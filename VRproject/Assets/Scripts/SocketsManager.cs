@@ -50,15 +50,18 @@ public class SocketsManager : MonoBehaviour
 
             if (socket.GetPuzzlePiece() != null)
             {
-                Debug.Log("Next puzzle piece: " + socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
-                _ball.MoveBall(socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
+                Debug.Log("Next puzzle piece: " + socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType() + " times:" + socket.GetTimes());
+                for (int i = 1; i <= socket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
+                {
+                    _ball.MoveBall(socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
+
+                    yield return new WaitForSeconds(0.5f); // to wait till the movement is finished to move again
+                }
             }
             else 
             {
                 foundLastOne = true;
             }
-
-            yield return new WaitForSeconds(0.5f); // to wait till the movement is finished to move again
         }
     }
 

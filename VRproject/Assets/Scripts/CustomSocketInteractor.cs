@@ -3,8 +3,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class CustomSocketInteractor : MonoBehaviour
 {
-    XRSocketInteractor _socket;
+    private XRSocketInteractor _socket;
     private GameObject _puzzlePiece;
+    private int _times = 1;
 
     void Start()
     {
@@ -29,6 +30,16 @@ public class CustomSocketInteractor : MonoBehaviour
     public GameObject GetPuzzlePiece()
     {
         return _puzzlePiece;
+    }
+
+    public int GetTimes()
+    {
+        return _times;
+    }
+
+    public void SetTimes(int times)
+    {
+        _times = times + 1; // because the times are chosen from a dropdown
     }
 
     #endregion
