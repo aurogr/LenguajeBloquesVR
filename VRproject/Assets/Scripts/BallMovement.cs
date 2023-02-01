@@ -7,6 +7,7 @@ public class BallMovement : MonoBehaviour
     [SerializeField] float _lengthCellGrid;
     [SerializeField] float _speed;
     [SerializeField] float _rotationAngleEachFixedUpdate = 10f;
+    [SerializeField] GameObject _ballSphere;
 
     Vector3 _directionOfMovement;
     Vector3 _directionOfRotation;
@@ -25,7 +26,7 @@ public class BallMovement : MonoBehaviour
     {
         if (_targetPosition != transform.position)
         {
-            transform.RotateAround(transform.position, _directionOfRotation, _rotationAngleEachFixedUpdate);
+            _ballSphere.transform.RotateAround(transform.position, _directionOfRotation, _rotationAngleEachFixedUpdate);
             transform.position = Vector3.MoveTowards(transform.position, _targetPosition, _speed * Time.deltaTime);
         }
     }
