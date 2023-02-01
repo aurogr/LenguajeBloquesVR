@@ -13,16 +13,11 @@ public class SocketsManager : MonoBehaviour
         _ball = FindObjectOfType<BallMovement>();
     }
 
-    //private void Start()
-    //{
-    //    EnqueueSockets();
-    //}
-
     private void Update() // temporarily for debug purposes
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(MovePuzzlePieces());
+            EnqueueSockets();
         }
     }
 
@@ -36,34 +31,11 @@ public class SocketsManager : MonoBehaviour
         {
             _sockets.Enqueue(sockets[i]);
         }
+
+        _ball.StartMovement(_sockets); // send queue to ball, it will move based on the puzzle pieces
     }
 
-    IEnumerator MovePuzzlePieces() // temporarily for debug purposes, but something similar should be used later on to get the pieces
-    {
-        EnqueueSockets();
-
-        bool foundLastOne = false;
-
-        while (!foundLastOne && _sockets.Count != 0)
-        {
-            CustomSocketInteractor socket = _sockets.Dequeue();
-
-            if (socket.GetPuzzlePiece() != null)
-            {
-                Debug.Log("Next puzzle piece: " + socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType() + " times:" + socket.GetTimes());
-                for (int i = 1; i <= socket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
-                {
-                    _ball.MoveBall(socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
-
-                    yield return new WaitForSeconds(0.5f); // to wait till the movement is finished to move again
-                }
-            }
-            else 
-            {
-                foundLastOne = true;
-            }
-        }
-    }
+    
 
 
 }

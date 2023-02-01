@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Container
+  - Goal
   layers:
   - Default
   - TransparentFX

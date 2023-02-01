@@ -12,6 +12,8 @@ public class CustomSocketInteractor : MonoBehaviour
         _socket = GetComponent<XRSocketInteractor>();
     }
 
+    #region Add / Remove puzzle pieces to socket
+
     public void AddPuzzlePiece()
     {
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
@@ -26,7 +28,10 @@ public class CustomSocketInteractor : MonoBehaviour
         Debug.Log("No longer got a puzzle piece in socket of " + transform.name);
     }
 
+    #endregion
+
     #region Getters/Setters
+
     public GameObject GetPuzzlePiece()
     {
         return _puzzlePiece;

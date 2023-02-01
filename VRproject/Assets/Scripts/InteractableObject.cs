@@ -4,7 +4,7 @@ public class InteractableObject : MonoBehaviour
 {
     [SerializeField] Transform _repositionTransform;
     [SerializeField] AudioClip _collisionAudioClip;
-    [SerializeField] PuzzlePiece.Type _pieceType = PuzzlePiece.Type.right;
+    [SerializeField] PuzzlePieceType _pieceType = PuzzlePieceType.right;
 
     AudioSource _audioSource;
 
@@ -24,13 +24,11 @@ public class InteractableObject : MonoBehaviour
         // _audioSource.PlayOneShot(_collisionAudioClip); // to play audio on coliision, deactivated temporarily but should be on final version
     }
 
-    public PuzzlePiece.Type GetPieceType()
+    public PuzzlePieceType GetPieceType()
     {
         return _pieceType;
     }
 }
 
-public class PuzzlePiece
-{
-    public enum Type { right, left, up, down};
-}
+public enum PuzzlePieceType { right, left, up, down};
+
