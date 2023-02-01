@@ -18,14 +18,11 @@ public class CustomSocketInteractor : MonoBehaviour
     {
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
-
-        Debug.Log(obj.transform.name + " in socket of " + transform.name);
     }
 
     public void RemovePuzzlePiece()
     {
         _puzzlePiece = null;
-        Debug.Log("No longer got a puzzle piece in socket of " + transform.name);
     }
 
     #endregion

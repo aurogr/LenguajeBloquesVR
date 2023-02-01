@@ -4,22 +4,28 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
+    #region Variables
     [SerializeField] float _lengthCellGrid;
     [SerializeField] float _speed;
     [SerializeField] float _rotationAngleEachFixedUpdate = 10f;
+    [SerializeField] float _movementDuration = 0.5f;
     [SerializeField] GameObject _ballSphere;
+    [SerializeField] GameObject _trailSpherePrefab;
 
     Vector3 _directionOfMovement;
     Vector3 _directionOfRotation;
     Vector3 _targetPosition;
 
     bool _isBallInGoal = false;
-    float _movementDuration = 0.5f;
+
+    List<GameObject> _trailSpheres;
+    #endregion
 
     #region Ball Movement
     void Start()
     {
         _targetPosition = transform.position;
+        _trailSpheres = new List<GameObject>();
     }
 
     public void FixedUpdate()
@@ -76,6 +82,7 @@ public class BallMovement : MonoBehaviour
                 for (int i = 1; i <= socket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
                 {
                     MoveBall(socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
+                    InstantiateTrailBall();
 
                     yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
                 }
@@ -91,6 +98,21 @@ public class BallMovement : MonoBehaviour
     }
 
     #endregion
+
+    private void InstantiateTrailBall()
+    {
+        GameObject sphere = Instantiate(_trailSpherePrefab, _ballSphere.transform.position, _ballSphere.transform.rotation, null);
+        _trailSpheres.Add(sphere);
+
+        float numberOfSpheresInTrail = _trailSpheres.Count;
+        float counter = 0;
+
+        foreach(GameObject trailSphere in _trailSpheres) // gradually change the transparency of the spheres in the trail, old movements should be more transparent
+        {
+            counter++;
+            trailSphere.GetComponent<Renderer>().material.color = new Color(1, 1, 1, 0.5f * (counter/numberOfSpheresInTrail));
+        }
+    }
 
     #region End methods
 
