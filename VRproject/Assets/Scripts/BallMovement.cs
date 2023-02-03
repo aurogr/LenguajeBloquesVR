@@ -21,12 +21,13 @@ public class BallMovement : MonoBehaviour
     List<GameObject> _trailSpheres;
     #endregion
 
-    #region Ball Movement
     void Start()
     {
         _targetPosition = transform.position;
         _trailSpheres = new List<GameObject>();
     }
+
+    #region Ball Movement
 
     public void FixedUpdate()
     {
@@ -58,13 +59,20 @@ public class BallMovement : MonoBehaviour
                 _directionOfRotation = -transform.right;
                 break;
         }
-
         _targetPosition += _directionOfMovement * _lengthCellGrid;
     }
 
-    public void StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
+    public bool StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
     {
-        StartCoroutine(MovePuzzlePieces(sockets));
+        if (sockets.Peek().GetPuzzlePiece() == null)
+        {
+            return false;
+        }
+        else
+        {
+            StartCoroutine(MovePuzzlePieces(sockets));
+            return true;
+        }
     }
 
     IEnumerator MovePuzzlePieces(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
@@ -81,10 +89,10 @@ public class BallMovement : MonoBehaviour
 
                 for (int i = 1; i <= socket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
                 {
+                    yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
+
                     MoveBall(socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
                     InstantiateTrailBall();
-
-                    yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
                 }
             }
             else
@@ -99,6 +107,7 @@ public class BallMovement : MonoBehaviour
 
     #endregion
 
+    #region Trail
     private void InstantiateTrailBall()
     {
         GameObject sphere = Instantiate(_trailSpherePrefab, _ballSphere.transform.position, _ballSphere.transform.rotation, null);
@@ -114,9 +123,11 @@ public class BallMovement : MonoBehaviour
         }
     }
 
+    #endregion
+
     #region End methods
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {

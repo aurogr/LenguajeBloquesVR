@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Container
   - Goal
+  - LeverCollider
   layers:
   - Default
   - TransparentFX

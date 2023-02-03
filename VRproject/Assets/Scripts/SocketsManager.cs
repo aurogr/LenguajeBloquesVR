@@ -13,12 +13,11 @@ public class SocketsManager : MonoBehaviour
         _ball = FindObjectOfType<BallMovement>();
     }
 
-    private void Update() // temporarily for debug purposes
+    public bool StartBallMovement()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            EnqueueSockets();
-        }
+        EnqueueSockets();
+
+        return _ball.StartMovement(_sockets); // send queue to ball, it will move based on the puzzle pieces
     }
 
     private void EnqueueSockets() // add every socket object contained on this parent object to a queue
@@ -31,8 +30,6 @@ public class SocketsManager : MonoBehaviour
         {
             _sockets.Enqueue(sockets[i]);
         }
-
-        _ball.StartMovement(_sockets); // send queue to ball, it will move based on the puzzle pieces
     }
 
     
