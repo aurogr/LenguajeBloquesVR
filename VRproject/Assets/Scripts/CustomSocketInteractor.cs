@@ -10,6 +10,9 @@ public class CustomSocketInteractor : MonoBehaviour
     void Start()
     {
         _socket = GetComponent<XRSocketInteractor>();
+
+        if (transform.GetSiblingIndex() != 0)
+            gameObject.SetActive(false);
     }
 
     #region Add / Remove puzzle pieces to socket
@@ -18,11 +21,30 @@ public class CustomSocketInteractor : MonoBehaviour
     {
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
+
+        ActivateNextSibling();
     }
 
     public void RemovePuzzlePiece()
     {
         _puzzlePiece = null;
+
+        DeactivateNextSibling();
+    }
+
+    private void ActivateNextSibling()
+    {
+        int index = transform.GetSiblingIndex();
+        GameObject nextSibling = transform.parent.GetChild(index + 1).gameObject;
+        nextSibling.SetActive(true);
+    }
+
+    private void DeactivateNextSibling()
+    {
+        int index = transform.GetSiblingIndex();
+        GameObject nextSibling = transform.parent.GetChild(index + 1).gameObject;
+        if (nextSibling.GetComponent<CustomSocketInteractor>().GetPuzzlePiece() == null)
+            nextSibling.SetActive(false);
     }
 
     #endregion
