@@ -3,6 +3,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class CustomSocketInteractor : MonoBehaviour
 {
+    [SerializeField] GameObject _canvas;
     private XRSocketInteractor _socket;
     private GameObject _puzzlePiece;
     private int _times = 1;
@@ -10,9 +11,7 @@ public class CustomSocketInteractor : MonoBehaviour
     void Start()
     {
         _socket = GetComponent<XRSocketInteractor>();
-
-        if (transform.GetSiblingIndex() != 0)
-            gameObject.SetActive(false);
+        _canvas.SetActive(false);
     }
 
     #region Add / Remove puzzle pieces to socket
@@ -21,15 +20,21 @@ public class CustomSocketInteractor : MonoBehaviour
     {
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
+        _puzzlePiece.transform.parent = transform.parent;
+        _puzzlePiece.GetComponent<InteractableObject>().ActivateSocket();
+        _canvas.SetActive(true);
 
-        ActivateNextSibling();
+        //ActivateNextSibling();
     }
 
     public void RemovePuzzlePiece()
     {
+        _puzzlePiece.GetComponent<InteractableObject>().DeactivateSocket();
+        _puzzlePiece.transform.parent = null;
         _puzzlePiece = null;
+        _canvas.SetActive(false);
 
-        DeactivateNextSibling();
+        //DeactivateNextSibling();
     }
 
     private void ActivateNextSibling()
