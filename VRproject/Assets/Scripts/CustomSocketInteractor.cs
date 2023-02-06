@@ -21,6 +21,7 @@ public class CustomSocketInteractor : MonoBehaviour
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
         _puzzlePiece.transform.parent = transform.parent;
+        _puzzlePiece.GetComponent<Rigidbody>().isKinematic = true;
         _puzzlePiece.GetComponent<InteractableObject>().ActivateSocket();
         _canvas.SetActive(true);
 
@@ -30,6 +31,7 @@ public class CustomSocketInteractor : MonoBehaviour
     public void RemovePuzzlePiece()
     {
         _puzzlePiece.GetComponent<InteractableObject>().DeactivateSocket();
+        _puzzlePiece.GetComponent<Rigidbody>().isKinematic = false;
         _puzzlePiece.transform.parent = null;
         _puzzlePiece = null;
         _canvas.SetActive(false);

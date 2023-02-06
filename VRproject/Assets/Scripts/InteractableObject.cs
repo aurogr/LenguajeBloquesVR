@@ -30,13 +30,11 @@ public class InteractableObject : MonoBehaviour
 
     public void ActivateSocket()
     {
-        Debug.Log("activate socket");
         _socket.gameObject.SetActive(true);
     }
 
     public void DeactivateSocket()
     {
-        Debug.Log("activate socket");
         if (_socket.GetPuzzlePiece() == null)
             _socket.gameObject.SetActive(true);
     }
