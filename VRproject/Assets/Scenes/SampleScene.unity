@@ -427,10 +427,6 @@ PrefabInstance:
       propertyPath: _repositionTransform
       value: 
       objectReference: {fileID: 1856121007}
-    - target: {fileID: 5043591902581205047, guid: b1960764dfc5b13469ab3d4a2caa5c3e, type: 3}
-      propertyPath: m_MovementType
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1960764dfc5b13469ab3d4a2caa5c3e, type: 3}
 --- !u!1 &144193140
@@ -839,8 +835,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 359216818}
   m_LocalRotation: {x: -0, y: -0, z: 0.07593042, w: 0.9971131}
-  m_LocalPosition: {x: -0.07003172, y: -0.19810724, z: -0.14519596}
-  m_LocalScale: {x: 0.049330242, y: 0.044440955, z: 0.19204402}
+  m_LocalPosition: {x: -0.13460438, y: -0.008327842, z: 0.00080403686}
+  m_LocalScale: {x: 0.049330235, y: 0.044440947, z: 0.19204402}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1170435114}
@@ -903,7 +899,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 390579761}
   m_LocalRotation: {x: -0, y: 0.5409233, z: -0, w: 0.84107196}
-  m_LocalPosition: {x: -0.112, y: 0, z: -0.386}
+  m_LocalPosition: {x: 0.02, y: 0, z: -0.073}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1142,7 +1138,7 @@ GameObject:
   - component: {fileID: 603474454}
   m_Layer: 0
   m_Name: LH Direct Interactor
-  m_TagString: Untagged
+  m_TagString: LeftHand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2754,7 +2750,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170435113}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.26942733, y: 1.1087794, z: -0.76850414}
+  m_LocalPosition: {x: 0.323, y: 0.887, z: 0.172}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3516,7 +3512,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1445942410}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.06837267, y: -0.1867795, z: -0.14599586}
+  m_LocalPosition: {x: 0.0038000047, y: 0.0029999018, z: 0}
   m_LocalScale: {x: 0.071922, y: 0.071922004, z: 0.071922}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3730,8 +3726,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1505649030}
   m_LocalRotation: {x: -0, y: -0, z: -0.59717613, w: 0.8021102}
-  m_LocalPosition: {x: 0.03995633, y: -0.10687947, z: -0.1451962}
-  m_LocalScale: {x: 0.14843468, y: 0.018688543, z: 0.018688554}
+  m_LocalPosition: {x: -0.02461633, y: 0.08289993, z: 0.00080379844}
+  m_LocalScale: {x: 0.1484347, y: 0.018688545, z: 0.018688554}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1082288107}
@@ -4271,7 +4267,7 @@ GameObject:
   - component: {fileID: 1661640408}
   m_Layer: 0
   m_Name: RH Direct Interactor
-  m_TagString: Untagged
+  m_TagString: RightHand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

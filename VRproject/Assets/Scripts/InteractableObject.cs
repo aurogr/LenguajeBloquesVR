@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class InteractableObject : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class InteractableObject : MonoBehaviour
     {
         _audioSource = gameObject.GetComponent<AudioSource>();
         _socket = GetComponentInChildren<CustomSocketInteractor>();
-        _socket.gameObject.SetActive(false);
+        //_socket.gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision collision)
