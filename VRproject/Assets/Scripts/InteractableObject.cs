@@ -42,6 +42,16 @@ public class InteractableObject : MonoBehaviour
     {
         return _pieceType;
     }
+
+    public void SetFatherLoop(ForLoopPieceBehaviour fatherLoop)
+    {
+        _socket.SetFatherLoop(fatherLoop);
+    }
+
+    public void RemoveFatherLoop()
+    {
+        _socket.RemoveFatherLoop();
+    }
 }
 
 public enum PuzzlePieceType { right, left, up, down};

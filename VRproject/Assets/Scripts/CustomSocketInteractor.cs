@@ -8,6 +8,8 @@ public class CustomSocketInteractor : MonoBehaviour
     private GameObject _puzzlePiece;
     private int _times = 1;
 
+    ForLoopPieceBehaviour _fatherLoop = null;
+
     void Start()
     {
         _socket = GetComponent<XRSocketInteractor>();
@@ -20,10 +22,15 @@ public class CustomSocketInteractor : MonoBehaviour
     {
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
-        _puzzlePiece.transform.parent = transform.parent;
+        _puzzlePiece.transform.parent = transform; // set the puzzle piece inside this socket object, so that they can move together and interact based on their heritage
         _puzzlePiece.GetComponent<Rigidbody>().isKinematic = true;
         //_puzzlePiece.GetComponent<InteractableObject>().ActivateSocket();
         _canvas.SetActive(true);
+
+        if(_fatherLoop != null) // warn the father loop that a change has been made and it needs to check its children again
+        {
+            _fatherLoop.CheckChildrenPuzzlePieces();
+        }
 
         //ActivateNextSibling();
     }
@@ -35,6 +42,11 @@ public class CustomSocketInteractor : MonoBehaviour
         _puzzlePiece.transform.parent = null;
         _puzzlePiece = null;
         _canvas.SetActive(false);
+
+        if (_fatherLoop != null)
+        {
+            _fatherLoop.CheckChildrenPuzzlePieces();
+        }
 
         //DeactivateNextSibling();
     }
@@ -71,6 +83,16 @@ public class CustomSocketInteractor : MonoBehaviour
     public void SetTimes(int times)
     {
         _times = times + 1; // because the times are chosen from a dropdown
+    }
+
+    public void SetFatherLoop(ForLoopPieceBehaviour fatherLoop)
+    {
+        _fatherLoop = fatherLoop;
+    }
+
+    public void RemoveFatherLoop()
+    {
+        _fatherLoop = null;
     }
 
     #endregion
