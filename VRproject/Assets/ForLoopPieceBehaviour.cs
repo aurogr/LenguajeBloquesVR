@@ -6,7 +6,11 @@ public class ForLoopPieceBehaviour : MonoBehaviour
 {
     [SerializeField] MeshRenderer _puzzlePieceExample;
     [SerializeField] GameObject _endMeshPiece;
+    [SerializeField] Transform _startTopMeshPiece;
+    [SerializeField] Transform _middleTopMeshPiece;
+    [SerializeField] Transform _endTopMeshPiece;
     [SerializeField] GameObject _endSocketObject;
+    
     XRSocketInteractor _loopSocket;
 
     Vector3 _endSocketObjectDefaultLocalPos;
@@ -24,6 +28,8 @@ public class ForLoopPieceBehaviour : MonoBehaviour
         _endSocketObjectDefaultLocalPos = _endSocketObject.transform.localPosition;
         _pieceSize = _puzzlePieceExample.bounds.size.x; // the length of a puzzle piece, to move the end mesh piece accurately
         _loopSocket = GetComponent<XRSocketInteractor>();
+
+        ChangeScaleTopPiece();
     }
 
     public void CheckChildrenPuzzlePieces()
@@ -44,23 +50,37 @@ public class ForLoopPieceBehaviour : MonoBehaviour
 
         _numberOfChildren = childrenPuzzlePieces.Length;
 
-        MoveEndPiece();
+        MoveEndAndTopPiece();
     }
 
-    private void MoveEndPiece()
+    private void MoveEndAndTopPiece()
     {
 
-        if(_numberOfChildren > 1)
+        if(_numberOfChildren > 0)
         {
-            float offset = _pieceSize * (_numberOfChildren - 1);
+            float offset = _pieceSize * (_numberOfChildren);
             _endMeshPiece.transform.localPosition = new Vector3(_endMeshPieceDefaultLocalPos.x + offset, _endMeshPiece.transform.localPosition.y, _endMeshPiece.transform.localPosition.z);
+            _endTopMeshPiece.localPosition = new Vector3(_endMeshPieceDefaultLocalPos.x + offset, _endTopMeshPiece.localPosition.y, _endTopMeshPiece.localPosition.z);
             _endSocketObject.transform.localPosition = new Vector3(_endSocketObjectDefaultLocalPos.x + offset, _endSocketObject.transform.localPosition.y, _endSocketObject.transform.localPosition.z);
         }
         else
         {
             _endMeshPiece.transform.localPosition = new Vector3(_endMeshPieceDefaultLocalPos.x, _endMeshPiece.transform.localPosition.y, _endMeshPiece.transform.localPosition.z);
+            _endTopMeshPiece.transform.localPosition = new Vector3(_endMeshPieceDefaultLocalPos.x, _endTopMeshPiece.transform.localPosition.y, _endTopMeshPiece.transform.localPosition.z);
             _endSocketObject.transform.localPosition = new Vector3(_endSocketObjectDefaultLocalPos.x, _endSocketObject.transform.localPosition.y, _endSocketObject.transform.localPosition.z);
         }
-        
+
+        ChangeScaleTopPiece();
+    }
+
+    private void ChangeScaleTopPiece()
+    {
+        // change scale of top piece
+        float distance = Vector3.Distance(_startTopMeshPiece.position, _endTopMeshPiece.position);
+
+        _middleTopMeshPiece.localScale = new Vector3(distance, _middleTopMeshPiece.transform.localScale.y, _middleTopMeshPiece.transform.localScale.z);
+
+        Vector3 middlePoint = (_startTopMeshPiece.position + _endTopMeshPiece.position) / 2;
+        _middleTopMeshPiece.position = middlePoint;
     }
 }
