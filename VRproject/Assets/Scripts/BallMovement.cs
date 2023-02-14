@@ -19,6 +19,8 @@ public class BallMovement : MonoBehaviour
     bool _isBallInGoal = false;
 
     List<GameObject> _trailSpheres;
+
+    CustomSocketInteractor _currentSocket;
     #endregion
 
     void Start()
@@ -77,23 +79,63 @@ public class BallMovement : MonoBehaviour
 
     IEnumerator MovePuzzlePieces(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
     {
+        //all of this is possible because the sockets are stored like a tree inside their parent,
+        // and the GetComponentsInChildren is a depth-first tipe of search
+
         bool foundLastOne = false;
 
         while (!foundLastOne && sockets.Count != 0 && !_isBallInGoal)
         {
-            CustomSocketInteractor socket = sockets.Dequeue();
+            _currentSocket = sockets.Dequeue();
 
-            if (socket.GetPuzzlePiece() != null)
+            if (_currentSocket.GetPuzzlePiece() != null)
             {
-                Debug.Log("Next puzzle piece: " + socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType() + " times:" + socket.GetTimes());
-
-                for (int i = 1; i <= socket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
+                // for loop behaviour
+                if (_currentSocket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType() == PuzzlePieceType.forLoop)
                 {
-                    yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
+                    int forLoopTimes = _currentSocket.GetTimes();
 
-                    MoveBall(socket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
-                    InstantiateTrailBall();
+                    _currentSocket = sockets.Peek(); // get next socket (which would be the first socket inside the for loop)
+
+                    // get all the sockets inside the for loop in an array
+                    CustomSocketInteractor[] forLoopChildrenSockets = _currentSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the for loop)
+                    int numberOfActiveChildrenSockets = forLoopChildrenSockets.Length - 1; // because the last socket of a for loop is always empty in case we want to add new pieces
+
+                    for (int i = 0; i < forLoopChildrenSockets.Length; i++) // dequeu the sockets inside the for loop
+                    {
+                        sockets.Dequeue();
+                    }
+
+                    // move the pieces inside the for loop
+                    for (int i = 0; i < forLoopTimes; i++)
+                    {
+                        for (int j = 0; j < numberOfActiveChildrenSockets; j++)
+                        {
+                            _currentSocket = forLoopChildrenSockets[j];
+                            Debug.Log(_currentSocket);
+                            
+                            for (int z = 1; z <= _currentSocket.GetTimes(); z++) // to move it however many times it has been specified on the puzzle piece
+                            {
+                                yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
+
+                                MoveBall(_currentSocket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
+                                InstantiateTrailBall();
+                            }
+
+                        }
+                    }
                 }
+                else // normal behaviour
+                {
+                    for (int i = 1; i <= _currentSocket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
+                    {
+                        yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
+
+                        MoveBall(_currentSocket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
+                        InstantiateTrailBall();
+                    }
+                }
+                
             }
             else
             {

@@ -54,5 +54,5 @@ public class InteractableObject : MonoBehaviour
     }
 }
 
-public enum PuzzlePieceType { right, left, up, down};
+public enum PuzzlePieceType { right, left, up, down, forLoop};
 

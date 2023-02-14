@@ -10,8 +10,6 @@ public class ForLoopPieceBehaviour : MonoBehaviour
     [SerializeField] Transform _middleTopMeshPiece;
     [SerializeField] Transform _endTopMeshPiece;
     [SerializeField] GameObject _endSocketObject;
-    
-    XRSocketInteractor _loopSocket;
 
     Vector3 _endSocketObjectDefaultLocalPos;
     Vector3 _endMeshPieceDefaultLocalPos;
@@ -27,8 +25,7 @@ public class ForLoopPieceBehaviour : MonoBehaviour
         _endMeshPieceDefaultLocalPos = _endMeshPiece.transform.localPosition;
         _endSocketObjectDefaultLocalPos = _endSocketObject.transform.localPosition;
         _pieceSize = _puzzlePieceExample.bounds.size.x; // the length of a puzzle piece, to move the end mesh piece accurately
-        _loopSocket = GetComponent<XRSocketInteractor>();
-
+      
         ChangeScaleTopPiece();
     }
 
