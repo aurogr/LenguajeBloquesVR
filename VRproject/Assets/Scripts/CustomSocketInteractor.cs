@@ -23,23 +23,21 @@ public class CustomSocketInteractor : MonoBehaviour
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
         _puzzlePiece.transform.parent = transform; // set the puzzle piece inside this socket object, so that they can move together and interact based on their heritage
-        _puzzlePiece.GetComponent<Rigidbody>().isKinematic = true;
-        //_puzzlePiece.GetComponent<InteractableObject>().ActivateSocket();
         _canvas.SetActive(true);
 
         if(_fatherLoop != null) // warn the father loop that a change has been made and it needs to check its children again
         {
             _fatherLoop.CheckChildrenPuzzlePieces();
         }
-
-        //ActivateNextSibling();
     }
 
     public void RemovePuzzlePiece()
     {
-        //_puzzlePiece.GetComponent<InteractableObject>().DeactivateSocket();
-        _puzzlePiece.GetComponent<Rigidbody>().isKinematic = false;
-        _puzzlePiece.transform.parent = null;
+        if (_puzzlePiece.activeSelf)
+        {
+            _puzzlePiece.transform.parent = null;
+        }
+
         _puzzlePiece = null;
         _canvas.SetActive(false);
 
@@ -48,22 +46,6 @@ public class CustomSocketInteractor : MonoBehaviour
             _fatherLoop.CheckChildrenPuzzlePieces();
         }
 
-        //DeactivateNextSibling();
-    }
-
-    private void ActivateNextSibling()
-    {
-        int index = transform.GetSiblingIndex();
-        GameObject nextSibling = transform.parent.GetChild(index + 1).gameObject;
-        nextSibling.SetActive(true);
-    }
-
-    private void DeactivateNextSibling()
-    {
-        int index = transform.GetSiblingIndex();
-        GameObject nextSibling = transform.parent.GetChild(index + 1).gameObject;
-        if (nextSibling.GetComponent<CustomSocketInteractor>().GetPuzzlePiece() == null)
-            nextSibling.SetActive(false);
     }
 
     #endregion
@@ -93,6 +75,16 @@ public class CustomSocketInteractor : MonoBehaviour
     public void RemoveFatherLoop()
     {
         _fatherLoop = null;
+    }
+
+    public void ActivateSocket()
+    {
+        _socket.socketActive = true;
+    }
+
+    public void DeactivateSocket()
+    {
+        _socket.socketActive = false;
     }
 
     #endregion

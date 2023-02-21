@@ -91,7 +91,7 @@ public class BallMovement : MonoBehaviour
             if (_currentSocket.GetPuzzlePiece() != null)
             {
                 // for loop behaviour
-                if (_currentSocket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType() == PuzzlePieceType.forLoop)
+                if (_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType() == PuzzlePieceType.forLoop)
                 {
                     int forLoopTimes = _currentSocket.GetTimes();
 
@@ -118,7 +118,7 @@ public class BallMovement : MonoBehaviour
                             {
                                 yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
 
-                                MoveBall(_currentSocket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
+                                MoveBall(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
                                 InstantiateTrailBall();
                             }
 
@@ -131,7 +131,7 @@ public class BallMovement : MonoBehaviour
                     {
                         yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
 
-                        MoveBall(_currentSocket.GetPuzzlePiece().GetComponent<InteractableObject>().GetPieceType());
+                        MoveBall(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
                         InstantiateTrailBall();
                     }
                 }
