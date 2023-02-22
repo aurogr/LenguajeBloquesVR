@@ -390,7 +390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bb00d5ed5ce63141aa7a41aa51b2f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _repositionTransform: {fileID: 0}
   _collisionAudioClip: {fileID: 8300000, guid: 85a11687190be8f48ac8fb2e873e976f, type: 3}
   _pieceType: 3
 --- !u!1 &5043591902803962214
@@ -530,6 +529,18 @@ PrefabInstance:
     - target: {fileID: 1606192946971515890, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606192946971515893, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
+      propertyPath: m_Size.x
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606192946971515893, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
+      propertyPath: m_Size.y
+      value: 0.015
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606192946971515893, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
+      propertyPath: m_Size.z
+      value: 0.09
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
