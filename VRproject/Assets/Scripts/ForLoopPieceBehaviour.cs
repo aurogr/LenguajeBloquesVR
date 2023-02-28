@@ -73,9 +73,12 @@ public class ForLoopPieceBehaviour : MonoBehaviour
     private void ChangeScaleTopPiece()
     {
         // change scale of top piece
+
+        // get the distance between the start and end piece
         float distance = Vector3.Distance(_startTopMeshPiece.position, _endTopMeshPiece.position);
 
-        _middleTopMeshPiece.localScale = new Vector3(distance, _middleTopMeshPiece.transform.localScale.y, _middleTopMeshPiece.transform.localScale.z);
+        // the new scale would be the new distance / normal distance (pieceSize) (because the normal distance is with a scale of 1, otherwise we'd have to multiply the new distance by the normal scale too)
+        _middleTopMeshPiece.localScale = new Vector3((distance / _pieceSize), _middleTopMeshPiece.transform.localScale.y, _middleTopMeshPiece.transform.localScale.z);
 
         Vector3 middlePoint = (_startTopMeshPiece.position + _endTopMeshPiece.position) / 2;
         _middleTopMeshPiece.position = middlePoint;

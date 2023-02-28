@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: For_Pz_Mat
+  m_Name: For_PZ_Color
   m_Shader: {fileID: -6465566751694194690, guid: 242758aa74ffb224c9dc82cfcd09ceb1, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -78,7 +78,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: c08cee84cc9b81c43826564bd145ba29, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9ca6d58faef73214c9ba42e76e4dfaf5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
