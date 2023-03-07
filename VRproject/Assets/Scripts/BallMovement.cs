@@ -144,7 +144,7 @@ public class BallMovement : MonoBehaviour
         }
 
         if (!_isBallInGoal)
-            EndOutsideGoal();
+            EndOutsideGoal("No has llegado a la portería.");
     }
 
     #endregion
@@ -175,12 +175,14 @@ public class BallMovement : MonoBehaviour
         {
             _isBallInGoal = true;
             ShowEndMenu("GOOL!! :)");
+        } else if (collision.gameObject.CompareTag("FieldLimits")) {
+            EndOutsideGoal("Te has salido del campo. Prueba otra vez.");
         }
     }
 
-    private void EndOutsideGoal()
+    private void EndOutsideGoal(string message)
     {
-        ShowEndMenu("A la siguiente será :(");
+        ShowEndMenu(message);
         // still to implement: based on the position of the ball, give feedback to player
     }
 
