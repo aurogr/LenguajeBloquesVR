@@ -4,7 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Container
+  - Goal
+  - LeverCollider
+  - RightHand
+  - LeftHand
+  - OutsideBounds
+  - Trash
+  - Reposition
   layers:
   - Default
   - TransparentFX
@@ -13,7 +19,7 @@ TagManager:
   - Water
   - UI
   - Interactable
-  - 
+  - Socket
   - 
   - 
   - 
