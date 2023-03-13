@@ -5,6 +5,8 @@ public class ScreenManager : MonoBehaviour
 {
     // this object has the logic of how all the screens (under the same canvas) show and hide
     // it should be on the canvas object, and every screen under that canvas needs to have an script component with the IScreen interface
+    // we'll define a screen as an object on a canvas that has all the information that needs to be displayed at a certain moment
+    // (for example, the game menu and options menu are screens)
 
     [SerializeField] private string _firstShownScreenName; // the screen that will first be visible as we initiliaze the game
     private IDictionary<string, IScreen> _screens;

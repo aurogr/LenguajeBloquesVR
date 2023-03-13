@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class SocketsManager : MonoBehaviour
 {
-    BallMovement _ball;
+    BallBehaviour _ball;
     Queue<CustomSocketInteractor> _sockets;
 
     private void Awake()
     {
         _sockets = new Queue<CustomSocketInteractor>();
-        _ball = FindObjectOfType<BallMovement>();
+        _ball = FindObjectOfType<BallBehaviour>();
     }
 
     public bool StartBallMovement()
