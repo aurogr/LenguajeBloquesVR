@@ -4,13 +4,13 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SpawnerSocketInteractor: MonoBehaviour
 {
-    PuzzlePieceSpawner _spawner;
+    ObjectPoolSpawner _spawner;
     XRSocketInteractor _socket;
     IXRSelectInteractable _lastObjectToEnter;
 
     private void Awake()
     {
-        _spawner = gameObject.GetComponentInParent<PuzzlePieceSpawner>();
+        _spawner = gameObject.GetComponentInParent<ObjectPoolSpawner>();
         _socket = gameObject.GetComponent<XRSocketInteractor>();
     }
 

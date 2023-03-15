@@ -44,22 +44,26 @@ public class ObjectPool
         _recycledObjects.Enqueue(objectToRecycle);
     }
 
-    public void SpawnRecycledObject()
+    public RecyclableObject SpawnRecycledObject()
     {
+        RecyclableObject spawnedObject = null;
+
         if (_recycledObjects.Count > 0)
         {
-            RecyclableObject recycledObject = _recycledObjects.Dequeue();
-            recycledObject.transform.SetParent(null);
-            recycledObject.gameObject.SetActive(true);
+            spawnedObject = _recycledObjects.Dequeue();
+            spawnedObject.transform.SetParent(null);
+            spawnedObject.gameObject.SetActive(true);
         }
         else
         {
             // instantiate a new one in demand
-            RecyclableObject instantiatedObject = InstantiateNewObject();
-            instantiatedObject.transform.SetParent(null);
-            instantiatedObject.gameObject.SetActive(true);
+            spawnedObject = InstantiateNewObject();
+            spawnedObject.transform.SetParent(null);
+            spawnedObject.gameObject.SetActive(true);
             Debug.Log("You already have a lot of pieces, I had to instantiate a new one for you");
         }
+
+        return spawnedObject;
     }
 
     #endregion

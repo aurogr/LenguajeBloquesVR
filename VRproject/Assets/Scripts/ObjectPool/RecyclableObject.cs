@@ -15,4 +15,5 @@ public abstract class RecyclableObject : MonoBehaviour
     {
         _belongingObjectPool.RecycleObject(this);
     }
+
 }
