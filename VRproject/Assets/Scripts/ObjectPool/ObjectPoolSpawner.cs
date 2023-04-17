@@ -9,7 +9,7 @@ public class ObjectPoolSpawner : MonoBehaviour
     private void Awake()
     {
         InitializePool();
-        SpawnObject();
+        //SpawnObject();
     }
 
     void InitializePool()

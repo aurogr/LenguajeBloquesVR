@@ -31,7 +31,9 @@ public class StartLever : MonoBehaviour
                 // else, it will stay at the bottom, showing the player visually that the lever has been triggered
 
                 _ballMovementStarted = _socketsManager.StartBallMovement(); // Start the ball movement from the sockets manager, returns a boolean indicating if it was possible
-                
+
+                Debug.Log(_ballMovementStarted);
+
                 if (_ballMovementStarted)
                 {
                     _interactionScript.enabled = false; // disable the xr interaction script, so that it can't be grabbed again

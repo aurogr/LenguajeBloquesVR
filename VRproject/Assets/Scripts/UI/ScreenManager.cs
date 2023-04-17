@@ -13,7 +13,7 @@ public class ScreenManager : MonoBehaviour
     private IScreen _currentScreen;
     private IScreen _previousScreen; // if a more complex logic was needed to go through multiple previous screens, we could use a stack
 
-    private void Awake()
+    private void Start()
     {
         // store all the screens (even the inactive ones) in a dictionary
         _screens = new Dictionary<string, IScreen>();

@@ -29,10 +29,13 @@ public class CustomSocketInteractor : MonoBehaviour
         {
             _fatherLoop.CheckChildrenPuzzlePieces();
         }
+
+        Debug.Log("puzzlepiece issss" + _puzzlePiece);
     }
 
     public void RemovePuzzlePiece()
     {
+        Debug.Log("this this happen ??? ");
         if (_puzzlePiece.activeSelf)
         {
             _puzzlePiece.transform.parent = null;
@@ -54,6 +57,7 @@ public class CustomSocketInteractor : MonoBehaviour
 
     public GameObject GetPuzzlePiece()
     {
+        Debug.Log("getting " + _puzzlePiece);
         return _puzzlePiece;
     }
 

@@ -3,8 +3,9 @@ using UnityEngine.UI;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Button))]
-public class ReturnToLastScreenButton : SwitchScreenButton
+public class StartGameButton : MonoBehaviour
 {
+    [SerializeField] private string _nextScreenName;
     private Button _button;
     private ScreenManager _screenManager;
 
@@ -16,16 +17,17 @@ public class ReturnToLastScreenButton : SwitchScreenButton
 
     private void OnEnable()
     {
-        _button.onClick.AddListener(ReturnToScreen);
+        _button.onClick.AddListener(StartGame);
     }
 
     private void OnDisable()
     {
-        _button.onClick.RemoveListener(ReturnToScreen);
+        _button.onClick.RemoveListener(StartGame);
     }
 
-    private void ReturnToScreen()
+    private void StartGame()
     {
-        _screenManager.SwitchToPreviousScreen();
+        GameManager.Instance.InvokeGameStartEvent();
+        _screenManager.SwitchScreen(_nextScreenName);
     }
 }

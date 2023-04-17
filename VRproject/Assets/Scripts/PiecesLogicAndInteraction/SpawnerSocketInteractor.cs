@@ -14,6 +14,28 @@ public class SpawnerSocketInteractor: MonoBehaviour
         _socket = gameObject.GetComponent<XRSocketInteractor>();
     }
 
+    private void OnEnable()
+    {
+        GameManager.Instance.OnGameStart += OnGameStartSpawn;
+        GameManager.Instance.OnSceneReset += OnResetSceneSpawn;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameStart -= OnGameStartSpawn;
+        GameManager.Instance.OnSceneReset -= OnResetSceneSpawn;
+    }
+
+    private void OnGameStartSpawn()
+    {
+        _spawner.SpawnObject();
+    }
+
+    private void OnResetSceneSpawn()
+    {
+        _lastObjectToEnter.transform.gameObject.GetComponent<RecyclableObject>().Recycle();
+    }
+
     public void OnSelectEnter()
     {
         // deactivate socket of the puzzle piece while it is on the spawner

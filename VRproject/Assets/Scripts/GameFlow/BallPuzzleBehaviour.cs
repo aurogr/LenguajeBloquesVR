@@ -23,8 +23,6 @@ public class BallPuzzleBehaviour
 
     public IEnumerator MoveNextPiece(CustomSocketInteractor currentSocket, Queue<CustomSocketInteractor> sockets)
     {
-        currentSocket = sockets.Dequeue();
-
         // for loop behaviour
         if (currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType() == PuzzlePieceType.forLoop)
         {

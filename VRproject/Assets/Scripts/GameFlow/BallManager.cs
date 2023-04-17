@@ -13,7 +13,6 @@ public class BallManager : MonoBehaviour
     [SerializeField] GameObject _trailSpherePrefab;
 
     CustomSocketInteractor _currentSocket;
-    FeedbackScreenImplementation _feedbackScreen;
     BallMovement _ballMovement;
     BallPuzzleBehaviour _ballPuzzleBehaviour;
 
@@ -22,7 +21,7 @@ public class BallManager : MonoBehaviour
 
     void Start()
     {
-        _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>();
+        
         _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
         _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration, _ballSphere, _trailSpherePrefab);
     }
@@ -54,7 +53,10 @@ public class BallManager : MonoBehaviour
 
         while (sockets.Count != 1 && !_isBallInGoal) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
+            
             _currentSocket = sockets.Dequeue();
+            Debug.Log("i got it here" + _currentSocket.GetPuzzlePiece());
+            Debug.Log("i got it" + _currentSocket);
 
             StartCoroutine(_ballPuzzleBehaviour.MoveNextPiece(_currentSocket, sockets));
         }
@@ -70,7 +72,7 @@ public class BallManager : MonoBehaviour
     private void ReachedSimulationEnd()
     {
         if (!_isBallInGoal)
-            SimulationEnd("No has llegado a la portería", false);
+            GameManager.Instance.GameEnd("No has llegado a la portería", false);
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -78,16 +80,10 @@ public class BallManager : MonoBehaviour
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
             _isBallInGoal = true;
-            SimulationEnd("Te has salido del campo. Prueba otra vez.", true);
+            GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", true);
         } else if (collision.gameObject.CompareTag("FieldLimits")) {
-            SimulationEnd("Te has salido del campo. Prueba otra vez.", false);
+            GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", false);
         }
-    }
-
-    private void SimulationEnd(string message, bool playerSucceeded)
-    {
-        _feedbackScreen.PrintFeedbackMessage(message, playerSucceeded);
-        _feedbackScreen.Show();
     }
 
     #endregion
