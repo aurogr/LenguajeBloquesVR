@@ -21,6 +21,7 @@ public class ScreenManager : MonoBehaviour
 
         foreach (IScreen screen in screensUnderManager)
         {
+            Debug.Log(screen.GetName());
             screen.GetGameObject().SetActive(false);
             _screens.Add(screen.GetName(), screen);
         }
