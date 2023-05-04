@@ -17,6 +17,22 @@ public class PuzzlePieceInteractableObject : RecyclableObject
         //_socket.gameObject.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnSceneReset += ResetPiece;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnSceneReset -= ResetPiece;
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("OutsideBounds")) // if the object is unreacheable to the player return it back to the table
@@ -28,7 +44,11 @@ public class PuzzlePieceInteractableObject : RecyclableObject
         // _audioSource.PlayOneShot(_collisionAudioClip); // to play audio on collision, deactivated temporarily but should be on final version
     }
 
-    #region Getters / setters etc
+    private void ResetPiece()
+    {
+        Recycle(); // recycable object behaviour
+    }
+    
 
     public void ActivateSocket()
     {
@@ -39,6 +59,8 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     {
         _socket.DeactivateSocket();
     }
+
+    #region Getters / setters etc
 
     public PuzzlePieceType GetPieceType()
     {

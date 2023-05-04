@@ -4,14 +4,43 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SpawnerSocketInteractor: MonoBehaviour
 {
-    PuzzlePieceSpawner _spawner;
+    ObjectPoolSpawner _spawner;
     XRSocketInteractor _socket;
     IXRSelectInteractable _lastObjectToEnter;
 
     private void Awake()
     {
-        _spawner = gameObject.GetComponentInParent<PuzzlePieceSpawner>();
+        _spawner = gameObject.GetComponentInParent<ObjectPoolSpawner>();
         _socket = gameObject.GetComponent<XRSocketInteractor>();
+    }
+
+    private void OnEnable()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameStart += OnGameStartSpawn;
+            GameManager.Instance.OnSceneReset += OnResetSceneSpawn;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameStart -= OnGameStartSpawn;
+            GameManager.Instance.OnSceneReset -= OnResetSceneSpawn;
+        }
+    }
+
+    private void OnGameStartSpawn()
+    {
+        Debug.Log("[Spawner socket interactor] On game start spawn");
+        _spawner.SpawnObject();
+    }
+
+    private void OnResetSceneSpawn()
+    {
+        _lastObjectToEnter.transform.gameObject.GetComponent<RecyclableObject>().Recycle();
     }
 
     public void OnSelectEnter()

@@ -54,6 +54,7 @@ public class CustomSocketInteractor : MonoBehaviour
 
     public GameObject GetPuzzlePiece()
     {
+        Debug.Log("getting " + _puzzlePiece);
         return _puzzlePiece;
     }
 

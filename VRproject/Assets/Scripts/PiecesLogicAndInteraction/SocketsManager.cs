@@ -3,17 +3,18 @@ using UnityEngine;
 
 public class SocketsManager : MonoBehaviour
 {
-    BallMovement _ball;
+    BallManager _ball;
     Queue<CustomSocketInteractor> _sockets;
 
     private void Awake()
     {
         _sockets = new Queue<CustomSocketInteractor>();
-        _ball = FindObjectOfType<BallMovement>();
+        _ball = FindObjectOfType<BallManager>();
     }
 
     public bool StartBallMovement()
     {
+        Debug.Log("[SocketsManager] StartBallMovement");
         EnqueueSockets();
 
         return _ball.StartMovement(_sockets); // send queue to ball, it will move based on the puzzle pieces

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PuzzlePieceSpawner : MonoBehaviour
+public class ObjectPoolSpawner : MonoBehaviour
 {
     [SerializeField] RecyclableObject _prefab;
     [SerializeField] int _objectPoolSize;
@@ -9,7 +9,7 @@ public class PuzzlePieceSpawner : MonoBehaviour
     private void Awake()
     {
         InitializePool();
-        SpawnObject();
+        //SpawnObject();
     }
 
     void InitializePool()
@@ -18,8 +18,8 @@ public class PuzzlePieceSpawner : MonoBehaviour
         _objectPool.Init(_objectPoolSize);
     }
 
-    public void SpawnObject() // should be called when we want to spawn a puzzle piece
+    public RecyclableObject SpawnObject() // should be called when we want to spawn a puzzle piece
     {
-        _objectPool.SpawnRecycledObject();
+        return _objectPool.SpawnRecycledObject();
     }
 }

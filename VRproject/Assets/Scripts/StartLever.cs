@@ -11,13 +11,25 @@ public class StartLever : MonoBehaviour
     HingeJoint _hingeJoint;
     bool _ballMovementStarted = false;
 
-
     private void Start()
     {
         _interactionScript = gameObject.GetComponent<XRGrabInteractable>();
         _rb = gameObject.GetComponent<Rigidbody>();
         _hingeJoint = gameObject.GetComponent<HingeJoint>();
         _socketsManager = FindObjectOfType<SocketsManager>();
+
+        // subscribe to game manager "start game" event to reset the ballMovementStarted boolean
+        GameManager.Instance.OnGameStart += ResetBallMovementBoolean;
+    }
+
+    private void ResetBallMovementBoolean()
+    {
+        _ballMovementStarted = false;
+
+        // reset level interaction
+        _interactionScript.enabled = true; // disable the xr interaction script, so that it can't be grabbed again
+        _hingeJoint.useSpring = true;
+        _rb.isKinematic = false; // stop the spring movement
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -31,7 +43,9 @@ public class StartLever : MonoBehaviour
                 // else, it will stay at the bottom, showing the player visually that the lever has been triggered
 
                 _ballMovementStarted = _socketsManager.StartBallMovement(); // Start the ball movement from the sockets manager, returns a boolean indicating if it was possible
-                
+
+                Debug.Log("[StartLevel] Is movement started: "+_ballMovementStarted);
+
                 if (_ballMovementStarted)
                 {
                     _interactionScript.enabled = false; // disable the xr interaction script, so that it can't be grabbed again
