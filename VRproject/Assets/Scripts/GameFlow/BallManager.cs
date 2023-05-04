@@ -35,30 +35,31 @@ public class BallManager : MonoBehaviour
 
     public bool StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
     {
+        Debug.Log("[BallManager] StartMovement");
         if (sockets.Peek().GetPuzzlePiece() == null)
         {
             return false;
         }
         else
         {
-            MovePuzzlePieces(sockets);
+            StartCoroutine(MovePuzzlePieces(sockets));
             return true;
         }
     }
 
-    private void MovePuzzlePieces(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
+    private IEnumerator MovePuzzlePieces(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
     {
         //all of this is possible because the sockets are stored like a tree inside their parent,
         // and the GetComponentsInChildren is a depth-first tipe of search
 
+        Debug.Log("[BallManager] MovePuzzlePieces");
+
         while (sockets.Count != 1 && !_isBallInGoal) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
-            
+            Debug.Log("[BallManager] Moved Piece");
             _currentSocket = sockets.Dequeue();
-            Debug.Log("i got it here" + _currentSocket.GetPuzzlePiece());
-            Debug.Log("i got it" + _currentSocket);
 
-            StartCoroutine(_ballPuzzleBehaviour.MoveNextPiece(_currentSocket, sockets));
+            yield return StartCoroutine(_ballPuzzleBehaviour.MoveNextPiece(_currentSocket, sockets));
         }
 
         ReachedSimulationEnd();

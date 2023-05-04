@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                Debug.Log("There is no instance in the scene");
+                //Debug.Log("There is no instance in the scene");
                 return null;
             }
             // Not handling a null return because the GameManager is the first object created, so this will only happen when the GameManager is destroyed when loading a new screen
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     public void GameEnd(string message, bool playerSucceeded)
     {
+        Debug.Log("[GameManager] GameEnd");
         _feedbackScreen.PrintFeedbackMessage(message, playerSucceeded);
     }
 

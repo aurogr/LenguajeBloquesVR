@@ -16,18 +16,25 @@ public class SpawnerSocketInteractor: MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.OnGameStart += OnGameStartSpawn;
-        GameManager.Instance.OnSceneReset += OnResetSceneSpawn;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameStart += OnGameStartSpawn;
+            GameManager.Instance.OnSceneReset += OnResetSceneSpawn;
+        }
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.OnGameStart -= OnGameStartSpawn;
-        GameManager.Instance.OnSceneReset -= OnResetSceneSpawn;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameStart -= OnGameStartSpawn;
+            GameManager.Instance.OnSceneReset -= OnResetSceneSpawn;
+        }
     }
 
     private void OnGameStartSpawn()
     {
+        Debug.Log("[Spawner socket interactor] On game start spawn");
         _spawner.SpawnObject();
     }
 

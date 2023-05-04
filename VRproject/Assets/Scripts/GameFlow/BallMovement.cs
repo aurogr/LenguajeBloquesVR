@@ -37,6 +37,7 @@ public class BallMovement
 
     public void MoveBall(PuzzlePieceType puzzlePieceType)
     {
+        Debug.Log("Moving piece");
         switch (puzzlePieceType)
         {
             case PuzzlePieceType.right:

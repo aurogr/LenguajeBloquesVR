@@ -23,6 +23,7 @@ public class BallPuzzleBehaviour
 
     public IEnumerator MoveNextPiece(CustomSocketInteractor currentSocket, Queue<CustomSocketInteractor> sockets)
     {
+        Debug.Log("[BallPuzzleBahviour] Moving inside the piece");
         // for loop behaviour
         if (currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType() == PuzzlePieceType.forLoop)
         {

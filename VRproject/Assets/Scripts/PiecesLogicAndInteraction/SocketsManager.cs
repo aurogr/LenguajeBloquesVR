@@ -14,6 +14,7 @@ public class SocketsManager : MonoBehaviour
 
     public bool StartBallMovement()
     {
+        Debug.Log("[SocketsManager] StartBallMovement");
         EnqueueSockets();
 
         return _ball.StartMovement(_sockets); // send queue to ball, it will move based on the puzzle pieces

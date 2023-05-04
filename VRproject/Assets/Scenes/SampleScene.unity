@@ -5435,8 +5435,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 851333000}
-  m_LocalRotation: {x: -0.8519389, y: -0.03820795, z: 0.24609765, w: 0.4606259}
-  m_LocalPosition: {x: 0.48540545, y: -3.2174115, z: 3.4821239}
+  m_LocalRotation: {x: -0.8234749, y: -0.22169557, z: 0.14056653, w: 0.5029725}
+  m_LocalPosition: {x: 0.522, y: -3.194, z: 3.484}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5444,7 +5444,7 @@ Transform:
   - {fileID: 1115488629}
   m_Father: {fileID: 2019681076}
   m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 63}
+  m_LocalEulerAnglesHint: {x: -130, y: 45, z: -52}
 --- !u!114 &851333002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7420,6 +7420,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Socket Object
       objectReference: {fileID: 0}
+    - target: {fileID: 1606192946971515889, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1606192946971515890, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -7942,7 +7946,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170435113}
   m_LocalRotation: {x: -0.7064338, y: -0.47771442, z: -0.030843567, w: 0.5213338}
-  m_LocalPosition: {x: 0.406, y: -2.962, z: 3.34}
+  m_LocalPosition: {x: 0.377, y: -2.979, z: 3.371}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -22536,7 +22540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &5306170911563071320
 GameObject:
   m_ObjectHideFlags: 0

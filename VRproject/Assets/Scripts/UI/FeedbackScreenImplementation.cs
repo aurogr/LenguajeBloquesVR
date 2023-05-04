@@ -18,19 +18,19 @@ public class FeedbackScreenImplementation : BasicScreenImplementation
 
     public void PrintFeedbackMessage(string message, bool playerSucceded)
     {
-        //_screenManager.SwitchScreen(_screenName);
+        _screenManager.SwitchScreen(_screenName);
 
-        //if (playerSucceded)
-        //{
-        //    _succeedBtns.SetActive(true);
-        //    _failBtns.SetActive(false);
-        //}
-        //else
-        //{
-        //    _succeedBtns.SetActive(false);
-        //    _failBtns.SetActive(true);
-        //}
+        if (playerSucceded)
+        {
+            _succeedBtns.SetActive(true);
+            _failBtns.SetActive(false);
+        }
+        else
+        {
+            _succeedBtns.SetActive(false);
+            _failBtns.SetActive(true);
+        }
 
-        //_feedbackText.text = message;
+        _feedbackText.text = message;
     }
 }
