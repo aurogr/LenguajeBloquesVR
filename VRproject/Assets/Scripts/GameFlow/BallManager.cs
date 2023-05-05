@@ -16,14 +16,14 @@ public class BallManager : MonoBehaviour
     BallMovement _ballMovement;
     BallPuzzleBehaviour _ballPuzzleBehaviour;
 
-    bool _isBallInGoal = false;
+    public bool IsBallInGoal = false;
     #endregion
 
     void Start()
     {
         
         _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
-        _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration, _ballSphere, _trailSpherePrefab);
+        _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration);
     }
 
     public void FixedUpdate()
@@ -35,7 +35,6 @@ public class BallManager : MonoBehaviour
 
     public bool StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
     {
-        Debug.Log("[BallManager] StartMovement");
         if (sockets.Peek().GetPuzzlePiece() == null)
         {
             return false;
@@ -52,16 +51,15 @@ public class BallManager : MonoBehaviour
         //all of this is possible because the sockets are stored like a tree inside their parent,
         // and the GetComponentsInChildren is a depth-first tipe of search
 
-        Debug.Log("[BallManager] MovePuzzlePieces");
-
-        while (sockets.Count != 1 && !_isBallInGoal) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
+        while (sockets.Count != 1) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
-            Debug.Log("[BallManager] Moved Piece");
             _currentSocket = sockets.Dequeue();
 
+            Debug.Log("[BallManager] MovePuzzlePieces");
             yield return StartCoroutine(_ballPuzzleBehaviour.MoveNextPiece(_currentSocket, sockets));
+            Debug.Log("[BallManager] MovePuzzlePieces: returned from coroutine. Sockets left: "+ sockets.Count);
         }
-
+        
         ReachedSimulationEnd();
         
     }
@@ -72,18 +70,22 @@ public class BallManager : MonoBehaviour
 
     private void ReachedSimulationEnd()
     {
-        if (!_isBallInGoal)
-            GameManager.Instance.GameEnd("No has llegado a la portería", false);
+        GameManager.Instance.GameEnd("No has llegado a la portería", false);
     }
 
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
-            _isBallInGoal = true;
-            GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", true);
+            IsBallInGoal = true;
+            GameManager.Instance.GameEnd("Olee.", true);
+            StopCoroutine("MovePuzzlePieces");
+            _ballPuzzleBehaviour = null;
         } else if (collision.gameObject.CompareTag("FieldLimits")) {
             GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", false);
+
+            StopCoroutine("MovePuzzlePieces");
+            _ballPuzzleBehaviour = null;
         }
     }
 

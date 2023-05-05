@@ -8,14 +8,18 @@ public class CustomXRGrabInteractable : XRGrabInteractable
     [SerializeField] Transform _socketAttachPoint;
     [SerializeField] MeshRenderer _mesh;
 
+    public bool IsBeingHeld = false;
+
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
         if (args.interactorObject.transform.CompareTag("RightHand"))
         {
+            IsBeingHeld = true;
             attachTransform = _rightHandGrabAttachPoint;
         }
         else if (args.interactorObject.transform.CompareTag("LeftHand"))
         {
+            IsBeingHeld = true;
             attachTransform = _leftHandGrabAttachPoint;
         }
         else
@@ -24,6 +28,12 @@ public class CustomXRGrabInteractable : XRGrabInteractable
         }
 
         base.OnSelectEntered(args);
+    }
+
+    protected override void OnSelectExited(SelectExitEventArgs args)
+    {
+        IsBeingHeld = false;
+        base.OnSelectExited(args);
     }
 
     protected override void OnHoverEntered(HoverEnterEventArgs args)

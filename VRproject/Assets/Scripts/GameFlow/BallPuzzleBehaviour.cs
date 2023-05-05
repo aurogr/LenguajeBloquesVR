@@ -6,24 +6,16 @@ public class BallPuzzleBehaviour
 {
     BallMovement _ballMovement;
     float _movementDuration;
-    GameObject _ballSphere;
-    GameObject _trailSpherePrefab;
 
-    List<GameObject> _trailSpheres;
-
-    public BallPuzzleBehaviour(BallMovement ballMovement, float movementDuration, GameObject ballSphere, GameObject trailSpherePrefab)
+    public BallPuzzleBehaviour(BallMovement ballMovement, float movementDuration)
     {
         _ballMovement = ballMovement;
         _movementDuration = movementDuration;
-        _ballSphere = ballSphere;
-        _trailSpherePrefab = trailSpherePrefab;
-
-        _trailSpheres = new List<GameObject>();
     }
 
     public IEnumerator MoveNextPiece(CustomSocketInteractor currentSocket, Queue<CustomSocketInteractor> sockets)
     {
-        Debug.Log("[BallPuzzleBahviour] Moving inside the piece");
+        Debug.Log("[BallPuzzleBehaviour] MoveNextPiece");
         // for loop behaviour
         if (currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType() == PuzzlePieceType.forLoop)
         {
@@ -50,9 +42,9 @@ public class BallPuzzleBehaviour
 
                     for (int z = 1; z <= currentSocket.GetTimes(); z++) // to move it however many times it has been specified on the puzzle piece
                     {
-                        yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
-
                         _ballMovement.MoveBall(currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
+
+                        yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
                     }
 
                 }
@@ -62,31 +54,10 @@ public class BallPuzzleBehaviour
         {
             for (int i = 1; i <= currentSocket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
             {
-                yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
-
                 _ballMovement.MoveBall(currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
+
+                yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
             }
         }
     }
-
-    #region Balls trail
-    private void InstantiateTrailBall()
-    {
-        RecyclableObject ballTrailInstance = BallSpawner.Instance.SpawnObject();
-        ballTrailInstance.gameObject.GetComponent<BallTrailObject>().SetTrailPosition(_ballSphere.transform);
-        //GameObject sphere = _mono.Instantiate(_trailSpherePrefab, _ballSphere.transform.position, _ballSphere.transform.rotation, null);
-        _trailSpheres.Add(ballTrailInstance.gameObject);
-
-        float numberOfSpheresInTrail = _trailSpheres.Count;
-        float counter = 0;
-
-        foreach (GameObject trailSphere in _trailSpheres) // gradually change the transparency of the spheres in the trail, old movements should be more transparent
-        {
-            counter++;
-            trailSphere.GetComponent<Renderer>().material.color = new Color(1, 1, 1, 0.5f * (counter / numberOfSpheresInTrail));
-        }
-    }
-
-    #endregion
-
 }

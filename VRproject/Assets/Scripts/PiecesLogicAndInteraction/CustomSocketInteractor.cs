@@ -33,9 +33,12 @@ public class CustomSocketInteractor : MonoBehaviour
 
     public void RemovePuzzlePiece()
     {
-        if (_puzzlePiece.activeSelf)
+        if (_puzzlePiece.GetComponent<CustomXRGrabInteractable>().IsBeingHeld) // the player has removed the puzzle piece
         {
-            _puzzlePiece.transform.parent = null;
+            if (_puzzlePiece.activeSelf)
+            {
+                _puzzlePiece.transform.parent = null;
+            }
         }
 
         _puzzlePiece = null;
@@ -54,7 +57,6 @@ public class CustomSocketInteractor : MonoBehaviour
 
     public GameObject GetPuzzlePiece()
     {
-        Debug.Log("getting " + _puzzlePiece);
         return _puzzlePiece;
     }
 

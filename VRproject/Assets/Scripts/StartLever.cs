@@ -27,7 +27,7 @@ public class StartLever : MonoBehaviour
         _ballMovementStarted = false;
 
         // reset level interaction
-        _interactionScript.enabled = true; // disable the xr interaction script, so that it can't be grabbed again
+        _interactionScript.enabled = true; // enable the xr interaction script, so that it can't be grabbed again
         _hingeJoint.useSpring = true;
         _rb.isKinematic = false; // stop the spring movement
     }

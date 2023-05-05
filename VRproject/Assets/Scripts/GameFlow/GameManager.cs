@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public bool GameStarted = false;
     FeedbackScreenImplementation _feedbackScreen;
 
+    #region Singleton definition
     public static GameManager Instance
     {
         get
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
+    #endregion
 
     private void Awake()
     {
@@ -49,7 +51,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("[GameManager] GameEnd");
         _feedbackScreen.PrintFeedbackMessage(message, playerSucceeded);
+        InvokeSceneResetEvent();
     }
-
 
 }

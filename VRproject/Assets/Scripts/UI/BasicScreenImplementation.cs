@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BasicScreenImplementation : MonoBehaviour, IScreen
 {
-    [SerializeField] string _name;
+    [SerializeField] protected string _name;
 
     public GameObject GetGameObject()
     {

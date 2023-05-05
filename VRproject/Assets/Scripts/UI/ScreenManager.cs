@@ -8,13 +8,33 @@ public class ScreenManager : MonoBehaviour
     // we'll define a screen as an object on a canvas that has all the information that needs to be displayed at a certain moment
     // (for example, the game menu and options menu are screens)
 
+    private static ScreenManager _instance;
     [SerializeField] private string _firstShownScreenName; // the screen that will first be visible as we initiliaze the game
     private IDictionary<string, IScreen> _screens;
     private IScreen _currentScreen;
     private IScreen _previousScreen; // if a more complex logic was needed to go through multiple previous screens, we could use a stack
 
-    private void Start()
+    #region Singleton definition
+    public static ScreenManager Instance
     {
+        get
+        {
+            if (_instance == null)
+            {
+                //Debug.Log("There is no instance in the scene");
+                return null;
+            }
+
+            return _instance;
+        }
+    }
+
+    #endregion
+
+    private void Awake()
+    {
+        _instance = this;
+
         // store all the screens (even the inactive ones) in a dictionary
         _screens = new Dictionary<string, IScreen>();
         IScreen[] screensUnderManager = GetComponentsInChildren<IScreen>(true);

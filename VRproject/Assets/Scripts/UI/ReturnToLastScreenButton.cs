@@ -6,12 +6,10 @@ using UnityEngine.UI;
 public class ReturnToLastScreenButton : SwitchScreenButton
 {
     private Button _button;
-    private ScreenManager _screenManager;
 
     private void Awake()
     {
         _button = GetComponent<Button>();
-        _screenManager = FindObjectOfType<ScreenManager>();
     }
 
     private void OnEnable()
@@ -26,6 +24,6 @@ public class ReturnToLastScreenButton : SwitchScreenButton
 
     private void ReturnToScreen()
     {
-        _screenManager.SwitchToPreviousScreen();
+        ScreenManager.Instance.SwitchToPreviousScreen();
     }
 }
