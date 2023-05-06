@@ -15,21 +15,48 @@ public class BallManager : MonoBehaviour
     CustomSocketInteractor _currentSocket;
     BallMovement _ballMovement;
     BallPuzzleBehaviour _ballPuzzleBehaviour;
+    Vector3 _currentBallPositionStart;
 
     public bool IsBallInGoal = false;
     #endregion
 
     void Start()
     {
-        
         _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
         _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration);
+        SetRandomBallPosition();
     }
 
     public void FixedUpdate()
     {
         _ballMovement.FixedUpdate();
     }
+
+    #region Ball Position
+    public void OnEnable() // ball is enabled when the scene is reseted
+    {
+        ResetBallPosition();
+    }
+
+    void SetRandomBallPosition()
+    {
+        transform.localPosition = new Vector3(_lengthCellGrid * Random.Range(-10, 10), _lengthCellGrid * Random.Range(-5, 5), 0);
+    }
+
+    void ResetBallPosition()
+    {
+        if (GameManager.Instance.GetIsGameSituationTheSame())
+        {
+            transform.position = _currentBallPositionStart;
+        }
+        else
+        {
+            SetRandomBallPosition();
+        }
+
+    }
+
+    #endregion
 
     #region Simulation flow
 

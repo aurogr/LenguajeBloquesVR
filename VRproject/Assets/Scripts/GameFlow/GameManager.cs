@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public event Action OnSceneReset;
     public event Action OnGameStart;
 
-    public bool GameStarted = false;
+    private bool _isGameSituationTheSame;
     FeedbackScreenImplementation _feedbackScreen;
 
     #region Singleton definition
@@ -37,8 +37,9 @@ public class GameManager : MonoBehaviour
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
     }
 
-    public void InvokeSceneResetEvent()
+    public void InvokeSceneResetEvent(bool isGameSituationTheSame)
     {
+        _isGameSituationTheSame = isGameSituationTheSame;
         OnSceneReset?.Invoke();
     }
 
@@ -51,7 +52,14 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("[GameManager] GameEnd");
         _feedbackScreen.PrintFeedbackMessage(message, playerSucceeded);
-        InvokeSceneResetEvent();
     }
+
+    #region Getters
+    public bool GetIsGameSituationTheSame()
+    {
+        return _isGameSituationTheSame;
+    }
+
+    #endregion
 
 }
