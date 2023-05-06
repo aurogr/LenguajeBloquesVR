@@ -16,15 +16,16 @@ public class BallManager : MonoBehaviour
     BallMovement _ballMovement;
     BallPuzzleBehaviour _ballPuzzleBehaviour;
     Vector3 _currentBallPositionStart;
+    [SerializeField] Vector3 _center;
 
     public bool IsBallInGoal = false;
     #endregion
 
     void Start()
     {
+        SetRandomBallPosition();
         _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
         _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration);
-        SetRandomBallPosition();
     }
 
     public void FixedUpdate()
@@ -36,11 +37,14 @@ public class BallManager : MonoBehaviour
     public void OnEnable() // ball is enabled when the scene is reseted
     {
         ResetBallPosition();
+        _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
+        _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration);
     }
 
     void SetRandomBallPosition()
     {
-        transform.localPosition = new Vector3(_lengthCellGrid * Random.Range(-10, 10), _lengthCellGrid * Random.Range(-5, 5), 0);
+        _currentBallPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-5, 5), _center.z + (_lengthCellGrid * Random.Range(-10, 10)));
+        transform.position = _currentBallPositionStart;
     }
 
     void ResetBallPosition()
@@ -82,9 +86,7 @@ public class BallManager : MonoBehaviour
         {
             _currentSocket = sockets.Dequeue();
 
-            Debug.Log("[BallManager] MovePuzzlePieces");
             yield return StartCoroutine(_ballPuzzleBehaviour.MoveNextPiece(_currentSocket, sockets));
-            Debug.Log("[BallManager] MovePuzzlePieces: returned from coroutine. Sockets left: "+ sockets.Count);
         }
         
         ReachedSimulationEnd();
@@ -98,6 +100,8 @@ public class BallManager : MonoBehaviour
     private void ReachedSimulationEnd()
     {
         GameManager.Instance.GameEnd("No has llegado a la portería", false);
+        _ballPuzzleBehaviour = null;
+        _ballMovement = null;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -108,11 +112,13 @@ public class BallManager : MonoBehaviour
             GameManager.Instance.GameEnd("Olee.", true);
             StopCoroutine("MovePuzzlePieces");
             _ballPuzzleBehaviour = null;
+            _ballMovement = null;
         } else if (collision.gameObject.CompareTag("FieldLimits")) {
             GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", false);
 
             StopCoroutine("MovePuzzlePieces");
             _ballPuzzleBehaviour = null;
+            _ballMovement = null;
         }
     }
 

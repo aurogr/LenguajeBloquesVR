@@ -19,7 +19,7 @@ public class StartLever : MonoBehaviour
         _socketsManager = FindObjectOfType<SocketsManager>();
 
         // subscribe to game manager "start game" event to reset the ballMovementStarted boolean
-        GameManager.Instance.OnGameStart += ResetBallMovementBoolean;
+        GameManager.Instance.OnSceneReset += ResetBallMovementBoolean;
     }
 
     private void ResetBallMovementBoolean()
