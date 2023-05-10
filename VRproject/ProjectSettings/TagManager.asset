@@ -11,6 +11,9 @@ TagManager:
   - OutsideBounds
   - Trash
   - Reposition
+  - Waypoint
+  - WaypointsHolder
+  - FieldLimits
   layers:
   - Default
   - TransparentFX

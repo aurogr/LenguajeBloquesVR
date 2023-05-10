@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Button))]
-public class ReturnToLastScreenButton : SwitchScreenButton
+public class ReturnToLastScreenButton : MonoBehaviour
 {
-    private Button _button;
+    Button _button;
 
     private void Awake()
     {

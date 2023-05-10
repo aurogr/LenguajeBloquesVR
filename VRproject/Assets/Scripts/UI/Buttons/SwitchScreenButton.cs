@@ -5,8 +5,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class SwitchScreenButton : MonoBehaviour
 {
-    [SerializeField] private string _nextScreenName;
-    private Button _button;
+    [SerializeField] string _nextScreenName;
+    Button _button;
 
     private void Awake()
     {

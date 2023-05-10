@@ -14,34 +14,34 @@ public class SpawnerSocketInteractor: MonoBehaviour
         _socket = gameObject.GetComponent<XRSocketInteractor>();
     }
 
-    private void OnEnable()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnGameStart += OnGameStartSpawn;
-            GameManager.Instance.OnSceneReset += OnResetSceneSpawn;
-        }
-    }
+    //private void OnEnable()
+    //{
+    //    if (GameManager.Instance != null)
+    //    {
+    //        GameManager.Instance.OnGameStart += OnGameStartSpawn;
+    //        GameManager.Instance.OnSceneReset += OnResetSceneSpawn;
+    //    }
+    //}
 
-    private void OnDisable()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnGameStart -= OnGameStartSpawn;
-            GameManager.Instance.OnSceneReset -= OnResetSceneSpawn;
-        }
-    }
+    //private void OnDisable()
+    //{
+    //    if (GameManager.Instance != null)
+    //    {
+    //        GameManager.Instance.OnGameStart -= OnGameStartSpawn;
+    //        GameManager.Instance.OnSceneReset -= OnResetSceneSpawn;
+    //    }
+    //}
 
-    private void OnGameStartSpawn()
-    {
-        Debug.Log("[Spawner socket interactor] On game start spawn");
-        _spawner.SpawnObject();
-    }
+    //private void OnGameStartSpawn()
+    //{
+    //    Debug.Log("[Spawner socket interactor] On game start spawn");
+    //    _spawner.SpawnObject();
+    //}
 
-    private void OnResetSceneSpawn()
-    {
-        _lastObjectToEnter.transform.gameObject.GetComponent<RecyclableObject>().Recycle();
-    }
+    //private void OnResetSceneSpawn()
+    //{
+    //    _lastObjectToEnter.transform.gameObject.GetComponent<RecyclableObject>().Recycle();
+    //}
 
     public void OnSelectEnter()
     {

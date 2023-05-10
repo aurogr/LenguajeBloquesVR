@@ -31,7 +31,7 @@ public class ScreenManager : MonoBehaviour
 
     #endregion
 
-    private void Awake()
+    private void Start() // some things need to go before
     {
         _instance = this;
 

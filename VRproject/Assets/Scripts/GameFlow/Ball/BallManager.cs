@@ -11,32 +11,39 @@ public class BallManager : MonoBehaviour
     [SerializeField] float _movementDuration = 0.5f;
     [SerializeField] GameObject _ballSphere;
     [SerializeField] GameObject _trailSpherePrefab;
+    [SerializeField] Vector3 _center;
 
     CustomSocketInteractor _currentSocket;
     BallMovement _ballMovement;
     BallPuzzleBehaviour _ballPuzzleBehaviour;
     Vector3 _currentBallPositionStart;
-    [SerializeField] Vector3 _center;
+    FeedbackScreenImplementation _feedbackScreen;
 
-    public bool IsBallInGoal = false;
+    List<GameObject> _waypoints;
+    private bool _firstTime = true;
+
     #endregion
 
-    void Start()
+    void Awake()
     {
-        SetRandomBallPosition();
-        _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
-        _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration);
+        _currentBallPositionStart = transform.position;
+        _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
     }
 
-    public void FixedUpdate()
+    #region ResetLevel
+    public void OnEnable() // ball is enabled when the scene is reseted (including the first time, just after awake)
     {
-        _ballMovement.FixedUpdate();
-    }
+        // reset the ball position and the waypoints
+        if (GameManager.Instance.GameLevel == GameManager.GameLevels.BasicLevel)
+        {
+            ResetBasicLevel();
+        }
+        else
+        {
+            ResetLoopLevel();
+        }
 
-    #region Ball Position
-    public void OnEnable() // ball is enabled when the scene is reseted
-    {
-        ResetBallPosition();
+        // create movement objects
         _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
         _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration);
     }
@@ -47,17 +54,35 @@ public class BallManager : MonoBehaviour
         transform.position = _currentBallPositionStart;
     }
 
-    void ResetBallPosition()
+    void ResetBasicLevel()
     {
-        if (GameManager.Instance.GetIsGameSituationTheSame())
-        {
-            transform.position = _currentBallPositionStart;
-        }
-        else
+        if (_firstTime || !GameManager.Instance.GetIsGameSituationTheSame())
         {
             SetRandomBallPosition();
         }
+        else
+        {
+            transform.position = _currentBallPositionStart;
+        }
 
+        _firstTime = false;
+    }
+
+    void ResetLoopLevel()
+    {
+        transform.position = _currentBallPositionStart;
+
+        if (_firstTime || !GameManager.Instance.GetIsGameSituationTheSame())
+        {
+            _waypoints = WaypointsController.Instance.GetNewWaypoints();
+        }
+        else
+        {
+            _waypoints = WaypointsController.Instance.RepeatWaypoints();
+            
+        }
+
+        _firstTime = false;
     }
 
     #endregion
@@ -93,13 +118,21 @@ public class BallManager : MonoBehaviour
         
     }
 
+    public void FixedUpdate()
+    {
+        _ballMovement.FixedUpdate(); // have to call it manually since it isn't a monobehaviour
+    }
+
     #endregion
 
     #region End methods
 
     private void ReachedSimulationEnd()
     {
-        GameManager.Instance.GameEnd("No has llegado a la portería", false);
+        //GameManager.Instance.GameEnd("No has llegado a la portería", false);
+        _feedbackScreen.PrintFeedbackMessage("No has llegado a la portería", false);
+
+        // release ball movement objects
         _ballPuzzleBehaviour = null;
         _ballMovement = null;
     }
@@ -108,17 +141,37 @@ public class BallManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
-            IsBallInGoal = true;
-            GameManager.Instance.GameEnd("Olee.", true);
-            StopCoroutine("MovePuzzlePieces");
-            _ballPuzzleBehaviour = null;
-            _ballMovement = null;
-        } else if (collision.gameObject.CompareTag("FieldLimits")) {
-            GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", false);
+            //GameManager.Instance.GameEnd("Enhorabuena!.", true);
+            _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
 
+            // stop ball and release ball movement objects
             StopCoroutine("MovePuzzlePieces");
             _ballPuzzleBehaviour = null;
             _ballMovement = null;
+        } 
+        else if (collision.gameObject.CompareTag("FieldLimits")) {
+            //GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", false);
+            _feedbackScreen.PrintFeedbackMessage("Te has salido del campo. Prueba otra vez.", false); // change screen
+
+            // stop ball and release ball movement objects
+            StopCoroutine("MovePuzzlePieces");
+            _ballPuzzleBehaviour = null;
+            _ballMovement = null;
+        } else if (collision.gameObject.CompareTag("Waypoint"))
+        {
+            _waypoints.Remove(collision.gameObject);
+            collision.gameObject.SetActive(false);
+
+            if (_waypoints.Count == 0) // if the player has cleared all the waypoints he wins
+            {
+                //GameManager.Instance.GameEnd("Enhorabuena!.", true);
+                _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
+
+                // stop ball and release ball movement objects
+                StopCoroutine("MovePuzzlePieces");
+                _ballPuzzleBehaviour = null;
+                _ballMovement = null;
+            }
         }
     }
 
