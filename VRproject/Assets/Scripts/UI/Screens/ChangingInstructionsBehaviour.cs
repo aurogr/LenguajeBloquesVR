@@ -7,19 +7,19 @@ public class ChangingInstructionsBehaviour : MonoBehaviour
     [SerializeField] Button _previousButton;
     [SerializeField] Button _nextButton;
 
-    Sprite _image;
+    Image _image;
     int _currentInstruction;
 
     private void Awake()
     {
-        _image = GetComponent<Image>().sprite;
+        _image = GetComponent<Image>();
     }
 
     private void OnEnable() // everytime the instruction screens appears
     {
         // reset image to starter
         _currentInstruction = 0;
-        _image = _instructions[_currentInstruction];
+        _image.sprite = _instructions[_currentInstruction];
 
         // set buttons
         _previousButton.gameObject.SetActive(false);
@@ -47,7 +47,7 @@ public class ChangingInstructionsBehaviour : MonoBehaviour
     private void PreviousInstruction()
     {
         _currentInstruction--;
-        _image = _instructions[_currentInstruction];
+        _image.sprite = _instructions[_currentInstruction];
 
         if (_currentInstruction == 0) // it has gone back to the first image
         {
@@ -62,7 +62,7 @@ public class ChangingInstructionsBehaviour : MonoBehaviour
     private void NextInstruction()
     {
         _currentInstruction++;
-        _image = _instructions[_currentInstruction];
+        _image.sprite = _instructions[_currentInstruction];
 
         if (_currentInstruction == 1) // it has passed the first image
         {

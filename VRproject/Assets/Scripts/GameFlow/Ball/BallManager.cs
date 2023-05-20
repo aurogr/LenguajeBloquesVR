@@ -50,7 +50,7 @@ public class BallManager : MonoBehaviour
 
     void SetRandomBallPosition()
     {
-        _currentBallPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-5, 5), _center.z + (_lengthCellGrid * Random.Range(-10, 10)));
+        _currentBallPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-4, 4), _center.z + (_lengthCellGrid * Random.Range(-5, 5)));
         transform.position = _currentBallPositionStart;
     }
 
