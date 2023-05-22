@@ -177,6 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collisionAudioClip: {fileID: 8300000, guid: 85a11687190be8f48ac8fb2e873e976f, type: 3}
   _pieceType: 2
+  _conditionType: 0
 --- !u!82 &5043591902581205045
 AudioSource:
   m_ObjectHideFlags: 0
@@ -392,6 +393,7 @@ MonoBehaviour:
   _leftHandGrabAttachPoint: {fileID: 448077517}
   _socketAttachPoint: {fileID: 1782091779}
   _mesh: {fileID: 1219611105697959036}
+  IsBeingHeld: 0
 --- !u!1 &8967000439948372475
 GameObject:
   m_ObjectHideFlags: 0

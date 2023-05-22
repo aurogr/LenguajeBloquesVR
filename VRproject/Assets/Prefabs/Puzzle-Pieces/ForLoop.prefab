@@ -525,6 +525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collisionAudioClip: {fileID: 8300000, guid: 85a11687190be8f48ac8fb2e873e976f, type: 3}
   _pieceType: 4
+  _conditionType: 0
 --- !u!82 &3506792994281296909
 AudioSource:
   m_ObjectHideFlags: 0

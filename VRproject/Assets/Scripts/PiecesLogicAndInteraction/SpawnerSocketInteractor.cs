@@ -47,7 +47,10 @@ public class SpawnerSocketInteractor: MonoBehaviour
     {
         // deactivate socket of the puzzle piece while it is on the spawner
         _lastObjectToEnter = _socket.GetOldestInteractableSelected();
-        _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>().socketActive = false;
+
+        XRSocketInteractor socket = _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>();
+        if (socket != null)
+            socket.socketActive = false;
     }
 
     public void OnSelectExit()
@@ -55,7 +58,9 @@ public class SpawnerSocketInteractor: MonoBehaviour
         StartCoroutine(SpawnObjectWithDelay());
 
         // activate socket of the puzzle piece when it leaves the spawner
-        _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>().socketActive = true;
+        XRSocketInteractor socket = _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>();
+        if (socket != null)
+            socket.socketActive = true;
     }
 
     IEnumerator SpawnObjectWithDelay()

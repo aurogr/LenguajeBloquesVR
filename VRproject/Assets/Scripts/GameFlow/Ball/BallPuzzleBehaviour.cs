@@ -15,28 +15,39 @@ public class BallPuzzleBehaviour
 
     public IEnumerator MoveNextPiece(CustomSocketInteractor currentSocket, Queue<CustomSocketInteractor> sockets)
     {
-        // for loop behaviour
-        if (currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType() == PuzzlePieceType.forLoop)
+        PuzzlePieceInteractableObject currentPuzzlePiece = currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>();
+        
+        // block behaviour
+        if ((currentPuzzlePiece.GetPieceType() == PuzzlePieceType.forLoop) || (currentPuzzlePiece.GetPieceType() == PuzzlePieceType.conditional))
         {
-            int forLoopTimes = currentSocket.GetTimes();
+            // get block pieces
+            int blockTimes = currentSocket.GetTimes();
 
-            currentSocket = sockets.Peek(); // get next socket (which would be the first socket inside the for loop)
+            currentSocket = sockets.Peek(); // get next socket (which would be the first socket inside the block)
 
-            // get all the sockets inside the for loop in an array
-            CustomSocketInteractor[] forLoopChildrenSockets = currentSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the for loop)
-            int numberOfActiveChildrenSockets = forLoopChildrenSockets.Length - 1; // because the last socket of a for loop is always empty in case we want to add new pieces
+            // get all the sockets inside the block in an array
+            CustomSocketInteractor[] blockChildrenSockets = currentSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
+            int numberOfActiveChildrenSockets = blockChildrenSockets.Length - 1; // because the last socket of a block is always empty in case we want to add new pieces
 
-            for (int i = 0; i < forLoopChildrenSockets.Length; i++) // dequeu the sockets inside the for loop
+            for (int i = 0; i < blockChildrenSockets.Length; i++) // dequeu the sockets inside the block
             {
                 sockets.Dequeue();
             }
 
-            // move the pieces inside the for loop
-            for (int i = 0; i < forLoopTimes; i++)
+            if (currentPuzzlePiece.GetPieceType() == PuzzlePieceType.conditional) // if its a conditional see if it can execute, if it can't return
+            {
+                if (currentPuzzlePiece.GetConditionType() != GameManager.Instance.GameCondition)
+                {
+                    yield break;
+                }
+            }                                            
+                
+            // move the pieces inside the block
+            for (int i = 0; i < blockTimes; i++)
             {
                 for (int j = 0; j < numberOfActiveChildrenSockets; j++)
                 {
-                    currentSocket = forLoopChildrenSockets[j];
+                    currentSocket = blockChildrenSockets[j];
                     Debug.Log(currentSocket);
 
                     for (int z = 1; z <= currentSocket.GetTimes(); z++) // to move it however many times it has been specified on the puzzle piece
@@ -48,6 +59,7 @@ public class BallPuzzleBehaviour
 
                 }
             }
+
         }
         else // normal behaviour
         {
@@ -59,4 +71,6 @@ public class BallPuzzleBehaviour
             }
         }
     }
+
 }
+

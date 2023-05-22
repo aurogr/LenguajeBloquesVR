@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class ForLoopPieceBehaviour : MonoBehaviour
+public class BlockBehaviour : MonoBehaviour
 {
     [SerializeField] MeshRenderer _puzzlePieceExample;
     [SerializeField] GameObject _endMeshPiece;

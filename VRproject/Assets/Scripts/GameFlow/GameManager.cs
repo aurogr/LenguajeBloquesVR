@@ -10,9 +10,9 @@ public class GameManager : MonoBehaviour
 
     private bool _isGameSituationTheSame;
 
-    public enum GameLevels { BasicLevel, LoopLevel, ConditionalLevel}
+    public GameLevels GameLevel = GameLevels.BasicLevel;
 
-    public GameLevels GameLevel;
+    public GameConditions GameCondition = GameConditions.None;
 
     #region Singleton definition
     public static GameManager Instance
@@ -73,3 +73,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
 }
+
+public enum GameLevels { BasicLevel, LoopLevel, ConditionalLevel }
+public enum GameConditions {None, GoalRed, GoalBlue}

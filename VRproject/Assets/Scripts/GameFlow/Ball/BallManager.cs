@@ -11,6 +11,8 @@ public class BallManager : MonoBehaviour
     [SerializeField] float _movementDuration = 0.5f;
     [SerializeField] GameObject _ballSphere;
     [SerializeField] GameObject _trailSpherePrefab;
+    [SerializeField] Material _redMat;
+    [SerializeField] Material _blueMat;
     [SerializeField] Vector3 _center;
 
     CustomSocketInteractor _currentSocket;
@@ -20,7 +22,9 @@ public class BallManager : MonoBehaviour
     FeedbackScreenImplementation _feedbackScreen;
 
     List<GameObject> _waypoints;
-    private bool _firstTime = true;
+    bool _firstTime = true;
+
+    MeshRenderer _ballRenderer;
 
     #endregion
 
@@ -28,19 +32,30 @@ public class BallManager : MonoBehaviour
     {
         _currentBallPositionStart = transform.position;
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
+        _ballRenderer = _ballSphere.GetComponent<MeshRenderer>();
     }
 
     #region ResetLevel
     public void OnEnable() // ball is enabled when the scene is reseted (including the first time, just after awake)
     {
         // reset the ball position and the waypoints
-        if (GameManager.Instance.GameLevel == GameManager.GameLevels.BasicLevel)
+        if (GameManager.Instance.GameLevel == GameLevels.LoopLevel)
         {
-            ResetBasicLevel();
+            ResetLoopLevel();
         }
         else
         {
-            ResetLoopLevel();
+            ResetBasicLevel();
+
+            if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel)
+            {
+                // very basic, only two conditions of the same type, when we have more it will have to change
+                GameManager.Instance.GameCondition = Random.Range(1, 3) switch
+                {
+                    1 => GameConditions.GoalRed,
+                    _ => GameConditions.GoalBlue,
+                };
+            }
         }
 
         // create movement objects
@@ -97,6 +112,15 @@ public class BallManager : MonoBehaviour
         }
         else
         {
+            if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel)
+            {
+                // very basic, only two conditions of the same type, when we have more it will have to change
+                if (GameManager.Instance.GameCondition == GameConditions.GoalRed)
+                    _ballRenderer.material = _redMat;
+                else 
+                    _ballRenderer.material = _blueMat;
+            }
+
             StartCoroutine(MovePuzzlePieces(sockets));
             return true;
         }
@@ -104,9 +128,10 @@ public class BallManager : MonoBehaviour
 
     private IEnumerator MovePuzzlePieces(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
     {
-        //all of this is possible because the sockets are stored like a tree inside their parent,
-        // and the GetComponentsInChildren is a depth-first tipe of search
+        yield return new WaitForSeconds(0.5f); // wait a little to start
 
+        // all of this is possible because the sockets are stored like a tree inside their parent,
+        // and the GetComponentsInChildren is a depth-first tipe of search
         while (sockets.Count != 1) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
             _currentSocket = sockets.Dequeue();

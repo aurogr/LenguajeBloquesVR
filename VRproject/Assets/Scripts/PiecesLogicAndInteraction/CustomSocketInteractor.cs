@@ -8,7 +8,7 @@ public class CustomSocketInteractor : MonoBehaviour
     private GameObject _puzzlePiece;
     private int _times = 1;
 
-    ForLoopPieceBehaviour _fatherLoop = null;
+    BlockBehaviour _fatherLoop = null;
 
     void Start()
     {
@@ -70,7 +70,7 @@ public class CustomSocketInteractor : MonoBehaviour
         _times = times + 1; // because the times are chosen from a dropdown
     }
 
-    public void SetFatherLoop(ForLoopPieceBehaviour fatherLoop)
+    public void SetFatherLoop(BlockBehaviour fatherLoop)
     {
         _fatherLoop = fatherLoop;
     }

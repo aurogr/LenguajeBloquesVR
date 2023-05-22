@@ -5,6 +5,7 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     Transform _repositionTransform;
     [SerializeField] AudioClip _collisionAudioClip;
     [SerializeField] PuzzlePieceType _pieceType = PuzzlePieceType.right;
+    [SerializeField] GameConditions _conditionType = GameConditions.None;
 
     CustomSocketInteractor _socket;
     AudioSource _audioSource;
@@ -66,8 +67,13 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     {
         return _pieceType;
     }
+    
+    public GameConditions GetConditionType()
+    {
+        return _conditionType;
+    }
 
-    public void SetFatherLoop(ForLoopPieceBehaviour fatherLoop)
+    public void SetFatherLoop(BlockBehaviour fatherLoop)
     {
         _socket.SetFatherLoop(fatherLoop);
     }
@@ -79,5 +85,5 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     #endregion
 }
 
-public enum PuzzlePieceType { right, left, up, down, forLoop, conditional};
+public enum PuzzlePieceType { right, left, up, down, forLoop, conditional, condition};
 
