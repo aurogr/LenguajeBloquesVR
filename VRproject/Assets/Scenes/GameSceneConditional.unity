@@ -3290,7 +3290,7 @@ GameObject:
   - component: {fileID: 642917427}
   m_Layer: 0
   m_Name: Goal
-  m_TagString: OutsideBounds
+  m_TagString: Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3736,7 +3736,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2019681076}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &674636795
 MonoBehaviour:
@@ -4574,7 +4574,7 @@ Transform:
   - {fileID: 7874297625842760094}
   - {fileID: 1115488629}
   m_Father: {fileID: 2019681076}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: -130, y: 45, z: -52}
 --- !u!114 &851333002
 MonoBehaviour:
@@ -8529,6 +8529,65 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1376901192}
   m_CullTransparentMesh: 1
+--- !u!1 &1378742706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1378742707}
+  - component: {fileID: 1378742709}
+  - component: {fileID: 1378742710}
+  m_Layer: 0
+  m_Name: BallSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1378742707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378742706}
+  m_LocalRotation: {x: -0.7064338, y: -0.47771442, z: -0.030843567, w: 0.5213338}
+  m_LocalPosition: {x: -0.22132348, y: -3.3563342, z: 3.7611017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2019681076}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1378742709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378742706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1ae17b09a840245a8b3af616f7e9a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 6171792480189769494, guid: e3f5d5a2747e0734fb6672c39f47dd46, type: 3}
+  _objectPoolSize: 10
+--- !u!114 &1378742710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378742706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0463400ed422ab84a97366fe4e9a17a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1393239320
 GameObject:
   m_ObjectHideFlags: 0
@@ -13122,6 +13181,7 @@ Transform:
   - {fileID: 1560392259}
   - {fileID: 184729212}
   - {fileID: 1337527177}
+  - {fileID: 1378742707}
   - {fileID: 674636794}
   - {fileID: 851333001}
   m_Father: {fileID: 0}
@@ -13181,6 +13241,7 @@ MonoBehaviour:
   _trailSpherePrefab: {fileID: 313078246551302867, guid: fab7fedac86f1de418a5564bed64e4ed, type: 3}
   _redMat: {fileID: -5707255225526085659, guid: 072cbc17ffa3ded4f868480b22f14ff7, type: 3}
   _blueMat: {fileID: -4906888412654700183, guid: 072cbc17ffa3ded4f868480b22f14ff7, type: 3}
+  _normalMat: {fileID: 2100000, guid: a96dc5be1462f73458899e930f3b3e07, type: 2}
   _center: {x: 1.8750018, y: 1.3373399, z: -0.56955147}
 --- !u!135 &2022729335
 SphereCollider:

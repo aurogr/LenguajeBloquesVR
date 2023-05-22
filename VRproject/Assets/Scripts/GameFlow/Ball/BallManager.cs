@@ -13,6 +13,7 @@ public class BallManager : MonoBehaviour
     [SerializeField] GameObject _trailSpherePrefab;
     [SerializeField] Material _redMat;
     [SerializeField] Material _blueMat;
+    [SerializeField] Material _normalMat;
     [SerializeField] Vector3 _center;
 
     CustomSocketInteractor _currentSocket;
@@ -55,6 +56,8 @@ public class BallManager : MonoBehaviour
                     1 => GameConditions.GoalRed,
                     _ => GameConditions.GoalBlue,
                 };
+
+                _ballRenderer.material = _normalMat;
             }
         }
 

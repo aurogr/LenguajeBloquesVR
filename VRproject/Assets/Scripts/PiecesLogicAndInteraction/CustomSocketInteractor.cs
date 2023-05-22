@@ -23,7 +23,9 @@ public class CustomSocketInteractor : MonoBehaviour
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
         _puzzlePiece.transform.parent = transform; // set the puzzle piece inside this socket object, so that they can move together and interact based on their heritage
-        _canvas.SetActive(true);
+
+        if (_puzzlePiece.GetComponent<PuzzlePieceInteractableObject>().GetPieceType() != PuzzlePieceType.conditional)
+            _canvas.SetActive(true);
 
         if(_fatherLoop != null) // warn the father loop that a change has been made and it needs to check its children again
         {

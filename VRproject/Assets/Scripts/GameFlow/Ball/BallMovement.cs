@@ -10,6 +10,7 @@ public class BallMovement
     Vector3 _directionOfRotation;
     Vector3 _targetPosition;
     Transform _transform;
+    List<GameObject> _trailSpheres;
 
     float _speed;
     float _rotationAngle;
@@ -23,6 +24,8 @@ public class BallMovement
         _speed = speed;
         _rotationAngle = rotationAngle;
         _lengthCellGrid = lenghtCellGrid;
+
+        _trailSpheres = new List<GameObject>();
     }
 
     #region Movement
@@ -37,6 +40,8 @@ public class BallMovement
 
     public void MoveBall(PuzzlePieceType puzzlePieceType)
     {
+        //InstantiateTrailBall();
+
         switch (puzzlePieceType)
         {
             case PuzzlePieceType.right:
@@ -57,6 +62,26 @@ public class BallMovement
                 break;
         }
         _targetPosition += _directionOfMovement * _lengthCellGrid;
+    }
+
+    #endregion
+
+    #region Balls trail
+    private void InstantiateTrailBall()
+    {
+        RecyclableObject ballTrailInstance = BallSpawner.Instance.gameObject.GetComponent<ObjectPoolSpawner>().SpawnObject();
+        ballTrailInstance.gameObject.GetComponent<BallTrailObject>().SetTrailPosition(_ballSphere.transform);
+        //GameObject sphere = _mono.Instantiate(_trailSpherePrefab, _ballSphere.transform.position, _ballSphere.transform.rotation, null);
+        _trailSpheres.Add(ballTrailInstance.gameObject);
+
+        float numberOfSpheresInTrail = _trailSpheres.Count;
+        float counter = 0;
+
+        foreach (GameObject trailSphere in _trailSpheres) // gradually change the transparency of the spheres in the trail, old movements should be more transparent
+        {
+            counter++;
+            trailSphere.GetComponent<Renderer>().material.color = new Color(1, 1, 1, 0.5f * (counter / numberOfSpheresInTrail));
+        }
     }
 
     #endregion

@@ -20,8 +20,14 @@ public class BallPuzzleBehaviour
         // block behaviour
         if ((currentPuzzlePiece.GetPieceType() == PuzzlePieceType.forLoop) || (currentPuzzlePiece.GetPieceType() == PuzzlePieceType.conditional))
         {
+            int blockTimes = 1;
+
             // get block pieces
-            int blockTimes = currentSocket.GetTimes();
+            if (currentPuzzlePiece.GetPieceType() == PuzzlePieceType.forLoop)
+            {
+                blockTimes = currentSocket.GetTimes();
+            }
+            
 
             currentSocket = sockets.Peek(); // get next socket (which would be the first socket inside the block)
 
