@@ -18,7 +18,6 @@ public class BallManager : MonoBehaviour
 
     CustomSocketInteractor _currentSocket;
     BallMovement _ballMovement;
-    BallPuzzleBehaviour _ballPuzzleBehaviour;
     Vector3 _currentBallPositionStart;
     FeedbackScreenImplementation _feedbackScreen;
 
@@ -29,12 +28,14 @@ public class BallManager : MonoBehaviour
 
     #endregion
 
+    #region Awake, set variables
     void Awake()
     {
         _currentBallPositionStart = transform.position;
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
         _ballRenderer = _ballSphere.GetComponent<MeshRenderer>();
     }
+    #endregion
 
     #region ResetLevel
     public void OnEnable() // ball is enabled when the scene is reseted (including the first time, just after awake)
@@ -63,7 +64,6 @@ public class BallManager : MonoBehaviour
 
         // create movement objects
         _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
-        _ballPuzzleBehaviour = new BallPuzzleBehaviour(_ballMovement, _movementDuration);
     }
 
     void SetRandomBallPosition()
@@ -106,7 +106,6 @@ public class BallManager : MonoBehaviour
     #endregion
 
     #region Simulation flow
-
     public bool StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
     {
         if (sockets.Peek().GetPuzzlePiece() == null)
@@ -139,7 +138,18 @@ public class BallManager : MonoBehaviour
         {
             _currentSocket = sockets.Dequeue();
 
-            yield return StartCoroutine(_ballPuzzleBehaviour.MoveNextPiece(_currentSocket, sockets));
+            switch (_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType())
+            {
+                case PuzzlePieceType.conditional:
+                    yield return StartCoroutine(MoveConditionalPiece(sockets));
+                    break;
+                case PuzzlePieceType.forLoop:
+                    yield return StartCoroutine(MoveForLoopPiece(sockets));
+                    break;
+                default:
+                    yield return StartCoroutine(MoveNormalPiece(_currentSocket));
+                    break;
+            }
         }
         
         ReachedSimulationEnd();
@@ -161,7 +171,6 @@ public class BallManager : MonoBehaviour
         _feedbackScreen.PrintFeedbackMessage("No has llegado a la portería", false);
 
         // release ball movement objects
-        _ballPuzzleBehaviour = null;
         _ballMovement = null;
     }
 
@@ -173,8 +182,7 @@ public class BallManager : MonoBehaviour
             _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
 
             // stop ball and release ball movement objects
-            StopCoroutine("MovePuzzlePieces");
-            _ballPuzzleBehaviour = null;
+            StopCoroutine(nameof(MovePuzzlePieces));
             _ballMovement = null;
         } 
         else if (collision.gameObject.CompareTag("FieldLimits")) {
@@ -182,8 +190,7 @@ public class BallManager : MonoBehaviour
             _feedbackScreen.PrintFeedbackMessage("Te has salido del campo. Prueba otra vez.", false); // change screen
 
             // stop ball and release ball movement objects
-            StopCoroutine("MovePuzzlePieces");
-            _ballPuzzleBehaviour = null;
+            StopCoroutine(nameof(MovePuzzlePieces));
             _ballMovement = null;
         } else if (collision.gameObject.CompareTag("Waypoint"))
         {
@@ -196,12 +203,84 @@ public class BallManager : MonoBehaviour
                 _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
 
                 // stop ball and release ball movement objects
-                StopCoroutine("MovePuzzlePieces");
-                _ballPuzzleBehaviour = null;
+                StopCoroutine(nameof(MovePuzzlePieces));
                 _ballMovement = null;
             }
         }
     }
 
+    #endregion
+
+    #region BallPuzzleBehaviour
+    public IEnumerator MoveConditionalPiece(Queue<CustomSocketInteractor> sockets)
+    {
+        CustomSocketInteractor ifConditionSocket = sockets.Peek(); // get first socket inside if condition
+
+        // get all the sockets inside the if condition block in an array
+        CustomSocketInteractor[] ifConditionChildrenSockets = ifConditionSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
+       
+        for (int i = 0; i < ifConditionChildrenSockets.Length; i++) // dequeu the sockets inside the if condition
+        {
+            sockets.Dequeue();
+        }
+
+        CustomSocketInteractor elseConditionSocket = sockets.Peek(); // get first socket inside the else condition
+
+        // get all the sockets inside the else condition block in an array
+        CustomSocketInteractor[] elseConditionChildrenSockets = ifConditionSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
+        
+        for (int i = 0; i < elseConditionChildrenSockets.Length; i++) // dequeu the sockets inside else condition
+        {
+            sockets.Dequeue();
+        }
+
+        if (_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetConditionType() == GameManager.Instance.GameCondition)
+            yield return StartCoroutine(MoveBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
+        else
+            yield return StartCoroutine(MoveBlock(elseConditionChildrenSockets, elseConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
+    }
+
+    public IEnumerator MoveForLoopPiece(Queue<CustomSocketInteractor> sockets)
+    {
+        int forLoopTimes = _currentSocket.GetTimes();
+
+        _currentSocket = sockets.Peek(); // get next socket (which would be the first socket inside the block)
+
+        // get all the sockets inside the block in an array
+        CustomSocketInteractor[] blockChildrenSockets = _currentSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
+        int numberOfActiveChildrenSockets = blockChildrenSockets.Length - 1; // because the last socket of a block is always empty in case we want to add new pieces
+
+        for (int i = 0; i < blockChildrenSockets.Length; i++) // dequeu the sockets inside the block
+        {
+            sockets.Dequeue();
+        }
+
+        // move the pieces inside the block
+        for (int i = 0; i < forLoopTimes; i++)
+        {
+            yield return StartCoroutine(MoveBlock(blockChildrenSockets, numberOfActiveChildrenSockets)); // to wait till the movement is finished to move again
+        }
+    }
+
+    public IEnumerator MoveNormalPiece(CustomSocketInteractor socket)
+    {
+        for (int i = 1; i <= socket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
+        {
+            _ballMovement.MoveBall(socket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
+
+            yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
+        }
+    }
+
+    public IEnumerator MoveBlock(CustomSocketInteractor[] sockets, int times)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            CustomSocketInteractor currentSocket = sockets[i];
+            Debug.Log(currentSocket);
+
+            yield return StartCoroutine(MoveNormalPiece(currentSocket)); // to wait till the movement is finished to move again
+        }
+    }
     #endregion
 }

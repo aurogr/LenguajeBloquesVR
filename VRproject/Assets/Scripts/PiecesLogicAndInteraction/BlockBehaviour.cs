@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
+/// <summary>
+/// This script is only given to the socket of a block piece that changes size according to its children so that it can keep count of the puzzle pieces stored inside it
+/// </summary>
 public class BlockBehaviour : MonoBehaviour
 {
+    #region Variables
     [SerializeField] MeshRenderer _puzzlePieceExample;
     [SerializeField] GameObject _endMeshPiece;
     [SerializeField] Transform _startTopMeshPiece;
@@ -16,9 +19,10 @@ public class BlockBehaviour : MonoBehaviour
     float _pieceSize;
     float _numberOfChildren;
 
-    Queue<PuzzlePieceInteractableObject> _lastChildrenPuzzlePieces;
+    Queue<PuzzlePieceInteractableObject> _lastChildrenPuzzlePieces; // list of the oldest knwon set of pieces inside the block
+    #endregion
 
-    // Start is called before the first frame update
+    #region Start, set variables
     void Start()
     {
         _lastChildrenPuzzlePieces = new Queue<PuzzlePieceInteractableObject>();
@@ -28,20 +32,25 @@ public class BlockBehaviour : MonoBehaviour
       
         ChangeScaleTopPiece();
     }
+    #endregion
 
+    #region Set block children
+    /// <summary>
+    /// Get number of times that the piece inside this socket will be executed
+    /// </summary>
     public void CheckChildrenPuzzlePieces()
     {
         PuzzlePieceInteractableObject[] childrenPuzzlePieces = GetComponentsInChildren<PuzzlePieceInteractableObject>();
 
-        // this is probably not optmized, because it removes all children father pointer in every change of the child pieces, and then adds them again if they are still there, should try to find a better solution
+        // removes all children when the inside of the block changes, and checks the inside of the block again to find all remaining/new child pieces and notify them
         for(int i = 0; i < _lastChildrenPuzzlePieces.Count; i++)
         {
             PuzzlePieceInteractableObject puzzlePiece =  _lastChildrenPuzzlePieces.Dequeue();
-            puzzlePiece.RemoveFatherLoop();
+            puzzlePiece.RemoveFatherBlockPointer(); // tell the pieces inside this block that they are no longer a child of this block
         }
         foreach (PuzzlePieceInteractableObject puzzlePiece in childrenPuzzlePieces)
         {
-            puzzlePiece.SetFatherLoop(this);
+            puzzlePiece.SetFatherBlockPointer(this); // tell the pieces inside this block that they are inside a block and point them towards the block piece
             _lastChildrenPuzzlePieces.Enqueue(puzzlePiece);
         }
 
@@ -49,7 +58,9 @@ public class BlockBehaviour : MonoBehaviour
 
         MoveEndAndTopPiece();
     }
+    #endregion
 
+    #region Block piece scaling
     private void MoveEndAndTopPiece()
     {
 
@@ -83,4 +94,5 @@ public class BlockBehaviour : MonoBehaviour
         Vector3 middlePoint = (_startTopMeshPiece.position + _endTopMeshPiece.position) / 2;
         _middleTopMeshPiece.position = middlePoint;
     }
+    #endregion
 }

@@ -1,24 +1,34 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
+/// <summary>
+/// This script is given to all socket objects to define how they interact with the puzzle pieces
+/// </summary>
 public class CustomSocketInteractor : MonoBehaviour
 {
+    #region Variables
     [SerializeField] GameObject _canvas;
     private XRSocketInteractor _socket;
     private GameObject _puzzlePiece;
     private int _times = 1;
 
     BlockBehaviour _fatherLoop = null;
+    #endregion
 
+    #region Start, set variables
     void Start()
     {
         _socket = GetComponent<XRSocketInteractor>();
         _canvas.SetActive(false);
     }
+    #endregion
 
     #region Add / Remove puzzle pieces to socket
 
-    public void AddPuzzlePiece()
+    /// <summary>
+    /// Executed when a puzzle piece connects to a socket. This socket now has a reference to the puzzle piece inside it
+    /// </summary>
+    public void AddPuzzlePiece() 
     {
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
@@ -33,6 +43,9 @@ public class CustomSocketInteractor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Executed when a puzzle piece disconnects from a socket
+    /// </summary>
     public void RemovePuzzlePiece()
     {
         if (_puzzlePiece.GetComponent<CustomXRGrabInteractable>().IsBeingHeld) // the player has removed the puzzle piece
@@ -50,34 +63,49 @@ public class CustomSocketInteractor : MonoBehaviour
         {
             _fatherLoop.CheckChildrenPuzzlePieces();
         }
-
     }
 
     #endregion
 
     #region Getters/Setters
 
+    /// <summary>
+    /// Get puzzle piece inside this socket (not the puzzle piece that the socket belongs to
+    /// </summary>
     public GameObject GetPuzzlePiece()
     {
         return _puzzlePiece;
     }
 
+    /// <summary>
+    /// Get number of times that the piece inside this socket will be executed
+    /// </summary>
     public int GetTimes()
     {
         return _times;
     }
 
+    /// <summary>
+    /// Set number of times that the piece inside this socket will be executed
+    /// </summary>
     public void SetTimes(int times)
     {
         _times = times + 1; // because the times are chosen from a dropdown
     }
 
-    public void SetFatherLoop(BlockBehaviour fatherLoop)
+    /// <summary>
+    /// This socket now belongs to a piece that is inside a block
+    /// </summary>
+    /// <param name="fatherLoop" >Give the father block so that it stores a reference to it</param>
+    public void SetFatherBlockPointer(BlockBehaviour fatherLoop)
     {
         _fatherLoop = fatherLoop;
     }
 
-    public void RemoveFatherLoop()
+    /// <summary>
+    /// The piece this socket belongs to is no longer inside a block
+    /// </summary>
+    public void RemoveFatherBlockPointer()
     {
         _fatherLoop = null;
     }

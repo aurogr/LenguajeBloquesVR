@@ -73,14 +73,21 @@ public class PuzzlePieceInteractableObject : RecyclableObject
         return _conditionType;
     }
 
-    public void SetFatherLoop(BlockBehaviour fatherLoop)
+    /// <summary>
+    /// Tell this puzzle piece to tell its socket that it is now inside a block
+    /// </summary>
+    /// <param name="fatherLoop" >Give the father block so that it stores a reference to it</param>
+    public void SetFatherBlockPointer(BlockBehaviour fatherLoop)
     {
-        _socket.SetFatherLoop(fatherLoop);
+        _socket.SetFatherBlockPointer(fatherLoop);
     }
 
-    public void RemoveFatherLoop()
+    /// <summary>
+    /// Tell this puzzle piece to tell its socket that it is no longer inside a block and should stop pointing to it
+    /// </summary>
+    public void RemoveFatherBlockPointer()
     {
-        _socket.RemoveFatherLoop();
+        _socket.RemoveFatherBlockPointer();
     }
     #endregion
 }
