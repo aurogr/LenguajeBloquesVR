@@ -124,6 +124,7 @@ public class BallManager : MonoBehaviour
             }
 
             StartCoroutine(MovePuzzlePieces(sockets));
+
             return true;
         }
     }
@@ -142,7 +143,8 @@ public class BallManager : MonoBehaviour
             {
                 case PuzzlePieceType.conditional:
                     yield return StartCoroutine(MoveConditionalPiece(sockets));
-                    break;
+                    ReachedSimulationEnd();
+                    yield break; // porque según está planteado después de una pieza condicional no se pueden poner más por lo que al acabar la condición se acaba la simulación
                 case PuzzlePieceType.forLoop:
                     yield return StartCoroutine(MoveForLoopPiece(sockets));
                     break;
@@ -151,9 +153,8 @@ public class BallManager : MonoBehaviour
                     break;
             }
         }
-        
+
         ReachedSimulationEnd();
-        
     }
 
     public void FixedUpdate()
@@ -214,6 +215,10 @@ public class BallManager : MonoBehaviour
     #region BallPuzzleBehaviour
     public IEnumerator MoveConditionalPiece(Queue<CustomSocketInteractor> sockets)
     {
+        // the puzzle pieces of the first condition always have to be dequeued, either to use them or to be able to reach the second condition sockets
+        // but the second condition sockets only need to be dequeued if the first condition doesn't apply because conditionals don't admit other pieces after,
+        // so it doesn't matter if we leave sockets left on the queue
+
         CustomSocketInteractor ifConditionSocket = sockets.Peek(); // get first socket inside if condition
 
         // get all the sockets inside the if condition block in an array
@@ -224,20 +229,25 @@ public class BallManager : MonoBehaviour
             sockets.Dequeue();
         }
 
-        CustomSocketInteractor elseConditionSocket = sockets.Peek(); // get first socket inside the else condition
-
-        // get all the sockets inside the else condition block in an array
-        CustomSocketInteractor[] elseConditionChildrenSockets = ifConditionSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
-        
-        for (int i = 0; i < elseConditionChildrenSockets.Length; i++) // dequeu the sockets inside else condition
+        if (_currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetCondition() == GameManager.Instance.GameCondition)
         {
-            sockets.Dequeue();
-        }
 
-        if (_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetConditionType() == GameManager.Instance.GameCondition)
             yield return StartCoroutine(MoveBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
+        }
         else
+        {
+            CustomSocketInteractor elseConditionSocket = sockets.Peek(); // get first socket inside the else condition
+
+            // get all the sockets inside the else condition block in an array
+            CustomSocketInteractor[] elseConditionChildrenSockets = elseConditionSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
+
+            for (int i = 0; i < elseConditionChildrenSockets.Length; i++) // dequeu the sockets inside else condition
+            {
+                sockets.Dequeue();
+            }
+
             yield return StartCoroutine(MoveBlock(elseConditionChildrenSockets, elseConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
+        }
     }
 
     public IEnumerator MoveForLoopPiece(Queue<CustomSocketInteractor> sockets)
@@ -250,7 +260,7 @@ public class BallManager : MonoBehaviour
         CustomSocketInteractor[] blockChildrenSockets = _currentSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
         int numberOfActiveChildrenSockets = blockChildrenSockets.Length - 1; // because the last socket of a block is always empty in case we want to add new pieces
 
-        for (int i = 0; i < blockChildrenSockets.Length; i++) // dequeu the sockets inside the block
+        for (int i = 0; i < numberOfActiveChildrenSockets; i++) // dequeu the sockets inside the block
         {
             sockets.Dequeue();
         }
@@ -277,7 +287,6 @@ public class BallManager : MonoBehaviour
         for (int i = 0; i < times; i++)
         {
             CustomSocketInteractor currentSocket = sockets[i];
-            Debug.Log(currentSocket);
 
             yield return StartCoroutine(MoveNormalPiece(currentSocket)); // to wait till the movement is finished to move again
         }

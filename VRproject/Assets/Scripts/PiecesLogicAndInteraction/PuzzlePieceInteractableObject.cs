@@ -5,7 +5,6 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     Transform _repositionTransform;
     [SerializeField] AudioClip _collisionAudioClip;
     [SerializeField] PuzzlePieceType _pieceType = PuzzlePieceType.right;
-    [SerializeField] GameConditions _conditionType = GameConditions.None;
 
     CustomSocketInteractor _socket;
     AudioSource _audioSource;
@@ -67,11 +66,6 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     {
         return _pieceType;
     }
-    
-    public GameConditions GetConditionType()
-    {
-        return _conditionType;
-    }
 
     /// <summary>
     /// Tell this puzzle piece to tell its socket that it is now inside a block
@@ -92,5 +86,5 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     #endregion
 }
 
-public enum PuzzlePieceType { right, left, up, down, forLoop, conditional, condition};
+public enum PuzzlePieceType { right, left, up, down, forLoop, conditional};
 

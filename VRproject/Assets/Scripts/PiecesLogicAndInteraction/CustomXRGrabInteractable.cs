@@ -38,7 +38,8 @@ public class CustomXRGrabInteractable : XRGrabInteractable
 
     protected override void OnHoverEntered(HoverEnterEventArgs args)
     {
-        _mesh.material.SetColor("_MultipliedColor", new Color(1, 0, 0, 1));
+        if (args.interactorObject.transform.gameObject.CompareTag("LeftHand") || args.interactorObject.transform.gameObject.CompareTag("RightHand"))
+            _mesh.material.SetColor("_MultipliedColor", new Color(0.7f, 0.7f, 0.7f, 1));
         base.OnHoverEntered(args);
     }
 
