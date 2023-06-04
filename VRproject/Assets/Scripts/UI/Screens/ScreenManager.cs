@@ -31,6 +31,16 @@ public class ScreenManager : MonoBehaviour
 
     #endregion
 
+    private void Awake()
+    {
+        IScreen[] screensUnderManager = GetComponentsInChildren<IScreen>(true);
+
+        foreach (IScreen screen in screensUnderManager)
+        {
+            screen.Show();
+        }
+    }
+
     private void Start() // some things need to go before
     {
         _instance = this;
@@ -41,7 +51,7 @@ public class ScreenManager : MonoBehaviour
 
         foreach (IScreen screen in screensUnderManager)
         {
-            screen.GetGameObject().SetActive(false);
+            screen.Hide();
             _screens.Add(screen.GetName(), screen);
         }
 

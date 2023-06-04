@@ -70,7 +70,7 @@ public class BallMovement
     private void InstantiateTrailBall()
     {
         RecyclableObject ballTrailInstance = BallSpawner.Instance.gameObject.GetComponent<ObjectPoolSpawner>().SpawnObject();
-        ballTrailInstance.gameObject.GetComponent<BallTrailObject>().SetTrailPosition(_ballSphere.transform);
+        ballTrailInstance.gameObject.GetComponent<BallTrailObject>().SetTrailPositionAndMaterial(_ballSphere.transform, _ballSphere.GetComponent<Renderer>().material);
         //GameObject sphere = _mono.Instantiate(_trailSpherePrefab, _ballSphere.transform.position, _ballSphere.transform.rotation, null);
         _trailSpheres.Add(ballTrailInstance.gameObject);
 
@@ -81,6 +81,14 @@ public class BallMovement
         {
             counter++;
             trailSphere.GetComponent<Renderer>().material.color = new Color(1, 1, 1, 0.5f * (counter / numberOfSpheresInTrail));
+        }
+    }
+
+    public void DestroyBalls()
+    {
+        foreach (GameObject trailSphere in _trailSpheres) // gradually change the transparency of the spheres in the trail, old movements should be more transparent
+        {
+            trailSphere.GetComponent<BallTrailObject>().Recycle();
         }
     }
 

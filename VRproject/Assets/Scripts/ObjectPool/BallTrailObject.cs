@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class BallTrailObject : RecyclableObject
 {
-    public void SetTrailPosition(Transform place)
+    public void SetTrailPositionAndMaterial(Transform place, Material material)
     {
         transform.position = place.position;
         transform.rotation = place.rotation;
+        gameObject.GetComponent<Renderer>().material = material;
     }
 
     private void OnEnable()

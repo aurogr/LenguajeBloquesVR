@@ -12,7 +12,6 @@ TagManager:
   - Trash
   - Reposition
   - Waypoint
-  - WaypointsHolder
   - FieldLimits
   layers:
   - Default

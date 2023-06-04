@@ -29,16 +29,29 @@ public class BallManager : MonoBehaviour
     #endregion
 
     #region Awake, set variables
-    void Awake()
+    void Start() // waypoints controller has to go before
     {
         _currentBallPositionStart = transform.position;
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
         _ballRenderer = _ballSphere.GetComponent<MeshRenderer>();
+
+        OnSceneReset(); // first time is played
     }
     #endregion
 
     #region ResetLevel
-    public void OnEnable() // ball is enabled when the scene is reseted (including the first time, just after awake)
+
+    public void OnEnable()
+    {
+        GameManager.Instance.OnSceneReset += OnSceneReset;
+    }
+
+    public void OnDisable()
+    {
+        GameManager.Instance.OnSceneReset -= OnSceneReset;
+    }
+
+    public void OnSceneReset()
     {
         // reset the ball position and the waypoints
         if (GameManager.Instance.GameLevel == GameLevels.LoopLevel)
@@ -172,6 +185,7 @@ public class BallManager : MonoBehaviour
         _feedbackScreen.PrintFeedbackMessage("No has llegado a la portería", false);
 
         // release ball movement objects
+        _ballMovement.DestroyBalls();
         _ballMovement = null;
     }
 
@@ -184,6 +198,7 @@ public class BallManager : MonoBehaviour
 
             // stop ball and release ball movement objects
             StopCoroutine(nameof(MovePuzzlePieces));
+            _ballMovement.DestroyBalls();
             _ballMovement = null;
         } 
         else if (collision.gameObject.CompareTag("FieldLimits")) {
@@ -192,8 +207,11 @@ public class BallManager : MonoBehaviour
 
             // stop ball and release ball movement objects
             StopCoroutine(nameof(MovePuzzlePieces));
+            _ballMovement.DestroyBalls();
             _ballMovement = null;
-        } else if (collision.gameObject.CompareTag("Waypoint"))
+
+        } 
+        else if (collision.gameObject.CompareTag("Waypoint"))
         {
             _waypoints.Remove(collision.gameObject);
             collision.gameObject.SetActive(false);
@@ -205,6 +223,7 @@ public class BallManager : MonoBehaviour
 
                 // stop ball and release ball movement objects
                 StopCoroutine(nameof(MovePuzzlePieces));
+                _ballMovement.DestroyBalls();
                 _ballMovement = null;
             }
         }
