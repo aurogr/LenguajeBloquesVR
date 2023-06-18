@@ -25,7 +25,6 @@ public class StartGameButton : MonoBehaviour
 
     private void StartGame()
     {
-        GameManager.Instance.InvokeGameStartEvent();
         ScreenManager.Instance.SwitchScreen(_nextScreenName);
     }
 }

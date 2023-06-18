@@ -64,7 +64,7 @@ public class BallManager : MonoBehaviour
 
             if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel)
             {
-                // very basic, only two conditions of the same type, when we have more it will have to change
+                // pick between two colors randomly
                 GameManager.Instance.GameCondition = Random.Range(1, 3) switch
                 {
                     1 => GameConditions.GoalRed,
@@ -72,7 +72,17 @@ public class BallManager : MonoBehaviour
                 };
 
                 _ballRenderer.material = _normalMat;
-            }
+            } else if (GameManager.Instance.GameLevel == GameLevels.MessageLevel)
+                {
+                    // pick between two colors randomly
+                    GameManager.Instance.GameCondition = Random.Range(1, 3) switch
+                    {
+                        1 => GameConditions.GoalRed,
+                        _ => GameConditions.GoalBlue,
+                    };
+
+                    _ballRenderer.material = _normalMat;
+                }
         }
 
         // create movement objects
@@ -127,9 +137,8 @@ public class BallManager : MonoBehaviour
         }
         else
         {
-            if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel)
+            if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel) // set ball material to match condition
             {
-                // very basic, only two conditions of the same type, when we have more it will have to change
                 if (GameManager.Instance.GameCondition == GameConditions.GoalRed)
                     _ballRenderer.material = _redMat;
                 else 
@@ -196,19 +205,13 @@ public class BallManager : MonoBehaviour
             //GameManager.Instance.GameEnd("Enhorabuena!.", true);
             _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
 
-            // stop ball and release ball movement objects
-            StopCoroutine(nameof(MovePuzzlePieces));
-            _ballMovement.DestroyBalls();
-            _ballMovement = null;
+            StopBehaviour();
         } 
         else if (collision.gameObject.CompareTag("FieldLimits")) {
             //GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", false);
             _feedbackScreen.PrintFeedbackMessage("Te has salido del campo. Prueba otra vez.", false); // change screen
 
-            // stop ball and release ball movement objects
-            StopCoroutine(nameof(MovePuzzlePieces));
-            _ballMovement.DestroyBalls();
-            _ballMovement = null;
+            StopBehaviour();
 
         } 
         else if (collision.gameObject.CompareTag("Waypoint"))
@@ -221,12 +224,17 @@ public class BallManager : MonoBehaviour
                 //GameManager.Instance.GameEnd("Enhorabuena!.", true);
                 _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
 
-                // stop ball and release ball movement objects
-                StopCoroutine(nameof(MovePuzzlePieces));
-                _ballMovement.DestroyBalls();
-                _ballMovement = null;
+                StopBehaviour();
             }
         }
+    }
+
+    void StopBehaviour()
+    {
+        // stop ball and release ball movement objects
+        StopCoroutine(nameof(MovePuzzlePieces));
+        _ballMovement.DestroyBalls();
+        _ballMovement = null;
     }
 
     #endregion

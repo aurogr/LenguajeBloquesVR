@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
 
     public event Action OnSceneReset;
-    public event Action OnGameStart;
 
     private bool _isGameSituationTheSame;
 
@@ -53,17 +52,6 @@ public class GameManager : MonoBehaviour
         OnSceneReset?.Invoke();
     }
 
-    public void InvokeGameStartEvent()
-    {
-        OnGameStart?.Invoke();
-    }
-
-    //public void GameEnd(string message, bool playerSucceeded)
-    //{
-    //    Debug.Log("[GameManager] GameEnd");
-    //    FindObjectOfType<FeedbackScreenImplementation>(true).PrintFeedbackMessage(message, playerSucceeded); // cannot search for this object just once because it will be different in every screen
-    //}
-
     #region Getters
     public bool GetIsGameSituationTheSame()
     {
@@ -74,5 +62,5 @@ public class GameManager : MonoBehaviour
 
 }
 
-public enum GameLevels { BasicLevel, LoopLevel, ConditionalLevel }
+public enum GameLevels { BasicLevel, LoopLevel, ConditionalLevel, MessageLevel }
 public enum GameConditions {None, GoalRed, GoalBlue}
