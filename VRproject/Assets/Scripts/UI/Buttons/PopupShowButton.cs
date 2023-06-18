@@ -26,6 +26,7 @@ public class PopupShowButton : MonoBehaviour
 
     private void ShowPopup()
     {
+        transform.SetAsFirstSibling(); // move to the top of the screen to be in top of any other popup buttons that there may be
         _popupScreen.SetActive(true);
     }
 }
