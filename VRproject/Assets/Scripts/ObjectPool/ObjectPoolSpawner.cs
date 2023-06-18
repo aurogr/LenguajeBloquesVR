@@ -6,10 +6,14 @@ public class ObjectPoolSpawner : MonoBehaviour
     [SerializeField] int _objectPoolSize;
     ObjectPool _objectPool;
 
+    public bool SpawnOnAwake = true;
+
     private void Awake()
     {
         InitializePool();
-        //SpawnObject();
+
+        if (SpawnOnAwake)
+            SpawnObject();
     }
 
     void InitializePool()

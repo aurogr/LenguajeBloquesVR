@@ -6,11 +6,14 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
 
     public event Action OnSceneReset;
-    public event Action OnGameStart;
 
-    public bool GameStarted = false;
-    FeedbackScreenImplementation _feedbackScreen;
+    private bool _isGameSituationTheSame;
 
+    public GameLevels GameLevel = GameLevels.BasicLevel;
+
+    public GameConditions GameCondition = GameConditions.None;
+
+    #region Singleton definition
     public static GameManager Instance
     {
         get
@@ -28,28 +31,36 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
+    #endregion
 
     private void Awake()
     {
-        _instance = this;
-        _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
+        if (GameManager.Instance != null)  // because we have some gameManagers on some scenes to try quicker, but they shouldn't be on the build
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject); // gameManager stays between scenes
+        }
     }
 
-    public void InvokeSceneResetEvent()
+    public void InvokeSceneResetEvent(bool isGameSituationTheSame)
     {
+        _isGameSituationTheSame = isGameSituationTheSame;
         OnSceneReset?.Invoke();
     }
 
-    public void InvokeGameStartEvent()
+    #region Getters
+    public bool GetIsGameSituationTheSame()
     {
-        OnGameStart?.Invoke();
+        return _isGameSituationTheSame;
     }
 
-    public void GameEnd(string message, bool playerSucceeded)
-    {
-        Debug.Log("[GameManager] GameEnd");
-        _feedbackScreen.PrintFeedbackMessage(message, playerSucceeded);
-    }
-
+    #endregion
 
 }
+
+public enum GameLevels { BasicLevel, LoopLevel, ConditionalLevel, MessageLevel }
+public enum GameConditions {None, GoalRed, GoalBlue}

@@ -14,40 +14,14 @@ public class SpawnerSocketInteractor: MonoBehaviour
         _socket = gameObject.GetComponent<XRSocketInteractor>();
     }
 
-    private void OnEnable()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnGameStart += OnGameStartSpawn;
-            GameManager.Instance.OnSceneReset += OnResetSceneSpawn;
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnGameStart -= OnGameStartSpawn;
-            GameManager.Instance.OnSceneReset -= OnResetSceneSpawn;
-        }
-    }
-
-    private void OnGameStartSpawn()
-    {
-        Debug.Log("[Spawner socket interactor] On game start spawn");
-        _spawner.SpawnObject();
-    }
-
-    private void OnResetSceneSpawn()
-    {
-        _lastObjectToEnter.transform.gameObject.GetComponent<RecyclableObject>().Recycle();
-    }
-
     public void OnSelectEnter()
     {
         // deactivate socket of the puzzle piece while it is on the spawner
         _lastObjectToEnter = _socket.GetOldestInteractableSelected();
-        _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>().socketActive = false;
+
+        XRSocketInteractor socket = _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>();
+        if (socket != null)
+            socket.socketActive = false;
     }
 
     public void OnSelectExit()
@@ -55,7 +29,9 @@ public class SpawnerSocketInteractor: MonoBehaviour
         StartCoroutine(SpawnObjectWithDelay());
 
         // activate socket of the puzzle piece when it leaves the spawner
-        _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>().socketActive = true;
+        XRSocketInteractor socket = _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>();
+        if (socket != null)
+            socket.socketActive = true;
     }
 
     IEnumerator SpawnObjectWithDelay()

@@ -378,6 +378,7 @@ MonoBehaviour:
   _leftHandGrabAttachPoint: {fileID: 448077517}
   _socketAttachPoint: {fileID: 1782091779}
   _mesh: {fileID: 6298333476496672583}
+  IsBeingHeld: 0
 --- !u!114 &7750974618265689822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,6 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collisionAudioClip: {fileID: 8300000, guid: 85a11687190be8f48ac8fb2e873e976f, type: 3}
   _pieceType: 3
+  _conditionType: 0
 --- !u!1 &5505879919087232658
 GameObject:
   m_ObjectHideFlags: 0

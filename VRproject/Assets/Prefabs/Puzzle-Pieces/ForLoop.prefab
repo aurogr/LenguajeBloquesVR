@@ -409,7 +409,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 8
+    m_Bits: 32
   m_SelectMode: 0
   m_CustomReticle: {fileID: 0}
   m_FirstHoverEntered:
@@ -510,6 +510,7 @@ MonoBehaviour:
   _leftHandGrabAttachPoint: {fileID: 3506792996056234131}
   _socketAttachPoint: {fileID: 3506792994734140981}
   _mesh: {fileID: 242164584218578292}
+  IsBeingHeld: 0
 --- !u!114 &3506792994281296908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -524,6 +525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _collisionAudioClip: {fileID: 8300000, guid: 85a11687190be8f48ac8fb2e873e976f, type: 3}
   _pieceType: 4
+  _conditionType: 0
 --- !u!82 &3506792994281296909
 AudioSource:
   m_ObjectHideFlags: 0
@@ -992,6 +994,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1606192946971515892, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
+      propertyPath: m_InteractionLayers.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606192946971515892, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
       propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1155,6 +1161,10 @@ PrefabInstance:
     - target: {fileID: 1606192946971515892, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
       propertyPath: m_AttachTransform
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606192946971515892, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
+      propertyPath: m_InteractionLayers.m_Bits
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 1606192946971515892, guid: e58c28e977c89a949b1c22631dd6c24e, type: 3}
       propertyPath: m_HoverExited.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
