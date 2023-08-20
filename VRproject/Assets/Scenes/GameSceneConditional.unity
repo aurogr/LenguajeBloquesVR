@@ -3916,8 +3916,8 @@ Transform:
   - {fileID: 8750962230800589216}
   - {fileID: 3437568356892027260}
   - {fileID: 4719030605473822230}
-  - {fileID: 1299561245}
   - {fileID: 1283170320}
+  - {fileID: 1299561245}
   m_Father: {fileID: 543450652420255699}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4210,6 +4210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d3387f8c771c342b555e333e907e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ball: {fileID: 0}
 --- !u!1 &868849977
 GameObject:
   m_ObjectHideFlags: 0
@@ -7008,11 +7009,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &1235353259 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 313078246551302867, guid: fab7fedac86f1de418a5564bed64e4ed, type: 3}
-  m_PrefabInstance: {fileID: 313078247501220984}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1235353263 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 313078246551302871, guid: fab7fedac86f1de418a5564bed64e4ed, type: 3}
@@ -7090,7 +7086,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 782586406}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1283170321
 BoxCollider:
@@ -7344,7 +7340,7 @@ Transform:
   - {fileID: 666362545}
   - {fileID: 918256352}
   m_Father: {fileID: 782586406}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1311721457
 GameObject:
@@ -9764,6 +9760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40b3f123a769aeb4b8852e1d0074a376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _socketsManager: {fileID: 0}
 --- !u!1 &1509252566
 GameObject:
   m_ObjectHideFlags: 0
@@ -12857,7 +12854,7 @@ MonoBehaviour:
   _speed: 0.15
   _rotationAngleEachFixedUpdate: 10
   _movementDuration: 1
-  _ballSphere: {fileID: 1235353259}
+  _mesh: {fileID: 0}
   _trailSpherePrefab: {fileID: 313078246551302867, guid: fab7fedac86f1de418a5564bed64e4ed, type: 3}
   _redMat: {fileID: -5707255225526085659, guid: 072cbc17ffa3ded4f868480b22f14ff7, type: 3}
   _blueMat: {fileID: -4906888412654700183, guid: 072cbc17ffa3ded4f868480b22f14ff7, type: 3}

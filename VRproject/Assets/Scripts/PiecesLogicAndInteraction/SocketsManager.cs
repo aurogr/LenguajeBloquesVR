@@ -3,24 +3,44 @@ using UnityEngine;
 
 public class SocketsManager : MonoBehaviour
 {
-    BallManager _ball;
-    Queue<CustomSocketInteractor> _sockets;
+    // private methods and parameters are not passed to its subclasses, while public ones are.
+    // Private methods are exclusive to the normal behaviour of this class (controlling a ball),
+    // while public ones will be used by the subclasses of the message scene,
+    // virtual methods are overried on the subclass, to still be called with the normal behaviour but change their specifid one
 
-    private void Awake()
+    BallManager _ball;
+    [HideInInspector] public Queue<CustomSocketInteractor> _sockets;
+
+    public void Awake()
     {
         _sockets = new Queue<CustomSocketInteractor>();
+    }
+
+    private void Start()
+    {
         _ball = FindObjectOfType<BallManager>();
     }
 
-    public bool StartBallMovement()
+    public bool ActivateLever()
     {
-        Debug.Log("[SocketsManager] StartBallMovement");
         EnqueueSockets();
 
-        return _ball.StartMovement(_sockets); // send queue to ball, it will move based on the puzzle pieces
+        if (_sockets.Peek().GetPuzzlePiece() == null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
-    private void EnqueueSockets() // add every socket object contained on this parent object to a queue
+    virtual public void StartMovement()
+    {
+        _ball.StartMovement(_sockets); // send queue to ball, it will move based on the puzzle pieces
+    }
+
+    public void EnqueueSockets() // add every socket object contained on this parent object to a queue
     {
         _sockets.Clear();
 

@@ -305,6 +305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameLevel: 0
+  GameCondition: 0
 --- !u!4 &151831705
 Transform:
   m_ObjectHideFlags: 0
@@ -1217,6 +1218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nextSceneName: MainMenuScene
+  _nextGameLevel: 0
 --- !u!114 &351135841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4133,6 +4135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d3387f8c771c342b555e333e907e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ball: {fileID: 0}
 --- !u!1 &868849977
 GameObject:
   m_ObjectHideFlags: 0
@@ -7267,6 +7270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nextSceneName: MainMenuScene
+  _nextGameLevel: 0
 --- !u!114 &1312745485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9404,6 +9408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40b3f123a769aeb4b8852e1d0074a376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _socketsManager: {fileID: 0}
 --- !u!1 &1509252566
 GameObject:
   m_ObjectHideFlags: 0
@@ -9674,6 +9679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nextSceneName: MainMenuScene
+  _nextGameLevel: 0
 --- !u!1 &1528161364
 GameObject:
   m_ObjectHideFlags: 0
@@ -12463,8 +12469,11 @@ MonoBehaviour:
   _speed: 0.15
   _rotationAngleEachFixedUpdate: 10
   _movementDuration: 1
-  _ballSphere: {fileID: 1235353259}
+  _mesh: {fileID: 1235353259}
   _trailSpherePrefab: {fileID: 313078246551302867, guid: fab7fedac86f1de418a5564bed64e4ed, type: 3}
+  _redMat: {fileID: 0}
+  _blueMat: {fileID: 0}
+  _normalMat: {fileID: 0}
   _center: {x: 1.8750018, y: 1.3373399, z: -0.56955147}
 --- !u!135 &2022729335
 SphereCollider:

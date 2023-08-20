@@ -7,7 +7,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class CustomSocketInteractor : MonoBehaviour
 {
     #region Variables
-    [SerializeField] GameObject _canvas;
+    [SerializeField] GameObject _timesCanvas;
     private XRSocketInteractor _socket;
     private GameObject _puzzlePiece;
     private int _times = 1;
@@ -19,7 +19,9 @@ public class CustomSocketInteractor : MonoBehaviour
     void Start()
     {
         _socket = GetComponent<XRSocketInteractor>();
-        _canvas.SetActive(false);
+
+        if (_timesCanvas != null) // some pieces, such as the message pieces or conditionals don't have a number of times
+            _timesCanvas.SetActive(false);
     }
     #endregion
 
@@ -34,8 +36,8 @@ public class CustomSocketInteractor : MonoBehaviour
         _puzzlePiece = obj.transform.gameObject;
         _puzzlePiece.transform.parent = transform; // set the puzzle piece inside this socket object, so that they can move together and interact based on their heritage
 
-        if (_puzzlePiece.GetComponent<PuzzlePieceInteractableObject>().GetPieceType() != PuzzlePieceType.conditional)
-            _canvas.SetActive(true);
+        if (_timesCanvas != null)
+            _timesCanvas.SetActive(true);
 
         if(_fatherLoop != null) // warn the father loop that a change has been made and it needs to check its children again
         {
@@ -57,7 +59,9 @@ public class CustomSocketInteractor : MonoBehaviour
         }
 
         _puzzlePiece = null;
-        _canvas.SetActive(false);
+
+        if (_timesCanvas != null)
+            _timesCanvas.SetActive(false);
 
         if (_fatherLoop != null)
         {

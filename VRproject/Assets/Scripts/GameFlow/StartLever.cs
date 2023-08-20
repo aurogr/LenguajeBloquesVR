@@ -6,7 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class StartLever : MonoBehaviour
 {
     XRGrabInteractable _interactionScript;
-    SocketsManager _socketsManager; // we can find it in real time instead of assigning it in the editor because there is only one
+    [SerializeField] SocketsManager _socketsManager; // given in the editor in the message level, but found in real time in the rest of levels since there is only one
     Rigidbody _rb;
     HingeJoint _hingeJoint;
     bool _ballMovementStarted = false;
@@ -16,7 +16,9 @@ public class StartLever : MonoBehaviour
         _interactionScript = gameObject.GetComponent<XRGrabInteractable>();
         _rb = gameObject.GetComponent<Rigidbody>();
         _hingeJoint = gameObject.GetComponent<HingeJoint>();
-        _socketsManager = FindObjectOfType<SocketsManager>();
+
+        if (_socketsManager == null) // if it wasn't given in the editor, find it
+            _socketsManager = FindObjectOfType<SocketsManager>();
 
         // subscribe to game manager "start game" event to reset the ballMovementStarted boolean
         GameManager.Instance.OnSceneReset += ResetBallMovementBoolean;
@@ -42,7 +44,7 @@ public class StartLever : MonoBehaviour
                 // because the hinge is configured as a spring, it will snap back into the initial position
                 // else, it will stay at the bottom, showing the player visually that the lever has been triggered
 
-                _ballMovementStarted = _socketsManager.StartBallMovement(); // Start the ball movement from the sockets manager, returns a boolean indicating if it was possible
+                _ballMovementStarted = _socketsManager.ActivateLever(); // check if the ball movement can be activated (there are sockets)
 
                 Debug.Log("[StartLevel] Is movement started: "+_ballMovementStarted);
 
@@ -52,6 +54,8 @@ public class StartLever : MonoBehaviour
                     _hingeJoint.useSpring = false;
                     _rb.velocity = Vector3.zero;
                     _rb.isKinematic = true; // stop the spring movement
+
+                    _socketsManager.StartMovement(); // Start the ball movement from the sockets manager
                 }
             }
         }

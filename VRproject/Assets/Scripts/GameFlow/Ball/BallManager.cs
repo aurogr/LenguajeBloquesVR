@@ -9,7 +9,7 @@ public class BallManager : MonoBehaviour
     [SerializeField] float _speed;
     [SerializeField] float _rotationAngleEachFixedUpdate = 10f;
     [SerializeField] float _movementDuration = 0.5f;
-    [SerializeField] GameObject _ballSphere;
+    [SerializeField] GameObject _mesh;
     [SerializeField] GameObject _trailSpherePrefab;
     [SerializeField] Material _redMat;
     [SerializeField] Material _blueMat;
@@ -18,22 +18,22 @@ public class BallManager : MonoBehaviour
 
     CustomSocketInteractor _currentSocket;
     BallMovement _ballMovement;
-    Vector3 _currentBallPositionStart;
+    Vector3 _currentPositionStart;
     FeedbackScreenImplementation _feedbackScreen;
 
     List<GameObject> _waypoints;
     bool _firstTime = true;
 
-    MeshRenderer _ballRenderer;
+    MeshRenderer _renderer;
 
     #endregion
 
     #region Awake, set variables
     void Start() // waypoints controller has to go before
     {
-        _currentBallPositionStart = transform.position;
+        _currentPositionStart = transform.position;
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
-        _ballRenderer = _ballSphere.GetComponent<MeshRenderer>();
+        _renderer = _mesh.GetComponent<MeshRenderer>();
 
         OnSceneReset(); // first time is played
     }
@@ -43,17 +43,19 @@ public class BallManager : MonoBehaviour
 
     public void OnEnable()
     {
-        GameManager.Instance.OnSceneReset += OnSceneReset;
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnSceneReset += OnSceneReset;
     }
 
     public void OnDisable()
     {
-        GameManager.Instance.OnSceneReset -= OnSceneReset;
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnSceneReset -= OnSceneReset;
     }
 
     public void OnSceneReset()
     {
-        // reset the ball position and the waypoints
+        // reset position (and waypoints on a loop level)
         if (GameManager.Instance.GameLevel == GameLevels.LoopLevel)
         {
             ResetLoopLevel();
@@ -67,32 +69,32 @@ public class BallManager : MonoBehaviour
                 // pick between two colors randomly
                 GameManager.Instance.GameCondition = Random.Range(1, 3) switch
                 {
-                    1 => GameConditions.GoalRed,
-                    _ => GameConditions.GoalBlue,
+                    1 => GameConditions.Red,
+                    _ => GameConditions.Blue,
                 };
 
-                _ballRenderer.material = _normalMat;
+                _renderer.material = _normalMat;
             } else if (GameManager.Instance.GameLevel == GameLevels.MessageLevel)
                 {
                     // pick between two colors randomly
                     GameManager.Instance.GameCondition = Random.Range(1, 3) switch
                     {
-                        1 => GameConditions.GoalRed,
-                        _ => GameConditions.GoalBlue,
+                        1 => GameConditions.Red,
+                        _ => GameConditions.Blue,
                     };
 
-                    _ballRenderer.material = _normalMat;
+                    _renderer.material = _normalMat;
                 }
         }
 
         // create movement objects
-        _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
+        _ballMovement = new BallMovement(_mesh, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
     }
 
     void SetRandomBallPosition()
     {
-        _currentBallPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-4, 4), _center.z + (_lengthCellGrid * Random.Range(-5, 5)));
-        transform.position = _currentBallPositionStart;
+        _currentPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-4, 4), _center.z + (_lengthCellGrid * Random.Range(-5, 5)));
+        transform.position = _currentPositionStart;
     }
 
     void ResetBasicLevel()
@@ -103,7 +105,7 @@ public class BallManager : MonoBehaviour
         }
         else
         {
-            transform.position = _currentBallPositionStart;
+            transform.position = _currentPositionStart;
         }
 
         _firstTime = false;
@@ -111,7 +113,7 @@ public class BallManager : MonoBehaviour
 
     void ResetLoopLevel()
     {
-        transform.position = _currentBallPositionStart;
+        transform.position = _currentPositionStart;
 
         if (_firstTime || !GameManager.Instance.GetIsGameSituationTheSame())
         {
@@ -129,26 +131,17 @@ public class BallManager : MonoBehaviour
     #endregion
 
     #region Simulation flow
-    public bool StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
+    public void StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
     {
-        if (sockets.Peek().GetPuzzlePiece() == null)
+        if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel) // set ball material to match condition
         {
-            return false;
+            if (GameManager.Instance.GameCondition == GameConditions.Red)
+                _renderer.material = _redMat;
+            else 
+                _renderer.material = _blueMat;
         }
-        else
-        {
-            if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel) // set ball material to match condition
-            {
-                if (GameManager.Instance.GameCondition == GameConditions.GoalRed)
-                    _ballRenderer.material = _redMat;
-                else 
-                    _ballRenderer.material = _blueMat;
-            }
 
-            StartCoroutine(MovePuzzlePieces(sockets));
-
-            return true;
-        }
+        StartCoroutine(MovePuzzlePieces(sockets));
     }
 
     private IEnumerator MovePuzzlePieces(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
@@ -202,13 +195,11 @@ public class BallManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
-            //GameManager.Instance.GameEnd("Enhorabuena!.", true);
             _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
 
             StopBehaviour();
         } 
         else if (collision.gameObject.CompareTag("FieldLimits")) {
-            //GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", false);
             _feedbackScreen.PrintFeedbackMessage("Te has salido del campo. Prueba otra vez.", false); // change screen
 
             StopBehaviour();
@@ -221,7 +212,6 @@ public class BallManager : MonoBehaviour
 
             if (_waypoints.Count == 0) // if the player has cleared all the waypoints he wins
             {
-                //GameManager.Instance.GameEnd("Enhorabuena!.", true);
                 _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
 
                 StopBehaviour();
@@ -256,7 +246,7 @@ public class BallManager : MonoBehaviour
             sockets.Dequeue();
         }
 
-        if (_currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetCondition() == GameManager.Instance.GameCondition)
+        if (_currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetConditionColor() == GameManager.Instance.GameCondition)
         {
 
             yield return StartCoroutine(MoveBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
@@ -309,9 +299,9 @@ public class BallManager : MonoBehaviour
         }
     }
 
-    public IEnumerator MoveBlock(CustomSocketInteractor[] sockets, int times)
+    public IEnumerator MoveBlock(CustomSocketInteractor[] sockets, int numberOfBlockPieces)
     {
-        for (int i = 0; i < times; i++)
+        for (int i = 0; i < numberOfBlockPieces; i++)
         {
             CustomSocketInteractor currentSocket = sockets[i];
 

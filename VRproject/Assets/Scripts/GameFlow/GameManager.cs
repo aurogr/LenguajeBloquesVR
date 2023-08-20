@@ -63,4 +63,4 @@ public class GameManager : MonoBehaviour
 }
 
 public enum GameLevels { BasicLevel, LoopLevel, ConditionalLevel, MessageLevel }
-public enum GameConditions {None, GoalRed, GoalBlue}
+public enum GameConditions {None, Red, Blue, Right, Left}
