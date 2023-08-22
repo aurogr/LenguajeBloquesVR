@@ -24,7 +24,7 @@ public class GoalKeeperSocketsManager : SocketsManager
 
         int successCounter = 0; // there are two defenders that must reach a position in the map, so the movement will be succesfull when the defenderSocketsManager returns true two times
 
-        for (int i = 0; i < base._sockets.Count; i++) // go through sockets (ignoring last because it doesn't contain a puzzle piece)
+        while(base._sockets.Count != 1) // go through sockets (ignoring last because it doesn't contain a puzzle piece)
         {
             Debug.Log("[GKSM] sockets count = " + _sockets.Count);
 

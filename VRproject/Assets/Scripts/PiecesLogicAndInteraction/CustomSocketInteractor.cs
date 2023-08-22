@@ -20,8 +20,8 @@ public class CustomSocketInteractor : MonoBehaviour
     {
         _socket = GetComponent<XRSocketInteractor>();
 
-        if (_timesCanvas != null) // some pieces, such as the message pieces or conditionals don't have a number of times
-            _timesCanvas.SetActive(false);
+        if (_timesCanvas != null ) // Message pieces sockets don't have a canvas, control to avoid errors.
+            _timesCanvas.SetActive(false); // all sockets start without the canvas showing, it is only shown when a piece is placed inside it
     }
     #endregion
 
@@ -36,7 +36,7 @@ public class CustomSocketInteractor : MonoBehaviour
         _puzzlePiece = obj.transform.gameObject;
         _puzzlePiece.transform.parent = transform; // set the puzzle piece inside this socket object, so that they can move together and interact based on their heritage
 
-        if (_timesCanvas != null)
+        if (_timesCanvas != null && (_puzzlePiece.GetComponent<PuzzlePieceInteractableObject>().GetPieceType() != PuzzlePieceType.conditional)) // When a conditional piece is placed the canvas shouldn't be shown
             _timesCanvas.SetActive(true);
 
         if(_fatherLoop != null) // warn the father loop that a change has been made and it needs to check its children again
