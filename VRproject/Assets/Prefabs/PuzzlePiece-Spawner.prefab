@@ -181,3 +181,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 7750974618265689822, guid: f75f4975681a5a241a8d4d4773679f2a, type: 3}
   _objectPoolSize: 3
+  SpawnOnAwake: 1
