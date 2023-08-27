@@ -100,7 +100,7 @@ public class DefenderManager : MonoBehaviour
                     yield return StartCoroutine(MoveForLoopPiece(sockets, messageTimes));
                     break;
                 default:
-                    yield return StartCoroutine(MoveNormalPiece(_currentSocket));
+                    yield return StartCoroutine(MoveNormalPiece(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>()));
                     break;
             }
         }
@@ -128,7 +128,6 @@ public class DefenderManager : MonoBehaviour
         Debug.Log("[OnTriggerEnter]");
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
-            Debug.Log("Defender on goal");
             _defenderOnGoal = true;
         }
     }
@@ -138,7 +137,6 @@ public class DefenderManager : MonoBehaviour
         Debug.Log("[OnTriggerExit]");
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
-            Debug.Log("Defender out of goal");
             _defenderOnGoal = false;
         }
     }
@@ -183,8 +181,6 @@ public class DefenderManager : MonoBehaviour
 
     public IEnumerator MoveForLoopPiece(Queue<CustomSocketInteractor> sockets, int messageTimes)
     {
-        int forLoopTimes = _currentSocket.GetTimes();
-
         _currentSocket = sockets.Peek(); // get next socket (which would be the first socket inside the block)
 
         // get all the sockets inside the block in an array
@@ -203,16 +199,16 @@ public class DefenderManager : MonoBehaviour
             {
                 CustomSocketInteractor currentSocket = blockChildrenSockets[i];
 
-                yield return StartCoroutine(MoveNormalPiece(currentSocket)); // to wait till the movement is finished to move again
+                yield return StartCoroutine(MoveNormalPiece(currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>())); // to wait till the movement is finished to move again
             }
         }
     }
 
-    public IEnumerator MoveNormalPiece(CustomSocketInteractor socket)
+    public IEnumerator MoveNormalPiece(PuzzlePieceInteractableObject puzzlePiece)
     {
-        for (int i = 1; i <= socket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
+        for (int i = 1; i <= puzzlePiece.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
         {
-            _defenderMovement.MoveBall(socket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
+            _defenderMovement.MoveBall(puzzlePiece.GetPieceType());
 
             yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
         }
@@ -230,7 +226,7 @@ public class DefenderManager : MonoBehaviour
                     yield return StartCoroutine(MoveForLoopPiece(sockets, messageTimes));
                     break;
                 default:
-                    yield return StartCoroutine(MoveNormalPiece(_currentSocket));
+                    yield return StartCoroutine(MoveNormalPiece(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>()));
                     break;
             }
         }

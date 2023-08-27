@@ -1,20 +1,42 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PuzzlePieceInteractableObject : RecyclableObject
 {
     Transform _repositionTransform;
     [SerializeField] AudioClip _collisionAudioClip;
     [SerializeField] PuzzlePieceType _pieceType = PuzzlePieceType.right;
+    
+    int _times = 1;
+    TMP_Dropdown _dropdown;
 
     CustomSocketInteractor _socket;
     AudioSource _audioSource;
+
+    public override void Recycle()
+    {
+        if (_pieceType == PuzzlePieceType.forLoop)
+        {
+            GetComponentInChildren<BlockBehaviour>().ResetSize();
+        }
+
+        if(_dropdown is not null)
+        {
+            _dropdown.value = 0;
+            _times = 1;
+        }
+
+        base.Recycle();
+    }
 
     private void Awake()
     {
         _repositionTransform = GameObject.FindGameObjectWithTag("Reposition").transform;
         _audioSource = gameObject.GetComponent<AudioSource>();
         _socket = GetComponentInChildren<CustomSocketInteractor>();
-        //_socket.gameObject.SetActive(false);
+
+        _dropdown = GetComponentInChildren<TMP_Dropdown>();
     }
 
     private void OnEnable()
@@ -62,6 +84,22 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     }
 
     #region Getters / setters etc
+
+    /// <summary>
+    /// Get number of times that the piece inside this socket will be executed
+    /// </summary>
+    public int GetTimes()
+    {
+        return _times;
+    }
+
+    /// <summary>
+    /// Set number of times that the piece inside this socket will be executed
+    /// </summary>
+    public void SetTimes(int times)
+    {
+        _times = times + 1; // because the times are chosen from a dropdown
+    }
 
     public PuzzlePieceType GetPieceType()
     {

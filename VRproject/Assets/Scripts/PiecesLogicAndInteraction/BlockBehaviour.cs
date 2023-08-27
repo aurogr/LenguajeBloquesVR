@@ -93,5 +93,17 @@ public class BlockBehaviour : MonoBehaviour
         Vector3 middlePoint = (_startTopMeshPiece.localPosition + _endTopMeshPiece.localPosition) / 2;
         _middleTopMeshPiece.localPosition = middlePoint;
     }
+
+    public void ResetSize()
+    {
+        _endMeshPiece.transform.localPosition = new Vector3(_endMeshPieceDefaultLocalPos.x, _endMeshPiece.transform.localPosition.y, _endMeshPiece.transform.localPosition.z);
+        _endTopMeshPiece.transform.localPosition = new Vector3(_endMeshPieceDefaultLocalPos.x, _endTopMeshPiece.transform.localPosition.y, _endTopMeshPiece.transform.localPosition.z);
+        _endSocketObject.transform.localPosition = new Vector3(_endSocketObjectDefaultLocalPos.x, _endSocketObject.transform.localPosition.y, _endSocketObject.transform.localPosition.z);
+ 
+        ChangeScaleTopPiece();
+
+        Debug.Log("[ResetSize]");
+    }
+
     #endregion
 }

@@ -10,7 +10,7 @@ public abstract class RecyclableObject : MonoBehaviour
         _belongingObjectPool = objectPool;
     }
 
-    public void Recycle() // this needs to be called from the correspondant script
+    virtual public void Recycle() // this needs to be called from the correspondant script
                           // when we want to stop using this object and return it to the pool
     {
         _belongingObjectPool.RecycleObject(this);

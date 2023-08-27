@@ -7,10 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class CustomSocketInteractor : MonoBehaviour
 {
     #region Variables
-    [SerializeField] GameObject _timesCanvas;
     private XRSocketInteractor _socket;
     private GameObject _puzzlePiece;
-    private int _times = 1;
 
     BlockBehaviour _fatherLoop = null;
     #endregion
@@ -18,11 +16,7 @@ public class CustomSocketInteractor : MonoBehaviour
     #region Start, set variables
     void Start()
     {
-        _socket = GetComponent<XRSocketInteractor>();
-
-        if (_timesCanvas != null ) // Message pieces sockets don't have a canvas, control to avoid errors.
-            _timesCanvas.SetActive(false); // all sockets start without the canvas showing, it is only shown when a piece is placed inside it
-    }
+        _socket = GetComponent<XRSocketInteractor>();}
     #endregion
 
     #region Add / Remove puzzle pieces to socket
@@ -35,9 +29,6 @@ public class CustomSocketInteractor : MonoBehaviour
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
         _puzzlePiece.transform.parent = transform; // set the puzzle piece inside this socket object, so that they can move together and interact based on their heritage
-
-        if (_timesCanvas != null && (_puzzlePiece.GetComponent<PuzzlePieceInteractableObject>().GetPieceType() != PuzzlePieceType.conditional)) // When a conditional piece is placed the canvas shouldn't be shown
-            _timesCanvas.SetActive(true);
 
         if(_fatherLoop != null) // warn the father loop that a change has been made and it needs to check its children again
         {
@@ -60,9 +51,6 @@ public class CustomSocketInteractor : MonoBehaviour
 
         _puzzlePiece = null;
 
-        if (_timesCanvas != null)
-            _timesCanvas.SetActive(false);
-
         if (_fatherLoop != null)
         {
             _fatherLoop.CheckChildrenPuzzlePieces();
@@ -79,22 +67,6 @@ public class CustomSocketInteractor : MonoBehaviour
     public GameObject GetPuzzlePiece()
     {
         return _puzzlePiece;
-    }
-
-    /// <summary>
-    /// Get number of times that the piece inside this socket will be executed
-    /// </summary>
-    public int GetTimes()
-    {
-        return _times;
-    }
-
-    /// <summary>
-    /// Set number of times that the piece inside this socket will be executed
-    /// </summary>
-    public void SetTimes(int times)
-    {
-        _times = times + 1; // because the times are chosen from a dropdown
     }
 
     /// <summary>
