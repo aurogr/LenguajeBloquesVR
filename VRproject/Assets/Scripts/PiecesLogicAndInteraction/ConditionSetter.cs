@@ -65,6 +65,6 @@ public class ConditionSetter : MonoBehaviour
     /// </summary>
     public void SetConditionTimes(int pieceCondition)
     {
-        _pieceConditionTimes = pieceCondition;
+        _pieceConditionTimes = pieceCondition + 1;
     }
 }

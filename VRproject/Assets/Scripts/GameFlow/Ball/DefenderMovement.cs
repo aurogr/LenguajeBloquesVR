@@ -9,7 +9,6 @@ public class DefenderMovement
     Transform _transform;
 
     float _speed;
-    float _rotationAngle;
     float _lengthCellGrid;
 
     public DefenderMovement(Transform transform, float speed, float lenghtCellGrid)

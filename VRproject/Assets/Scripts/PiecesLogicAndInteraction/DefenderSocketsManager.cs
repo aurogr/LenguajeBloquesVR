@@ -8,11 +8,7 @@ public class DefenderSocketsManager : SocketsManager
 
     public IEnumerator StartMovement(GameConditions color, GameConditions direction, int messageTimes) // different method than father, overload
     {
-        Debug.Log("[DFSM StartMovement]");
         base.EnqueueSockets(); // enqueue sockets to use thems
-
-
-        Debug.Log("[DFSM] sockets count = "+ base._sockets.Count);
 
         if (color == GameConditions.Red)
         {

@@ -46,7 +46,8 @@ public class PuzzlePieceInteractableObject : RecyclableObject
 
     private void ResetPiece()
     {
-        Recycle(); // recycable object behaviour
+        if (!GameManager.Instance.GetIsGameSituationTheSame()) // Piece only resets if the game situation changes, if the player is still trying the same screen pieces stay
+            Recycle(); // recycable object behaviour
     }
     
 

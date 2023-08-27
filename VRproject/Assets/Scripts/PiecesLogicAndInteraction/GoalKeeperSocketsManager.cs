@@ -14,33 +14,22 @@ public class GoalKeeperSocketsManager : SocketsManager
 
     override public void StartMovement()
     {
-        Debug.Log("[GKSM StartMovement]");
         StartCoroutine(GoalKeeperMovement());
     }
 
     private IEnumerator GoalKeeperMovement()
     {
-        Debug.Log("[GKSM GoalKeeperMovement]");
-
-        int successCounter = 0; // there are two defenders that must reach a position in the map, so the movement will be succesfull when the defenderSocketsManager returns true two times
-
         while(base._sockets.Count != 1) // go through sockets (ignoring last because it doesn't contain a puzzle piece)
         {
-            Debug.Log("[GKSM] sockets count = " + _sockets.Count);
-
             ConditionSetter _currentPieceConditions = base._sockets.Dequeue().GetComponentInChildren<ConditionSetter>(); // we know that this socket manager only has message pieces, which have a condition setter
             int times = _currentPieceConditions.GetConditionTimes();
             GameConditions direction = _currentPieceConditions.GetConditionSide();
             GameConditions color = _currentPieceConditions.GetConditionColor();
 
             yield return _defenderSocketsManager.StartMovement(color, direction, times);
-            bool positionReached = _defenderSocketsManager.GetResult();
-
-            if (positionReached)
-                successCounter++;
         }
 
-        if (successCounter == 2)
+        if (_defenderSocketsManager.GetResult())
         {
             _feedbackScreen.PrintFeedbackMessage("olee", true);
         }

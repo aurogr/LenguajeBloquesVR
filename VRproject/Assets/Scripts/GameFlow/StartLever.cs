@@ -26,12 +26,18 @@ public class StartLever : MonoBehaviour
 
     private void ResetBallMovementBoolean()
     {
-        _ballMovementStarted = false;
-
         // reset level interaction
-        _interactionScript.enabled = true; // enable the xr interaction script, so that it can't be grabbed again
+        _interactionScript.enabled = true; // enable the xr interaction script, so that it can be grabbed again
         _hingeJoint.useSpring = true;
         _rb.isKinematic = false; // stop the spring movement
+
+        StartCoroutine(ReenableCollider()); // wait for the spring to go back to position to enable movement
+    }
+
+    IEnumerator ReenableCollider()
+    {
+        yield return new WaitForSeconds(3);
+        _ballMovementStarted = false;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -45,8 +51,6 @@ public class StartLever : MonoBehaviour
                 // else, it will stay at the bottom, showing the player visually that the lever has been triggered
 
                 _ballMovementStarted = _socketsManager.ActivateLever(); // check if the ball movement can be activated (there are sockets)
-
-                Debug.Log("[StartLevel] Is movement started: "+_ballMovementStarted);
 
                 if (_ballMovementStarted)
                 {

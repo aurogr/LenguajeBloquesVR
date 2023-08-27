@@ -83,8 +83,6 @@ public class DefenderManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f); // wait a little to start
 
-        Debug.Log("[DM MPP] direction: " + direction + " messageTimes: " + messageTimes);
-
         bool exitWhileLoop = false;
         // all of this is possible because the sockets are stored like a tree inside their parent,
         // and the GetComponentsInChildren is a depth-first tipe of search
@@ -127,16 +125,20 @@ public class DefenderManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        Debug.Log("[OnTriggerEnter]");
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
+            Debug.Log("Defender on goal");
             _defenderOnGoal = true;
         }
     }
 
     private void OnTriggerExit(Collider collision)
     {
+        Debug.Log("[OnTriggerExit]");
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
+            Debug.Log("Defender out of goal");
             _defenderOnGoal = false;
         }
     }
@@ -189,18 +191,18 @@ public class DefenderManager : MonoBehaviour
         CustomSocketInteractor[] blockChildrenSockets = _currentSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
         int numberOfActiveChildrenSockets = blockChildrenSockets.Length - 1; // because the last socket of a block is always empty in case we want to add new pieces
 
-        for (int i = 0; i < numberOfActiveChildrenSockets; i++) // dequeu the sockets inside the block
+        for (int i = 0; i < blockChildrenSockets.Length; i++) // dequeu the sockets inside the block (including the empty one)
         {
             sockets.Dequeue();
         }
 
         // move the pieces inside the block
-        for (int i = 0; i < forLoopTimes; i++)
+        for (int j = 0; j < messageTimes; j++)
         {
-            CustomSocketInteractor currentSocket = blockChildrenSockets[i];
-
-            for (int j = 0; j < messageTimes; i++)
+            for (int i = 0; i < numberOfActiveChildrenSockets; i++)
             {
+                CustomSocketInteractor currentSocket = blockChildrenSockets[i];
+
                 yield return StartCoroutine(MoveNormalPiece(currentSocket)); // to wait till the movement is finished to move again
             }
         }
