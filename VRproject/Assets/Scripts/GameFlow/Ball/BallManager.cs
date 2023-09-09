@@ -11,10 +11,8 @@ public class BallManager : MonoBehaviour
     [SerializeField] float _movementDuration = 0.5f;
     [SerializeField] GameObject _mesh;
     [SerializeField] GameObject _trailSpherePrefab;
-    [SerializeField] Material _redMat;
-    [SerializeField] Material _blueMat;
-    [SerializeField] Material _normalMat;
-    [SerializeField] Vector3 _center;
+    
+    Vector3 _center;
 
     CustomSocketInteractor _currentSocket;
     BallMovement _ballMovement;
@@ -31,6 +29,7 @@ public class BallManager : MonoBehaviour
     #region Awake, set variables
     void Start() // waypoints controller has to go before
     {
+        _center = transform.position;
         _currentPositionStart = transform.position;
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
         _renderer = _mesh.GetComponent<MeshRenderer>();
@@ -73,27 +72,17 @@ public class BallManager : MonoBehaviour
                     _ => GameConditions.Blue,
                 };
 
-                _renderer.material = _normalMat;
-            } else if (GameManager.Instance.GameLevel == GameLevels.MessageLevel)
-                {
-                    // pick between two colors randomly
-                    GameManager.Instance.GameCondition = Random.Range(1, 3) switch
-                    {
-                        1 => GameConditions.Red,
-                        _ => GameConditions.Blue,
-                    };
-
-                    _renderer.material = _normalMat;
-                }
+                _renderer.material.color = new Color(1, 1, 1);
+            }
         }
 
         // create movement objects
-        _ballMovement = new BallMovement(_mesh, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
+        _ballMovement = new BallMovement(this.gameObject, _mesh, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
     }
 
     void SetRandomBallPosition()
     {
-        _currentPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-4, 4), _center.z + (_lengthCellGrid * Random.Range(-5, 5)));
+        _currentPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-2, 2), _center.z + (_lengthCellGrid * Random.Range(-4, 4)));
         transform.position = _currentPositionStart;
     }
 
@@ -136,9 +125,9 @@ public class BallManager : MonoBehaviour
         if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel) // set ball material to match condition
         {
             if (GameManager.Instance.GameCondition == GameConditions.Red)
-                _renderer.material = _redMat;
-            else 
-                _renderer.material = _blueMat;
+                _renderer.material.color = new Color(1, 0, 0);
+            else
+                _renderer.material.color = new Color(0, 0, 1);
         }
 
         StartCoroutine(MovePuzzlePieces(sockets));

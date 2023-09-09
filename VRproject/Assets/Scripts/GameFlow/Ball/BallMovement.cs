@@ -5,6 +5,7 @@ using UnityEngine;
 public class BallMovement
 {
     GameObject _ballSphere;
+    GameObject _parent;
 
     Vector3 _directionOfMovement;
     Vector3 _directionOfRotation;
@@ -16,8 +17,9 @@ public class BallMovement
     float _rotationAngle;
     float _lengthCellGrid;
 
-    public BallMovement(GameObject ballSphere, Transform transform, float speed, float rotationAngle, float lenghtCellGrid)
+    public BallMovement(GameObject parent, GameObject ballSphere, Transform transform, float speed, float rotationAngle, float lenghtCellGrid)
     {
+        _parent = parent;
         _ballSphere = ballSphere;
         _transform = transform;
         _targetPosition = transform.position;
@@ -40,7 +42,7 @@ public class BallMovement
 
     public void MoveBall(PuzzlePieceType puzzlePieceType)
     {
-        //InstantiateTrailBall();
+        InstantiateTrailBall();
 
         switch (puzzlePieceType)
         {
@@ -69,7 +71,7 @@ public class BallMovement
     #region Balls trail
     private void InstantiateTrailBall()
     {
-        RecyclableObject ballTrailInstance = BallSpawner.Instance.gameObject.GetComponent<ObjectPoolSpawner>().SpawnObject();
+        RecyclableObject ballTrailInstance = _parent.GetComponent<ObjectPoolSpawner>().SpawnObject();
         ballTrailInstance.gameObject.GetComponent<BallTrailObject>().SetTrailPositionAndMaterial(_ballSphere.transform, _ballSphere.GetComponent<Renderer>().material);
         //GameObject sphere = _mono.Instantiate(_trailSpherePrefab, _ballSphere.transform.position, _ballSphere.transform.rotation, null);
         _trailSpheres.Add(ballTrailInstance.gameObject);
