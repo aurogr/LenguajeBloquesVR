@@ -36,7 +36,7 @@ public class StartLever : MonoBehaviour
 
     IEnumerator ReenableCollider()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1.5f);
         _ballMovementStarted = false;
     }
 
