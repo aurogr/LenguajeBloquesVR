@@ -51,7 +51,12 @@ public class DefenderManager : MonoBehaviour
 
     void SetRandomGoalPosition()
     {
-        _currentGoalPosition = new Vector3(_startGoalPosition.x, _startGoalPosition.y, _startGoalPosition.z + (_lengthCellGrid * Random.Range(-5, 5)));
+        int random = Random.Range(-5, 5);
+
+        while (random == 0) // can't be 0 because then it won't move from start position
+            random = Random.Range(-5, 5);
+
+        _currentGoalPosition = new Vector3(_startGoalPosition.x, _startGoalPosition.y, _startGoalPosition.z + (_lengthCellGrid * random));
         _defenderGoal.transform.position = _currentGoalPosition;
     }
 
@@ -65,8 +70,7 @@ public class DefenderManager : MonoBehaviour
         }
         else
         {
-            _currentGoalPosition = new Vector3(_startGoalPosition.x, _startGoalPosition.y, _startGoalPosition.z + (_lengthCellGrid * Random.Range(-5, 5)));
-            _defenderGoal.transform.position = _currentGoalPosition;
+            SetRandomGoalPosition();
         }
     }
 
