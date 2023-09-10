@@ -1293,6 +1293,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: TimesCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5257209800551684918, guid: a4d63f652e974f248b36dc2821348147, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3506792994281296908}
+    - target: {fileID: 5257209800551684918, guid: a4d63f652e974f248b36dc2821348147, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetTimes
+      objectReference: {fileID: 0}
+    - target: {fileID: 8588983519491470272, guid: a4d63f652e974f248b36dc2821348147, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4d63f652e974f248b36dc2821348147, type: 3}
 --- !u!224 &5779977708473452140 stripped
