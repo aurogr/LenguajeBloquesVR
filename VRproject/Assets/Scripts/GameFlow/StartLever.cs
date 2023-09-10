@@ -1,11 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.UI;
 
 public class StartLever : MonoBehaviour
 {
     XRGrabInteractable _interactionScript;
+    [SerializeField] Button _pauseBtn;
     [SerializeField] SocketsManager _socketsManager; // given in the editor in the message level, but found in real time in the rest of levels since there is only one
     Rigidbody _rb;
     HingeJoint _hingeJoint;
@@ -26,6 +27,7 @@ public class StartLever : MonoBehaviour
 
     private void ResetBallMovementBoolean()
     {
+        _pauseBtn.interactable = true;
         // reset level interaction
         _interactionScript.enabled = true; // enable the xr interaction script, so that it can be grabbed again
         _hingeJoint.useSpring = true;
@@ -54,6 +56,7 @@ public class StartLever : MonoBehaviour
 
                 if (_ballMovementStarted)
                 {
+                    _pauseBtn.interactable = false;
                     _interactionScript.enabled = false; // disable the xr interaction script, so that it can't be grabbed again
                     _hingeJoint.useSpring = false;
                     _rb.velocity = Vector3.zero;

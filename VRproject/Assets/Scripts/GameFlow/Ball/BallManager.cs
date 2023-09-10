@@ -238,7 +238,7 @@ public class BallManager : MonoBehaviour
         if (_currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetConditionColor() == GameManager.Instance.GameCondition)
         {
 
-            yield return StartCoroutine(MoveBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
+            yield return StartCoroutine(MoveBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length-1)); // to wait till the movement is finished to move again
         }
         else
         {
@@ -252,7 +252,7 @@ public class BallManager : MonoBehaviour
                 sockets.Dequeue();
             }
 
-            yield return StartCoroutine(MoveBlock(elseConditionChildrenSockets, elseConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
+            yield return StartCoroutine(MoveBlock(elseConditionChildrenSockets, elseConditionChildrenSockets.Length-1)); // to wait till the movement is finished to move again
         }
     }
 

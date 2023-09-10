@@ -531,7 +531,7 @@ MonoBehaviour:
   _lengthCellGrid: 0.178624
   _speed: 0.2
   _rotationAngleEachFixedUpdate: 10
-  _movementDuration: 0.7
+  _movementDuration: 1
   _mesh: {fileID: 5353442478161665892}
   _trailSpherePrefab: {fileID: 313078246551302867, guid: fab7fedac86f1de418a5564bed64e4ed, type: 3}
 --- !u!114 &5353442477374277558
