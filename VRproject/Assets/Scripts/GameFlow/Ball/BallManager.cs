@@ -183,6 +183,42 @@ public class BallManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        // conditionals
+        if (GameManager.Instance.GameCondition == GameConditions.Red)
+        {
+            if (collision.gameObject.CompareTag("RedGoal"))
+            {
+                StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
+                return;
+            }
+            else if (collision.gameObject.CompareTag("BlueGoal"))
+            {
+                StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería equivocada", false); // change screen
+                return;
+            }
+        }
+        else if (GameManager.Instance.GameCondition == GameConditions.Blue)
+        {
+            if (collision.gameObject.CompareTag("BlueGoal"))
+            {
+                StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
+                return;
+            }
+            else if (collision.gameObject.CompareTag("RedGoal"))
+            {
+                StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería equivocada", false); // change screen
+                return;
+            }
+        }
+
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
             StopBehaviour();
