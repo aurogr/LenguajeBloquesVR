@@ -8177,7 +8177,7 @@ MonoBehaviour:
       - m_Target: {fileID: 39194626}
         m_TargetAssemblyTypeName: LoopsHelpLevelManager, Assembly-CSharp
         m_MethodName: SetLinesActivated
-        m_Mode: 6
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11508,8 +11508,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 70c39eb0c9fb8fd46a8058dcf5f8f2b1, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -13890,7 +13890,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4450733741000868182, guid: 79b0f6c8268042245a4dbc23bc74504c, type: 3}
       propertyPath: _nextSceneName
-      value: GameSceneMessages
+      value: GameSceneConditional
       objectReference: {fileID: 0}
     - target: {fileID: 4450733741123482593, guid: 79b0f6c8268042245a4dbc23bc74504c, type: 3}
       propertyPath: m_Name

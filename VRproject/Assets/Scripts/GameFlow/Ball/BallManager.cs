@@ -178,7 +178,7 @@ public class BallManager : MonoBehaviour
         _ballMovement = null;
 
         //GameManager.Instance.GameEnd("No has llegado a la portería", false);
-        _feedbackScreen.PrintFeedbackMessage("No has llegado a la portería", false);
+        _feedbackScreen.PrintFeedbackMessage("No quedan instrucciones y no has conseguido tu objetivo", false);
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -187,7 +187,7 @@ public class BallManager : MonoBehaviour
         {
             StopBehaviour();
 
-            _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
+            _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
         } 
         else if (collision.gameObject.CompareTag("FieldLimits")) {
             StopBehaviour();
@@ -203,7 +203,7 @@ public class BallManager : MonoBehaviour
             {
                 StopBehaviour();
 
-                _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
+                _feedbackScreen.PrintFeedbackMessage("Has pasado por todos los cuadrados", true); // change screen
             }
         }
     }

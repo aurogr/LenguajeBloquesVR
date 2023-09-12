@@ -25,29 +25,21 @@ public class WaypointsHolder : MonoBehaviour
 
     private void OnDisable()
     {
-        LoopsHelpLevelManager.Instance.OnArrowsHelpChanged -= AdjustArrowsHelp;
-        LoopsHelpLevelManager.Instance.OnLinesHelpChanged -= AdjustLinesHelp;
-        LoopsHelpLevelManager.Instance.OnNumbersHelpChanged -= AdjustNumbersHelp;
+        if (LoopsHelpLevelManager.Instance != null)
+        {
+            LoopsHelpLevelManager.Instance.OnArrowsHelpChanged -= AdjustArrowsHelp;
+            LoopsHelpLevelManager.Instance.OnLinesHelpChanged -= AdjustLinesHelp;
+            LoopsHelpLevelManager.Instance.OnNumbersHelpChanged -= AdjustNumbersHelp;
+        }
     }
     #endregion
 
     #region Help Methods
     void AdjustHelpLevel()
     {
-        foreach(GameObject waypoint in _waypointsList)
-        {
-            waypoint.GetComponent<WaypointDummy>().SetMaterial();
-        }
-
-        if (LoopsHelpLevelManager.Instance.GetLinesActivated())
-            _linesHelp.SetActive(true);
-        else
-            _linesHelp.SetActive(false);
-
-        if (LoopsHelpLevelManager.Instance.GetArrowsActivated())
-            _arrowsHelp.SetActive(true);
-        else
-            _arrowsHelp.SetActive(false);
+        AdjustNumbersHelp();
+        AdjustLinesHelp();
+        AdjustArrowsHelp();
     }
 
     void AdjustNumbersHelp()

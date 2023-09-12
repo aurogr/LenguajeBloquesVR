@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class ChangeSceneButton : MonoBehaviour
 {
     [SerializeField] string _nextSceneName;
-    [SerializeField] GameLevels _nextGameLevel = GameLevels.BasicLevel;
     Button _button;
 
     private void Awake()
@@ -27,7 +26,6 @@ public class ChangeSceneButton : MonoBehaviour
 
     private void ChangeScene()
     {
-        GameManager.Instance.GameLevel = _nextGameLevel;
         SceneManager.LoadScene(_nextSceneName, LoadSceneMode.Single);
     }
 }

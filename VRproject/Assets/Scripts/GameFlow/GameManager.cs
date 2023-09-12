@@ -35,15 +35,17 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (GameManager.Instance != null)  // because we have some gameManagers on some scenes to try quicker, but they shouldn't be on the build
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject); // gameManager stays between scenes
-        }
+        _instance = this;
+        //if (GameManager.Instance != null)  // because we have some gameManagers on some scenes to try quicker, but they shouldn't be on the build
+        //{
+        //    Destroy(gameObject);
+        //    return;
+        //}
+        //else
+        //{
+        //    _instance = this;
+        //    DontDestroyOnLoad(gameObject); // gameManager stays between scenes
+        //}
     }
 
     public void InvokeSceneResetEvent(bool isGameSituationTheSame)

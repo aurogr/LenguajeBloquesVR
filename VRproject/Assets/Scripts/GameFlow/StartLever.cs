@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class StartLever : MonoBehaviour
 {
     XRGrabInteractable _interactionScript;
-    [SerializeField] Button _pauseBtn;
+    [SerializeField] Button _pauseBtn; // needs to be given in the editor in all scenes, to stop the player from pausing the game while simulation is running (not possible)
     [SerializeField] SocketsManager _socketsManager; // given in the editor in the message level, but found in real time in the rest of levels since there is only one
     Rigidbody _rb;
     HingeJoint _hingeJoint;
@@ -27,8 +27,8 @@ public class StartLever : MonoBehaviour
 
     private void ResetBallMovementBoolean()
     {
-        _pauseBtn.interactable = true;
         // reset level interaction
+        _pauseBtn.interactable = true;
         _interactionScript.enabled = true; // enable the xr interaction script, so that it can be grabbed again
         _hingeJoint.useSpring = true;
         _rb.isKinematic = false; // stop the spring movement

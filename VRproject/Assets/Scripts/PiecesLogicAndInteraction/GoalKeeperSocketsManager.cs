@@ -31,7 +31,7 @@ public class GoalKeeperSocketsManager : SocketsManager
 
         if (_defenderSocketsManager.GetResult())
         {
-            _feedbackScreen.PrintFeedbackMessage("olee", true);
+            _feedbackScreen.PrintFeedbackMessage("Los jugadores están donde indica el portero", true);
         }
         else
         {

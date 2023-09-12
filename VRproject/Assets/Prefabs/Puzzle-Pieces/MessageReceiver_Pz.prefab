@@ -1112,7 +1112,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1633667035206587068}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0004, y: 0, z: -0.1978}
+  m_LocalPosition: {x: -0.0004, y: 0, z: -0.1653}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1974,10 +1974,10 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 6200711201491798843}
   m_Template: {fileID: 435418468448173935}
-  m_CaptionText: {fileID: 0}
+  m_CaptionText: {fileID: 98965960880927936}
   m_CaptionImage: {fileID: 4792131915660808958}
   m_Placeholder: {fileID: 0}
-  m_ItemText: {fileID: 0}
+  m_ItemText: {fileID: 2583652546960603327}
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
@@ -2748,7 +2748,7 @@ MonoBehaviour:
   _rightHandGrabAttachPoint: {fileID: 2023195318}
   _leftHandGrabAttachPoint: {fileID: 448077517}
   _socketAttachPoint: {fileID: 1782091779}
-  _mesh: {fileID: 0}
+  _mesh: {fileID: 1431261228398772598}
   IsBeingHeld: 0
 --- !u!114 &7750974618265689822
 MonoBehaviour:
