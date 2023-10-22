@@ -5,14 +5,14 @@ using TMPro;
 public class PuzzlePieceInteractableObject : RecyclableObject
 {
     Transform _repositionTransform;
-    [SerializeField] AudioClip _collisionAudioClip;
+    //[SerializeField] AudioClip _collisionAudioClip;
     [SerializeField] PuzzlePieceType _pieceType = PuzzlePieceType.right;
     
     int _times = 1;
     TMP_Dropdown _dropdown;
 
     CustomSocketInteractor _socket;
-    AudioSource _audioSource;
+    //AudioSource _audioSource;
 
     public override void Recycle()
     {
@@ -33,7 +33,7 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     private void Awake()
     {
         _repositionTransform = GameObject.FindGameObjectWithTag("Reposition").transform;
-        _audioSource = gameObject.GetComponent<AudioSource>();
+        //_audioSource = gameObject.GetComponent<AudioSource>();
         _socket = GetComponentInChildren<CustomSocketInteractor>();
 
         _dropdown = GetComponentInChildren<TMP_Dropdown>();
@@ -125,5 +125,5 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     #endregion
 }
 
-public enum PuzzlePieceType { right, left, up, down, forLoop, conditional, message};
+public enum PuzzlePieceType { right, left, up, down, forLoop, conditional, message, variable};
 
