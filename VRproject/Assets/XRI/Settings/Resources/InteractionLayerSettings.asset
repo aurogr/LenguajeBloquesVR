@@ -17,9 +17,9 @@ MonoBehaviour:
   - Lever Interaction
   - Ray Interaction
   - PuzzlePiece Interaction
-  - 
-  - Block Interaction
-  - 
+  - Message Interaction
+  - Loop Interaction
+  - Conditional Interaction
   - 
   - 
   - 

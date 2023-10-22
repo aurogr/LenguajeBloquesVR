@@ -26,13 +26,16 @@ public class SpawnerSocketInteractor: MonoBehaviour
 
     public void OnSelectExit()
     {
-        StartCoroutine(SpawnObjectWithDelay());
+        if (_socket.isActiveAndEnabled) // avoid errors derivated by the socket not being active when exiting the scene because of the order of execution in unity
+        {
+            StartCoroutine(SpawnObjectWithDelay());
 
-        // activate socket of the puzzle piece when it leaves the spawner
-        XRSocketInteractor socket = _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>();
-        if (socket != null)
-            socket.socketActive = true;
-    }
+            // activate socket of the puzzle piece when it leaves the spawner
+            XRSocketInteractor socket = _lastObjectToEnter.transform.gameObject.GetComponentInChildren<XRSocketInteractor>();
+            if (socket != null)
+                socket.socketActive = true;
+        }
+    } 
 
     IEnumerator SpawnObjectWithDelay()
     {

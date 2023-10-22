@@ -63,7 +63,6 @@ public class BlockBehaviour : MonoBehaviour
     #region Block piece scaling
     private void MoveEndAndTopPiece()
     {
-
         if(_numberOfChildren > 0)
         {
             float offset = _pieceSize * (_numberOfChildren);
@@ -86,13 +85,25 @@ public class BlockBehaviour : MonoBehaviour
         // change scale of top piece
 
         // get the distance between the start and end piece
-        float distance = Vector3.Distance(_startTopMeshPiece.position, _endTopMeshPiece.position);
+        float distance = Vector3.Distance(_startTopMeshPiece.localPosition, _endTopMeshPiece.localPosition);
 
         // the new scale would be the new distance / normal distance (pieceSize) (because the normal distance is with a scale of 1, otherwise we'd have to multiply the new distance by the normal scale too)
         _middleTopMeshPiece.localScale = new Vector3((distance / _pieceSize), _middleTopMeshPiece.transform.localScale.y, _middleTopMeshPiece.transform.localScale.z);
 
-        Vector3 middlePoint = (_startTopMeshPiece.position + _endTopMeshPiece.position) / 2;
-        _middleTopMeshPiece.position = middlePoint;
+        Vector3 middlePoint = (_startTopMeshPiece.localPosition + _endTopMeshPiece.localPosition) / 2;
+        _middleTopMeshPiece.localPosition = middlePoint;
     }
+
+    public void ResetSize()
+    {
+        _endMeshPiece.transform.localPosition = new Vector3(_endMeshPieceDefaultLocalPos.x, _endMeshPiece.transform.localPosition.y, _endMeshPiece.transform.localPosition.z);
+        _endTopMeshPiece.transform.localPosition = new Vector3(_endMeshPieceDefaultLocalPos.x, _endTopMeshPiece.transform.localPosition.y, _endTopMeshPiece.transform.localPosition.z);
+        _endSocketObject.transform.localPosition = new Vector3(_endSocketObjectDefaultLocalPos.x, _endSocketObject.transform.localPosition.y, _endSocketObject.transform.localPosition.z);
+ 
+        ChangeScaleTopPiece();
+
+        Debug.Log("[ResetSize]");
+    }
+
     #endregion
 }

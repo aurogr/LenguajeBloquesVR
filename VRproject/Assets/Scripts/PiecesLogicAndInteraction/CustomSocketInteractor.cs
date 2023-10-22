@@ -7,10 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class CustomSocketInteractor : MonoBehaviour
 {
     #region Variables
-    [SerializeField] GameObject _canvas;
     private XRSocketInteractor _socket;
     private GameObject _puzzlePiece;
-    private int _times = 1;
 
     BlockBehaviour _fatherLoop = null;
     #endregion
@@ -18,9 +16,7 @@ public class CustomSocketInteractor : MonoBehaviour
     #region Start, set variables
     void Start()
     {
-        _socket = GetComponent<XRSocketInteractor>();
-        _canvas.SetActive(false);
-    }
+        _socket = GetComponent<XRSocketInteractor>();}
     #endregion
 
     #region Add / Remove puzzle pieces to socket
@@ -33,9 +29,6 @@ public class CustomSocketInteractor : MonoBehaviour
         IXRSelectInteractable obj = _socket.GetOldestInteractableSelected();
         _puzzlePiece = obj.transform.gameObject;
         _puzzlePiece.transform.parent = transform; // set the puzzle piece inside this socket object, so that they can move together and interact based on their heritage
-
-        if (_puzzlePiece.GetComponent<PuzzlePieceInteractableObject>().GetPieceType() != PuzzlePieceType.conditional)
-            _canvas.SetActive(true);
 
         if(_fatherLoop != null) // warn the father loop that a change has been made and it needs to check its children again
         {
@@ -57,7 +50,6 @@ public class CustomSocketInteractor : MonoBehaviour
         }
 
         _puzzlePiece = null;
-        _canvas.SetActive(false);
 
         if (_fatherLoop != null)
         {
@@ -75,22 +67,6 @@ public class CustomSocketInteractor : MonoBehaviour
     public GameObject GetPuzzlePiece()
     {
         return _puzzlePiece;
-    }
-
-    /// <summary>
-    /// Get number of times that the piece inside this socket will be executed
-    /// </summary>
-    public int GetTimes()
-    {
-        return _times;
-    }
-
-    /// <summary>
-    /// Set number of times that the piece inside this socket will be executed
-    /// </summary>
-    public void SetTimes(int times)
-    {
-        _times = times + 1; // because the times are chosen from a dropdown
     }
 
     /// <summary>

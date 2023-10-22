@@ -9,31 +9,30 @@ public class BallManager : MonoBehaviour
     [SerializeField] float _speed;
     [SerializeField] float _rotationAngleEachFixedUpdate = 10f;
     [SerializeField] float _movementDuration = 0.5f;
-    [SerializeField] GameObject _ballSphere;
+    [SerializeField] GameObject _mesh;
     [SerializeField] GameObject _trailSpherePrefab;
-    [SerializeField] Material _redMat;
-    [SerializeField] Material _blueMat;
-    [SerializeField] Material _normalMat;
-    [SerializeField] Vector3 _center;
+    
+    Vector3 _center;
 
     CustomSocketInteractor _currentSocket;
     BallMovement _ballMovement;
-    Vector3 _currentBallPositionStart;
+    Vector3 _currentPositionStart;
     FeedbackScreenImplementation _feedbackScreen;
 
     List<GameObject> _waypoints;
     bool _firstTime = true;
 
-    MeshRenderer _ballRenderer;
+    MeshRenderer _renderer;
 
     #endregion
 
     #region Awake, set variables
     void Start() // waypoints controller has to go before
     {
-        _currentBallPositionStart = transform.position;
+        _center = transform.position;
+        _currentPositionStart = transform.position;
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
-        _ballRenderer = _ballSphere.GetComponent<MeshRenderer>();
+        _renderer = _mesh.GetComponent<MeshRenderer>();
 
         OnSceneReset(); // first time is played
     }
@@ -43,17 +42,19 @@ public class BallManager : MonoBehaviour
 
     public void OnEnable()
     {
-        GameManager.Instance.OnSceneReset += OnSceneReset;
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnSceneReset += OnSceneReset;
     }
 
     public void OnDisable()
     {
-        GameManager.Instance.OnSceneReset -= OnSceneReset;
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnSceneReset -= OnSceneReset;
     }
 
     public void OnSceneReset()
     {
-        // reset the ball position and the waypoints
+        // reset position (and waypoints on a loop level)
         if (GameManager.Instance.GameLevel == GameLevels.LoopLevel)
         {
             ResetLoopLevel();
@@ -67,32 +68,22 @@ public class BallManager : MonoBehaviour
                 // pick between two colors randomly
                 GameManager.Instance.GameCondition = Random.Range(1, 3) switch
                 {
-                    1 => GameConditions.GoalRed,
-                    _ => GameConditions.GoalBlue,
+                    1 => GameConditions.Red,
+                    _ => GameConditions.Blue,
                 };
 
-                _ballRenderer.material = _normalMat;
-            } else if (GameManager.Instance.GameLevel == GameLevels.MessageLevel)
-                {
-                    // pick between two colors randomly
-                    GameManager.Instance.GameCondition = Random.Range(1, 3) switch
-                    {
-                        1 => GameConditions.GoalRed,
-                        _ => GameConditions.GoalBlue,
-                    };
-
-                    _ballRenderer.material = _normalMat;
-                }
+                _renderer.material.color = new Color(1, 1, 1);
+            }
         }
 
         // create movement objects
-        _ballMovement = new BallMovement(_ballSphere, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
+        _ballMovement = new BallMovement(this.gameObject, _mesh, transform, _speed, _rotationAngleEachFixedUpdate, _lengthCellGrid);
     }
 
     void SetRandomBallPosition()
     {
-        _currentBallPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-4, 4), _center.z + (_lengthCellGrid * Random.Range(-5, 5)));
-        transform.position = _currentBallPositionStart;
+        _currentPositionStart = new Vector3(_center.x, _center.y + _lengthCellGrid * Random.Range(-2, 2), _center.z + (_lengthCellGrid * Random.Range(-4, 4)));
+        transform.position = _currentPositionStart;
     }
 
     void ResetBasicLevel()
@@ -103,7 +94,7 @@ public class BallManager : MonoBehaviour
         }
         else
         {
-            transform.position = _currentBallPositionStart;
+            transform.position = _currentPositionStart;
         }
 
         _firstTime = false;
@@ -111,7 +102,7 @@ public class BallManager : MonoBehaviour
 
     void ResetLoopLevel()
     {
-        transform.position = _currentBallPositionStart;
+        transform.position = _currentPositionStart;
 
         if (_firstTime || !GameManager.Instance.GetIsGameSituationTheSame())
         {
@@ -129,26 +120,17 @@ public class BallManager : MonoBehaviour
     #endregion
 
     #region Simulation flow
-    public bool StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
+    public void StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
     {
-        if (sockets.Peek().GetPuzzlePiece() == null)
+        if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel) // set ball material to match condition
         {
-            return false;
+            if (GameManager.Instance.GameCondition == GameConditions.Red)
+                _renderer.material.color = new Color(1, 0, 0);
+            else
+                _renderer.material.color = new Color(0, 0, 1);
         }
-        else
-        {
-            if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel) // set ball material to match condition
-            {
-                if (GameManager.Instance.GameCondition == GameConditions.GoalRed)
-                    _ballRenderer.material = _redMat;
-                else 
-                    _ballRenderer.material = _blueMat;
-            }
 
-            StartCoroutine(MovePuzzlePieces(sockets));
-
-            return true;
-        }
+        StartCoroutine(MovePuzzlePieces(sockets));
     }
 
     private IEnumerator MovePuzzlePieces(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
@@ -171,7 +153,7 @@ public class BallManager : MonoBehaviour
                     yield return StartCoroutine(MoveForLoopPiece(sockets));
                     break;
                 default:
-                    yield return StartCoroutine(MoveNormalPiece(_currentSocket));
+                    yield return StartCoroutine(MoveNormalPiece(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>()));
                     break;
             }
         }
@@ -181,7 +163,8 @@ public class BallManager : MonoBehaviour
 
     public void FixedUpdate()
     {
-        _ballMovement.FixedUpdate(); // have to call it manually since it isn't a monobehaviour
+        if(_ballMovement != null)
+            _ballMovement.FixedUpdate(); // have to call it manually since it isn't a monobehaviour
     }
 
     #endregion
@@ -190,29 +173,62 @@ public class BallManager : MonoBehaviour
 
     private void ReachedSimulationEnd()
     {
-        //GameManager.Instance.GameEnd("No has llegado a la portería", false);
-        _feedbackScreen.PrintFeedbackMessage("No has llegado a la portería", false);
-
         // release ball movement objects
         _ballMovement.DestroyBalls();
         _ballMovement = null;
+
+        //GameManager.Instance.GameEnd("No has llegado a la portería", false);
+        _feedbackScreen.PrintFeedbackMessage("No quedan instrucciones y no has conseguido tu objetivo", false);
     }
 
     private void OnTriggerEnter(Collider collision)
     {
+        // conditionals
+        if (GameManager.Instance.GameCondition == GameConditions.Red)
+        {
+            if (collision.gameObject.CompareTag("RedGoal"))
+            {
+                StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
+                return;
+            }
+            else if (collision.gameObject.CompareTag("BlueGoal"))
+            {
+                StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería equivocada", false); // change screen
+                return;
+            }
+        }
+        else if (GameManager.Instance.GameCondition == GameConditions.Blue)
+        {
+            if (collision.gameObject.CompareTag("BlueGoal"))
+            {
+                StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
+                return;
+            }
+            else if (collision.gameObject.CompareTag("RedGoal"))
+            {
+                StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería equivocada", false); // change screen
+                return;
+            }
+        }
+
         if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
         {
-            //GameManager.Instance.GameEnd("Enhorabuena!.", true);
-            _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
-
             StopBehaviour();
+
+            _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
         } 
         else if (collision.gameObject.CompareTag("FieldLimits")) {
-            //GameManager.Instance.GameEnd("Te has salido del campo. Prueba otra vez.", false);
-            _feedbackScreen.PrintFeedbackMessage("Te has salido del campo. Prueba otra vez.", false); // change screen
-
             StopBehaviour();
 
+            _feedbackScreen.PrintFeedbackMessage("Te has salido del campo. Prueba otra vez.", false); // change screen
         } 
         else if (collision.gameObject.CompareTag("Waypoint"))
         {
@@ -221,10 +237,9 @@ public class BallManager : MonoBehaviour
 
             if (_waypoints.Count == 0) // if the player has cleared all the waypoints he wins
             {
-                //GameManager.Instance.GameEnd("Enhorabuena!.", true);
-                _feedbackScreen.PrintFeedbackMessage("Enhorabuena!.", true); // change screen
-
                 StopBehaviour();
+
+                _feedbackScreen.PrintFeedbackMessage("Has pasado por todos los cuadrados", true); // change screen
             }
         }
     }
@@ -232,7 +247,7 @@ public class BallManager : MonoBehaviour
     void StopBehaviour()
     {
         // stop ball and release ball movement objects
-        StopCoroutine(nameof(MovePuzzlePieces));
+        StopAllCoroutines();
         _ballMovement.DestroyBalls();
         _ballMovement = null;
     }
@@ -256,10 +271,10 @@ public class BallManager : MonoBehaviour
             sockets.Dequeue();
         }
 
-        if (_currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetCondition() == GameManager.Instance.GameCondition)
+        if (_currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetConditionColor() == GameManager.Instance.GameCondition)
         {
 
-            yield return StartCoroutine(MoveBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
+            yield return StartCoroutine(MoveBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length-1)); // to wait till the movement is finished to move again
         }
         else
         {
@@ -273,13 +288,13 @@ public class BallManager : MonoBehaviour
                 sockets.Dequeue();
             }
 
-            yield return StartCoroutine(MoveBlock(elseConditionChildrenSockets, elseConditionChildrenSockets.Length)); // to wait till the movement is finished to move again
+            yield return StartCoroutine(MoveBlock(elseConditionChildrenSockets, elseConditionChildrenSockets.Length-1)); // to wait till the movement is finished to move again
         }
     }
 
     public IEnumerator MoveForLoopPiece(Queue<CustomSocketInteractor> sockets)
     {
-        int forLoopTimes = _currentSocket.GetTimes();
+        int forLoopTimes = _currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetTimes();
 
         _currentSocket = sockets.Peek(); // get next socket (which would be the first socket inside the block)
 
@@ -287,7 +302,7 @@ public class BallManager : MonoBehaviour
         CustomSocketInteractor[] blockChildrenSockets = _currentSocket.gameObject.GetComponentsInChildren<CustomSocketInteractor>(); // this also gets the parent object (the first socket inside the block)
         int numberOfActiveChildrenSockets = blockChildrenSockets.Length - 1; // because the last socket of a block is always empty in case we want to add new pieces
 
-        for (int i = 0; i < numberOfActiveChildrenSockets; i++) // dequeu the sockets inside the block
+        for (int i = 0; i < blockChildrenSockets.Length; i++) // dequeu the sockets inside the block (including empty socket)
         {
             sockets.Dequeue();
         }
@@ -299,23 +314,23 @@ public class BallManager : MonoBehaviour
         }
     }
 
-    public IEnumerator MoveNormalPiece(CustomSocketInteractor socket)
+    public IEnumerator MoveNormalPiece(PuzzlePieceInteractableObject puzzlePiece)
     {
-        for (int i = 1; i <= socket.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
+        for (int i = 1; i <= puzzlePiece.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
         {
-            _ballMovement.MoveBall(socket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
+            _ballMovement.MoveBall(puzzlePiece.GetPieceType());
 
             yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
         }
     }
 
-    public IEnumerator MoveBlock(CustomSocketInteractor[] sockets, int times)
+    public IEnumerator MoveBlock(CustomSocketInteractor[] sockets, int numberOfBlockPieces)
     {
-        for (int i = 0; i < times; i++)
+        for (int i = 0; i < numberOfBlockPieces; i++)
         {
             CustomSocketInteractor currentSocket = sockets[i];
 
-            yield return StartCoroutine(MoveNormalPiece(currentSocket)); // to wait till the movement is finished to move again
+            yield return StartCoroutine(MoveNormalPiece(currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>())); // to wait till the movement is finished to move again
         }
     }
     #endregion

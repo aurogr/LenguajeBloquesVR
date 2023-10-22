@@ -11,12 +11,10 @@ public class FeedbackScreenImplementation : BasicScreenImplementation
     private void Awake()
     {
         _feedbackText = GetComponentInChildren<TextMeshProUGUI>();
-        Debug.Log("[FeedbackScreen] Awake");
     }
 
     public void PrintFeedbackMessage(string message, bool playerSucceded)
     {
-        Debug.Log("[Feedbackscreen] PrintFeedback Message");
         ScreenManager.Instance.SwitchScreen(_name);
 
         if (playerSucceded)
