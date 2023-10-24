@@ -4,7 +4,7 @@ public class ConditionSetter : MonoBehaviour
 {
     GameConditions _pieceConditionDirection = GameConditions.Left;
     GameConditions _pieceConditionColor = GameConditions.Red;
-    int _pieceConditionTimes = 0;
+    int _pieceConditionTimes = 1;
 
     /// <summary>
     /// Get selected condition of a conditional piece

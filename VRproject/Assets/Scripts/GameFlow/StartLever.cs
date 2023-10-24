@@ -37,10 +37,10 @@ public class StartLever : MonoBehaviour
         _rb.isKinematic = false; // stop the spring movement
 
         // restart socket interaction
-        foreach (var socket in _sockets)
-        {
-            socket.GetPuzzlePiece().GetComponent<CustomXRGrabInteractable>().enabled = true;
-        }
+        //foreach (var socket in _sockets)
+        //{
+        //    socket.GetPuzzlePiece().GetComponent<CustomXRGrabInteractable>().enabled = true;
+        //}
 
         StartCoroutine(ReenableCollider()); // wait for the spring to go back to position to enable movement
     }
@@ -77,13 +77,13 @@ public class StartLever : MonoBehaviour
                     _rb.isKinematic = true; // stop the spring movement
 
                     // stop sockets interaction
-                    int counter = 1;
-                    foreach (var socket in _sockets)
-                    {
-                        if (counter != _sockets.Count)
-                            socket.GetPuzzlePiece().GetComponent<CustomXRGrabInteractable>().enabled = false;
-                        counter++;
-                    }
+                    //int counter = 1;
+                    //foreach (var socket in _sockets)
+                    //{
+                    //    if (counter != _sockets.Count)
+                    //        socket.GetPuzzlePiece().GetComponent<CustomXRGrabInteractable>().enabled = false;
+                    //    counter++;
+                    //}
                 }
             }
         }

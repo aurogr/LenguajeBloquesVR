@@ -34,9 +34,9 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
     void Start()
     {
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
-        _center = transform.position; // get editor position on start
-        _startGoalPosition = transform.position;
-        _targetPosition = transform.position;
+        _center = _defenderTransform.position; // get editor position on start
+        _startGoalPosition = _defenderTransform.position;
+        _targetPosition = _defenderTransform.position;
         SetRandomGoalPosition();
         waitForSeconds = new WaitForSeconds(_movementDuration);
     }
@@ -74,13 +74,10 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
 
     void ResetLevel()
     {
-        transform.position = _center;
+        _defenderTransform.position = _center;
+        _targetPosition = _center;
 
-        if (GameManager.Instance.GetIsGameSituationTheSame())
-        {
-            _defenderGoal.transform.position = _currentGoalPosition;
-        }
-        else
+        if (!GameManager.Instance.GetIsGameSituationTheSame())
         {
             SetRandomGoalPosition();
         }
@@ -106,8 +103,10 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
         while (sockets.Count != 1 && !_stopIteration) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
             _currentSocket = sockets.Dequeue();
+            Debug.Log(_currentSocket);
             PuzzlePieceType puzzlePieceType = _currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType();
 
+            Debug.Log(puzzlePieceType);
             if (puzzlePieceType == PuzzlePieceType.message)
             {
                 if (_direction != null && _times != 0) {

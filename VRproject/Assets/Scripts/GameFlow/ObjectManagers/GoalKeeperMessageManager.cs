@@ -36,7 +36,7 @@ public class GoalKeeperMessageManager : MonoBehaviour, IObjectManager
 
             if (_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType() == PuzzlePieceType.message)
             {
-                yield return (_defenderObject.GetComponent<IObjectManager>().WaitForProgram(_defenderSockets));
+                yield return (StartCoroutine(_defenderObject.GetComponent<IObjectManager>().WaitForProgram(_defenderSockets)));
             }
         }
     }

@@ -7530,6 +7530,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 117.082
       objectReference: {fileID: 0}
+    - target: {fileID: 6577566989170858488, guid: 43e9cb06fb84be649bab2b9650236c0b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6577566990089727033, guid: 43e9cb06fb84be649bab2b9650236c0b, type: 3}
       propertyPath: _pauseBtn
       value: 
@@ -7541,7 +7545,7 @@ PrefabInstance:
     - target: {fileID: 6577566990089727033, guid: 43e9cb06fb84be649bab2b9650236c0b, type: 3}
       propertyPath: _programableObject
       value: 
-      objectReference: {fileID: 1656159156}
+      objectReference: {fileID: 1441292274}
     - target: {fileID: 6577566990089727035, guid: 43e9cb06fb84be649bab2b9650236c0b, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -7814,6 +7818,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1441292275}
   - component: {fileID: 1441292276}
+  - component: {fileID: 1441292277}
   m_Layer: 0
   m_Name: BlueDefenderManager
   m_TagString: Untagged
@@ -7851,6 +7856,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1441292277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441292274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a316e31b9cedda4a82dda89a33e80d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lengthCellGrid: 0.138
+  _speed: 0.15
+  _movementDuration: 1
+  _defenderGoal: {fileID: 1869254560}
+  _defenderTransform: {fileID: 1441292275}
 --- !u!1 &1441779090
 GameObject:
   m_ObjectHideFlags: 0
@@ -9566,7 +9588,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1656159158}
-  - component: {fileID: 1656159157}
   m_Layer: 5
   m_Name: GoalKeeper
   m_TagString: Untagged
@@ -9574,23 +9595,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1656159157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656159156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a316e31b9cedda4a82dda89a33e80d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lengthCellGrid: 0.138
-  _speed: 0.15
-  _movementDuration: 1
-  _defenderGoal: {fileID: 1869254560}
-  _defenderTransform: {fileID: 1441292275}
 --- !u!224 &1656159158
 RectTransform:
   m_ObjectHideFlags: 0
