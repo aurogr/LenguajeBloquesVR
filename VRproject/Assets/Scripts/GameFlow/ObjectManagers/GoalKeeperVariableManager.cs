@@ -19,6 +19,7 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
     Vector3 _targetPosition;
     [SerializeField] Transform _defenderTransform;
     bool _reachedGoal = false;
+    bool _gameStarted = false;
     bool _defenderOnGoal = false;
     bool _stopIteration = false;
     bool _defenderOnField = true;
@@ -76,6 +77,15 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
     {
         _defenderTransform.position = _center;
         _targetPosition = _center;
+        _times = 0;
+
+        // resetBooleans
+        _direction = null;
+        _reachedGoal = false;
+        _defenderOnGoal = false;
+        _stopIteration = false;
+        _defenderOnField = true;
+        _gameStarted = false;
 
         if (!GameManager.Instance.GetIsGameSituationTheSame())
         {
@@ -88,6 +98,7 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
     #region Start program, go through instructions
     public void StartProgram(Queue<CustomSocketInteractor> sockets) // called from the StartLever
     {
+        _gameStarted = true;
         StartCoroutine(IterateOverQueue(sockets));
     }
 
@@ -179,24 +190,27 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
 
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("[OnTriggerEnter]");
-        if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
+        if (_gameStarted)
         {
-            _reachedGoal = true;
-            _defenderOnGoal = true;
-        }
-        else if (collision.gameObject.CompareTag("FieldLimits"))
-        {
-            _defenderOnField = false;
+            if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
+            {
+                _reachedGoal = true;
+                _defenderOnGoal = true;
+            }
+            else if (collision.gameObject.CompareTag("FieldLimits"))
+            {
+                _defenderOnField = false;
+            }
         }
     }
 
     private void OnTriggerExit(Collider collision)
     {
-        Debug.Log("[OnTriggerExit]");
-        if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
-        {
-            _defenderOnGoal = false;
+        if(_gameStarted){
+            if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
+            {
+                _defenderOnGoal = false;
+            }
         }
     }
 
