@@ -59,32 +59,17 @@ public class BallManager : MonoBehaviour, IObjectManager
     public void OnSceneReset()
     {
         // reset position (and waypoints on a loop level)
-        if (GameManager.Instance.GameLevel == GameLevels.LoopLevel)
+        switch (GameManager.Instance.GameLevel)
         {
-            ResetLoopLevel();
-        }
-        else
-        {
-            ResetBasicLevel();
-
-            // pick between two colors randomly
-            GameManager.Instance.GameCondition = Random.Range(1, 3) switch
-            {
-                1 => GameConditions.Red,
-                _ => GameConditions.Blue,
-            };
-
-            if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel)
-            {
-                _renderer.material.color = new Color(1, 1, 1);
-            }
-            else
-            {
-                if (GameManager.Instance.GameCondition == GameConditions.Red)
-                    _renderer.material.color = new Color(1, 0, 0);
-                else
-                    _renderer.material.color = new Color(0, 0, 1);
-            }
+            case GameLevels.LoopLevel:
+                ResetLoopLevel();
+                break;
+            case GameLevels.ConditionalLevel:
+                ResetConditionalLevel();
+                break;
+            case GameLevels.BasicLevel:
+                ResetBasicLevel();
+                break;
         }
 
         // create movement objects
@@ -101,6 +86,17 @@ public class BallManager : MonoBehaviour, IObjectManager
     {
         if (_firstTime || !GameManager.Instance.GetIsGameSituationTheSame())
         {
+            GameManager.Instance.GameCondition = Random.Range(1, 3) switch
+            {
+                1 => GameConditions.Red,
+                _ => GameConditions.Blue,
+            };
+
+            if (GameManager.Instance.GameCondition == GameConditions.Red)
+                _renderer.material.color = new Color(1, 0, 0);
+            else
+                _renderer.material.color = new Color(0, 0, 1);
+
             SetRandomBallPosition();
         }
         else
@@ -126,6 +122,17 @@ public class BallManager : MonoBehaviour, IObjectManager
         }
 
         _firstTime = false;
+    }
+
+    void ResetConditionalLevel()
+    {
+        GameManager.Instance.GameCondition = Random.Range(1, 3) switch
+        {
+            1 => GameConditions.Red,
+            _ => GameConditions.Blue,
+        };
+
+        _renderer.material.color = new Color(1, 1, 1);
     }
 
     #endregion

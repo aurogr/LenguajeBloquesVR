@@ -6674,7 +6674,7 @@ PrefabInstance:
     - target: {fileID: 6577566990089727033, guid: 43e9cb06fb84be649bab2b9650236c0b, type: 3}
       propertyPath: _socketsManager
       value: 
-      objectReference: {fileID: 2143739284}
+      objectReference: {fileID: 378440904}
     - target: {fileID: 6577566990089727033, guid: 43e9cb06fb84be649bab2b9650236c0b, type: 3}
       propertyPath: _programableObject
       value: 
@@ -7095,7 +7095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defenderSocketsManager: {fileID: 2143739284}
-  _defenderObject: {fileID: 1955111812}
+  _defenderObject: {fileID: 172128735}
 --- !u!1 &1265079121
 GameObject:
   m_ObjectHideFlags: 0

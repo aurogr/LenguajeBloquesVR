@@ -75,11 +75,10 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
 
     void ResetLevel()
     {
+        // reset variables
         _defenderTransform.position = _center;
         _targetPosition = _center;
         _times = 0;
-
-        // resetBooleans
         _direction = null;
         _reachedGoal = false;
         _defenderOnGoal = false;

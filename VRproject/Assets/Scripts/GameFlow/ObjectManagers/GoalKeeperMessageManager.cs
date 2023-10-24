@@ -17,8 +17,9 @@ public class GoalKeeperMessageManager : MonoBehaviour, IObjectManager
     #region Start program, go through instructions
     public void StartProgram(Queue<CustomSocketInteractor> sockets) // called from the StartLever
     {
+        Debug.Log("PROGRAM STARTTED");
         _defenderSockets = _defenderSocketsManager.EnqueueSockets();
-        IterateOverQueue(sockets);
+        StartCoroutine(IterateOverQueue(sockets));
     }
 
     public IEnumerator WaitForProgram(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
@@ -36,7 +37,9 @@ public class GoalKeeperMessageManager : MonoBehaviour, IObjectManager
 
             if (_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType() == PuzzlePieceType.message)
             {
-                yield return (StartCoroutine(_defenderObject.GetComponent<IObjectManager>().WaitForProgram(_defenderSockets)));
+                Debug.Log("HEREEE");
+                IObjectManager objectManager = _defenderObject.GetComponent(typeof(IObjectManager)) as IObjectManager;
+                yield return (StartCoroutine(objectManager.WaitForProgram(_defenderSockets)));
             }
         }
     }

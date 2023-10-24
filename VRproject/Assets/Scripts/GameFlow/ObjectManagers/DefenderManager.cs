@@ -20,6 +20,7 @@ public class DefenderManager : MonoBehaviour, IObjectManager
     bool _reachedGoal = false;
     bool _defenderOnGoal = false;
     bool _defenderOnField = true;
+    bool _gameStarted = false;
     FeedbackScreenImplementation _feedbackScreen;
     private WaitForSeconds waitForSeconds;
 
@@ -69,7 +70,13 @@ public class DefenderManager : MonoBehaviour, IObjectManager
 
     void ResetLevel()
     {
+        // reset variables
         transform.position = _center;
+        _targetPosition = _center;
+        _reachedGoal = false;
+        _defenderOnGoal = false;
+        _defenderOnField = true;
+        _gameStarted = false;
 
         if (GameManager.Instance.GetIsGameSituationTheSame())
         {
@@ -91,6 +98,8 @@ public class DefenderManager : MonoBehaviour, IObjectManager
 
     public IEnumerator WaitForProgram(Queue<CustomSocketInteractor> sockets) // called from the GoalKeeper object
     {
+        Debug.Log("WAITING");
+        _gameStarted = true;
         yield return (StartCoroutine(IterateOverQueue(sockets)));
     }
 

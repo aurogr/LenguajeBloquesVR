@@ -218,6 +218,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Instructions Start (Screen)
       objectReference: {fileID: 0}
+    - target: {fileID: 5639776661849234573, guid: 14d74f2589c7c8440a71291342efd31b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5639776661849234575, guid: 14d74f2589c7c8440a71291342efd31b, type: 3}
       propertyPath: _name
       value: 5
@@ -7784,6 +7788,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1528934722}
     m_Modifications:
+    - target: {fileID: 1551638136779224966, guid: 603798cac89290049aea6c64ac983c1e, type: 3}
+      propertyPath: _nextScreenName
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5353442476448839925, guid: 603798cac89290049aea6c64ac983c1e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -7874,11 +7882,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5353442476448839926, guid: 603798cac89290049aea6c64ac983c1e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353442476673975806, guid: 603798cac89290049aea6c64ac983c1e, type: 3}
+      propertyPath: m_TagString
+      value: BlueGoal
       objectReference: {fileID: 0}
     - target: {fileID: 5353442477374277561, guid: 603798cac89290049aea6c64ac983c1e, type: 3}
       propertyPath: _movementDuration
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5353442477921857793, guid: 603798cac89290049aea6c64ac983c1e, type: 3}
+      propertyPath: m_TagString
+      value: RedGoal
       objectReference: {fileID: 0}
     - target: {fileID: 5353442478161665888, guid: 603798cac89290049aea6c64ac983c1e, type: 3}
       propertyPath: m_LocalPosition.z
