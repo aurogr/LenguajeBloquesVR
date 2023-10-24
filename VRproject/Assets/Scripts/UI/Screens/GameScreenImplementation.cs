@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameScreenImplementation : MonoBehaviour, IScreen
 {
-    [SerializeField] protected string _name;
+    [SerializeField] protected ScreenName _name;
 
     public GameObject GetGameObject()
     {
@@ -13,7 +13,7 @@ public class GameScreenImplementation : MonoBehaviour, IScreen
 
     public string GetName()
     {
-        return _name;
+        return _name.ToString();
     }
 
     public void Hide()

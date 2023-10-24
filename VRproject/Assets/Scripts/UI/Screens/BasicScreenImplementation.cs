@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BasicScreenImplementation : MonoBehaviour, IScreen
 {
-    [SerializeField] protected string _name;
+    [SerializeField] protected ScreenName _name;
 
     public GameObject GetGameObject()
     {
@@ -11,7 +11,7 @@ public class BasicScreenImplementation : MonoBehaviour, IScreen
 
     public string GetName()
     {
-        return _name;
+        return _name.ToString();
     }
 
     public void Hide()

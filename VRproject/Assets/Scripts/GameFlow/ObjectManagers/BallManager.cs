@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallManager : MonoBehaviour
+public class BallManager : MonoBehaviour, IObjectManager
 {
     #region Variables
     [SerializeField] float _lengthCellGrid;
@@ -24,6 +24,8 @@ public class BallManager : MonoBehaviour
 
     MeshRenderer _renderer;
 
+    private WaitForSeconds waitForSeconds;
+
     #endregion
 
     #region Awake, set variables
@@ -34,11 +36,13 @@ public class BallManager : MonoBehaviour
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
         _renderer = _mesh.GetComponent<MeshRenderer>();
 
+        waitForSeconds = new WaitForSeconds(_movementDuration);
+
         OnSceneReset(); // first time is played
     }
     #endregion
 
-    #region ResetLevel
+    #region Reset level
 
     public void OnEnable()
     {
@@ -63,16 +67,23 @@ public class BallManager : MonoBehaviour
         {
             ResetBasicLevel();
 
+            // pick between two colors randomly
+            GameManager.Instance.GameCondition = Random.Range(1, 3) switch
+            {
+                1 => GameConditions.Red,
+                _ => GameConditions.Blue,
+            };
+
             if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel)
             {
-                // pick between two colors randomly
-                GameManager.Instance.GameCondition = Random.Range(1, 3) switch
-                {
-                    1 => GameConditions.Red,
-                    _ => GameConditions.Blue,
-                };
-
                 _renderer.material.color = new Color(1, 1, 1);
+            }
+            else
+            {
+                if (GameManager.Instance.GameCondition == GameConditions.Red)
+                    _renderer.material.color = new Color(1, 0, 0);
+                else
+                    _renderer.material.color = new Color(0, 0, 1);
             }
         }
 
@@ -119,8 +130,8 @@ public class BallManager : MonoBehaviour
 
     #endregion
 
-    #region Simulation flow
-    public void StartMovement(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
+    #region Start program, go through instructions
+    public void StartProgram(Queue<CustomSocketInteractor> sockets) // called from the StartLever
     {
         if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel) // set ball material to match condition
         {
@@ -130,12 +141,17 @@ public class BallManager : MonoBehaviour
                 _renderer.material.color = new Color(0, 0, 1);
         }
 
-        StartCoroutine(MovePuzzlePieces(sockets));
+        StartCoroutine(IterateOverQueue(sockets));
     }
 
-    private IEnumerator MovePuzzlePieces(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
+    public IEnumerator WaitForProgram(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
     {
-        yield return new WaitForSeconds(0.5f); // wait a little to start
+        throw new System.NotImplementedException();
+    }
+
+    private IEnumerator IterateOverQueue(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
+    {
+        yield return waitForSeconds; // wait a little to start
 
         // all of this is possible because the sockets are stored like a tree inside their parent,
         // and the GetComponentsInChildren is a depth-first tipe of search
@@ -146,14 +162,14 @@ public class BallManager : MonoBehaviour
             switch (_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType())
             {
                 case PuzzlePieceType.conditional:
-                    yield return StartCoroutine(MoveConditionalPiece(sockets));
+                    yield return StartCoroutine(ReadConditionalPiece(sockets));
                     ReachedSimulationEnd();
                     yield break; // porque según está planteado después de una pieza condicional no se pueden poner más por lo que al acabar la condición se acaba la simulación
                 case PuzzlePieceType.forLoop:
-                    yield return StartCoroutine(MoveForLoopPiece(sockets));
+                    yield return StartCoroutine(ReadLoopPiece(sockets));
                     break;
                 default:
-                    yield return StartCoroutine(MoveNormalPiece(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>()));
+                    yield return StartCoroutine(ReadMovementPiece(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>()));
                     break;
             }
         }
@@ -169,7 +185,7 @@ public class BallManager : MonoBehaviour
 
     #endregion
 
-    #region End methods
+    #region Victory and defeat conditions, end level
 
     private void ReachedSimulationEnd()
     {
@@ -183,7 +199,7 @@ public class BallManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        // conditionals
+        // winning condition for basic and conditional level
         if (GameManager.Instance.GameCondition == GameConditions.Red)
         {
             if (collision.gameObject.CompareTag("RedGoal"))
@@ -219,18 +235,13 @@ public class BallManager : MonoBehaviour
             }
         }
 
-        if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
+        // losing condition on collision for all levels
+        if (collision.gameObject.CompareTag("FieldLimits"))
         {
             StopBehaviour();
 
-            _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
-        } 
-        else if (collision.gameObject.CompareTag("FieldLimits")) {
-            StopBehaviour();
-
-            _feedbackScreen.PrintFeedbackMessage("Te has salido del campo. Prueba otra vez.", false); // change screen
-        } 
-        else if (collision.gameObject.CompareTag("Waypoint"))
+            _feedbackScreen.PrintFeedbackMessage("Te has salido del campo.", false); // change screen
+        } else if (collision.gameObject.CompareTag("Waypoint")) // winning condition for loop levels
         {
             _waypoints.Remove(collision.gameObject);
             collision.gameObject.SetActive(false);
@@ -254,8 +265,8 @@ public class BallManager : MonoBehaviour
 
     #endregion
 
-    #region BallPuzzleBehaviour
-    public IEnumerator MoveConditionalPiece(Queue<CustomSocketInteractor> sockets)
+    #region Read pieces
+    public IEnumerator ReadConditionalPiece(Queue<CustomSocketInteractor> sockets)
     {
         // the puzzle pieces of the first condition always have to be dequeued, either to use them or to be able to reach the second condition sockets
         // but the second condition sockets only need to be dequeued if the first condition doesn't apply because conditionals don't admit other pieces after,
@@ -274,7 +285,7 @@ public class BallManager : MonoBehaviour
         if (_currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetConditionColor() == GameManager.Instance.GameCondition)
         {
 
-            yield return StartCoroutine(MoveBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length-1)); // to wait till the movement is finished to move again
+            yield return StartCoroutine(GoThroughBlock(ifConditionChildrenSockets, ifConditionChildrenSockets.Length-1)); // to wait till the movement is finished to move again
         }
         else
         {
@@ -288,11 +299,11 @@ public class BallManager : MonoBehaviour
                 sockets.Dequeue();
             }
 
-            yield return StartCoroutine(MoveBlock(elseConditionChildrenSockets, elseConditionChildrenSockets.Length-1)); // to wait till the movement is finished to move again
+            yield return StartCoroutine(GoThroughBlock(elseConditionChildrenSockets, elseConditionChildrenSockets.Length-1)); // to wait till the movement is finished to move again
         }
     }
 
-    public IEnumerator MoveForLoopPiece(Queue<CustomSocketInteractor> sockets)
+    public IEnumerator ReadLoopPiece(Queue<CustomSocketInteractor> sockets)
     {
         int forLoopTimes = _currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetTimes();
 
@@ -310,27 +321,30 @@ public class BallManager : MonoBehaviour
         // move the pieces inside the block
         for (int i = 0; i < forLoopTimes; i++)
         {
-            yield return StartCoroutine(MoveBlock(blockChildrenSockets, numberOfActiveChildrenSockets)); // to wait till the movement is finished to move again
+            yield return StartCoroutine(GoThroughBlock(blockChildrenSockets, numberOfActiveChildrenSockets)); // to wait till the movement is finished to move again
         }
     }
 
-    public IEnumerator MoveNormalPiece(PuzzlePieceInteractableObject puzzlePiece)
-    {
-        for (int i = 1; i <= puzzlePiece.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
-        {
-            _ballMovement.MoveBall(puzzlePiece.GetPieceType());
 
-            yield return new WaitForSeconds(_movementDuration); // to wait till the movement is finished to move again
-        }
-    }
-
-    public IEnumerator MoveBlock(CustomSocketInteractor[] sockets, int numberOfBlockPieces)
+    // go through all pieces inside a block (loop and conditional path)
+    public IEnumerator GoThroughBlock(CustomSocketInteractor[] sockets, int numberOfBlockPieces)
     {
         for (int i = 0; i < numberOfBlockPieces; i++)
         {
             CustomSocketInteractor currentSocket = sockets[i];
 
-            yield return StartCoroutine(MoveNormalPiece(currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>())); // to wait till the movement is finished to move again
+            yield return StartCoroutine(ReadMovementPiece(currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>())); // to wait till the movement is finished to move again
+        }
+    }
+
+    // movement piece behaviour
+    public IEnumerator ReadMovementPiece(PuzzlePieceInteractableObject puzzlePiece)
+    {
+        for (int i = 1; i <= puzzlePiece.GetTimes(); i++) // to move it however many times it has been specified on the puzzle piece
+        {
+            _ballMovement.SelectNextCell(puzzlePiece.GetPieceType());
+
+            yield return waitForSeconds; // to wait till the movement is finished to move again
         }
     }
     #endregion

@@ -15,7 +15,7 @@ public class FeedbackScreenImplementation : BasicScreenImplementation
 
     public void PrintFeedbackMessage(string message, bool playerSucceded)
     {
-        ScreenManager.Instance.SwitchScreen(_name);
+        ScreenManager.Instance.SwitchScreen(_name.ToString());
 
         if (playerSucceded)
         {

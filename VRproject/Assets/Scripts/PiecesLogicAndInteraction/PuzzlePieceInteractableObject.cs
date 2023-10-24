@@ -125,5 +125,5 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     #endregion
 }
 
-public enum PuzzlePieceType { right, left, up, down, forLoop, conditional, message, variable};
+public enum PuzzlePieceType { right, left, up, down, forLoop, conditional, message, variableTimes, variableDirection};
 

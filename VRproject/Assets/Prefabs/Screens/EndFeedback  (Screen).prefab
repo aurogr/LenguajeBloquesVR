@@ -406,7 +406,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nextSceneName: MainMenuScene
-  _nextGameLevel: 0
 --- !u!1 &4450733740895754686
 GameObject:
   m_ObjectHideFlags: 0
@@ -678,7 +677,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nextSceneName: GameSceneLoops
-  _nextGameLevel: 1
 --- !u!1 &4450733741123482593
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,7 +769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8673b593295e1c42ad09651770d7455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: FeedBackScreen
+  _name: 3
   _succeedBtns: {fileID: 4450733742288608637}
   _failBtns: {fileID: 4450733741876281652}
 --- !u!1 &4450733741222039141
@@ -1220,7 +1218,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nextSceneName: MainMenuScene
-  _nextGameLevel: 1
 --- !u!1 &4450733741944938232
 GameObject:
   m_ObjectHideFlags: 0
