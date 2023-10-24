@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefenderManager : MonoBehaviour, IObjectManager
+public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
 {
     #region Variables
+    [SerializeField] SocketsManager _defenderSocketsManager;
+
     [SerializeField] float _lengthCellGrid;
     [SerializeField] float _speed;
     [SerializeField] float _movementDuration = 0.5f;
@@ -91,37 +93,32 @@ public class DefenderManager : MonoBehaviour, IObjectManager
     #endregion
 
     #region Start program, go through instructions
-    public void StartProgram(Queue<CustomSocketInteractor> sockets)
+    public void StartProgram(Queue<CustomSocketInteractor> goalKeeperSockets)
     {
-        throw new System.NotImplementedException();
+        Queue<CustomSocketInteractor> defenderSockets = _defenderSocketsManager.EnqueueSockets();
+        if (defenderSockets.Count == 0)
+            _feedbackScreen.PrintFeedbackMessage("Programa instrucciones para el defensa", false);
+        else
+            StartCoroutine(IterateOverQueue(goalKeeperSockets, defenderSockets));
     }
 
-    public IEnumerator WaitForProgram(Queue<CustomSocketInteractor> sockets) // called from the GoalKeeper object
-    {
-        Debug.Log("WAITING");
-        _gameStarted = true;
-        yield return (StartCoroutine(IterateOverQueue(sockets)));
-    }
-
-    private IEnumerator IterateOverQueue(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
+    private IEnumerator IterateOverQueue(Queue<CustomSocketInteractor> goalKeeperSockets, Queue<CustomSocketInteractor> defenderSockets) // coroutine to move each piece
     {
         yield return new WaitForSeconds(0.5f); // wait a little to start
 
-        if(sockets.Count > 1)
+        while (goalKeeperSockets.Count != 1 && _defenderOnField) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
-            while (sockets.Count != 1 && _defenderOnField) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
-            {
-                _currentSocket = sockets.Dequeue();
+            goalKeeperSockets.Dequeue();
 
+            while(defenderSockets.Count != 1 && _defenderOnField)
+            {
+                _currentSocket = defenderSockets.Dequeue(); 
                 SelectNextCell(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
                 yield return waitForSeconds; // wait a little to start
             }
-            ReachedSimulationEnd();
         }
-        else
-        {
-            _feedbackScreen.PrintFeedbackMessage("Programa instrucciones para el defensa", false);
-        }
+        ReachedSimulationEnd();
+        
     }
 
     public void FixedUpdate() // because the class is not a monobehaviour, unity won't call the fixed update, we have to call it from the class it was instantiated from

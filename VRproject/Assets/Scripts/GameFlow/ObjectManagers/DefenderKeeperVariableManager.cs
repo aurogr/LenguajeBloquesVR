@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
+public class DefenderKeeperVariableManager : MonoBehaviour, IObjectManager
 {
 
     #region Variables
@@ -99,11 +99,6 @@ public class GoalKeeperVariableManager : MonoBehaviour, IObjectManager
     {
         _gameStarted = true;
         StartCoroutine(IterateOverQueue(sockets));
-    }
-
-    public IEnumerator WaitForProgram(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
-    {
-        throw new System.NotImplementedException();
     }
 
     private IEnumerator IterateOverQueue(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece

@@ -21,6 +21,7 @@ public class BallManager : MonoBehaviour, IObjectManager
 
     List<GameObject> _waypoints;
     bool _firstTime = true;
+    bool _specialPieceUsed = false;
 
     MeshRenderer _renderer;
 
@@ -58,6 +59,8 @@ public class BallManager : MonoBehaviour, IObjectManager
 
     public void OnSceneReset()
     {
+        _specialPieceUsed = false;
+
         // reset position (and waypoints on a loop level)
         switch (GameManager.Instance.GameLevel)
         {
@@ -151,11 +154,6 @@ public class BallManager : MonoBehaviour, IObjectManager
         StartCoroutine(IterateOverQueue(sockets));
     }
 
-    public IEnumerator WaitForProgram(Queue<CustomSocketInteractor> sockets) // called from the sockets manager
-    {
-        throw new System.NotImplementedException();
-    }
-
     private IEnumerator IterateOverQueue(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
     {
         yield return waitForSeconds; // wait a little to start
@@ -169,10 +167,12 @@ public class BallManager : MonoBehaviour, IObjectManager
             switch (_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType())
             {
                 case PuzzlePieceType.conditional:
+                    _specialPieceUsed = true;
                     yield return StartCoroutine(ReadConditionalPiece(sockets));
                     ReachedSimulationEnd();
                     yield break; // porque según está planteado después de una pieza condicional no se pueden poner más por lo que al acabar la condición se acaba la simulación
                 case PuzzlePieceType.forLoop:
+                    _specialPieceUsed = true;
                     yield return StartCoroutine(ReadLoopPiece(sockets));
                     break;
                 default:
@@ -200,8 +200,57 @@ public class BallManager : MonoBehaviour, IObjectManager
         _ballMovement.DestroyBalls();
         _ballMovement = null;
 
-        //GameManager.Instance.GameEnd("No has llegado a la portería", false);
-        _feedbackScreen.PrintFeedbackMessage("No quedan instrucciones y no has conseguido tu objetivo", false);
+        switch (GameManager.Instance.GameLevel)
+        {
+            case GameLevels.BasicLevel:
+                EndFeedbackBasic();
+                break;
+            case GameLevels.ConditionalLevel:
+                EndFeedbackConditional();
+                break;
+            case GameLevels.LoopLevel:
+                EndFeedbackLoop();
+                break;
+        }
+        _feedbackScreen.PrintFeedbackMessage("No quedan instrucciones", false);
+    }
+
+    private void EndFeedbackBasic()
+    {
+        string message = "";
+
+        if ((transform.position.x > _currentPositionStart.x && GameManager.Instance.GameCondition == GameConditions.Red) || (transform.position.x < _currentPositionStart.x && GameManager.Instance.GameCondition == GameConditions.Blue))
+            message = "Dirección equivocada, fíjate bien en el color de la pelota";
+        else if (transform.position.y > (_center.y + _lengthCellGrid*0.5f))
+            message = "Baja un poco la pelota";
+        else if (transform.position.y < (_center.y - _lengthCellGrid*0.5f))
+            message = "Sube un poco la pelota";
+        else
+            message = "Continúa en esa dirección, ¡casi lo tienes!";
+
+        _feedbackScreen.PrintFeedbackMessage(message, false);
+    }
+
+    private void EndFeedbackConditional()
+    {
+        string message = "";
+        if (!_specialPieceUsed)
+            message = "Prueba a utilizar la pieza condicional";
+        else
+            message = "Revisa las piezas utilizadas";
+
+        _feedbackScreen.PrintFeedbackMessage(message, false);
+    }
+
+    private void EndFeedbackLoop()
+    {
+        string message = "";
+        if (!_specialPieceUsed)
+            message = "Prueba a utilizar la pieza de bucle";
+        else
+            message = "Revisa las piezas utilizadas";
+
+        _feedbackScreen.PrintFeedbackMessage(message, false);
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -213,7 +262,15 @@ public class BallManager : MonoBehaviour, IObjectManager
             {
                 StopBehaviour();
 
-                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
+                if (GameManager.Instance.GameLevel == GameLevels.ConditionalLevel && !_specialPieceUsed)
+                {
+                    _feedbackScreen.PrintFeedbackMessage("Has tenido suerte, pero intenta utilizar la pieza condicional la próxima vez", true); // change screen
+                }
+                else
+                {
+                    _feedbackScreen.PrintFeedbackMessage("", true); // change screen
+                }
+                
                 return;
             }
             else if (collision.gameObject.CompareTag("BlueGoal"))
@@ -230,7 +287,7 @@ public class BallManager : MonoBehaviour, IObjectManager
             {
                 StopBehaviour();
 
-                _feedbackScreen.PrintFeedbackMessage("El balón ha entrado en la portería", true); // change screen
+                _feedbackScreen.PrintFeedbackMessage("", true); // change screen
                 return;
             }
             else if (collision.gameObject.CompareTag("RedGoal"))
@@ -257,7 +314,10 @@ public class BallManager : MonoBehaviour, IObjectManager
             {
                 StopBehaviour();
 
-                _feedbackScreen.PrintFeedbackMessage("Has pasado por todos los cuadrados", true); // change screen
+                if (!_specialPieceUsed)
+                    _feedbackScreen.PrintFeedbackMessage("Lograste tu objetivo, pero intenta utilizar la pieza de bucle la próxima vez", true); // change screen
+                else
+                    _feedbackScreen.PrintFeedbackMessage("", true); // change screen
             }
         }
     }
