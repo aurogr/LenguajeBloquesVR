@@ -774,7 +774,7 @@ MonoBehaviour:
   _defenderSocketsManager: {fileID: 2143739284}
   _lengthCellGrid: 0.138
   _speed: 0.15
-  _movementDuration: 0.5
+  _movementDuration: 0.9
   _defenderGoal: {fileID: 1955111812}
 --- !u!1 &176985140
 GameObject:
@@ -6679,7 +6679,7 @@ PrefabInstance:
     - target: {fileID: 6577566990089727033, guid: 43e9cb06fb84be649bab2b9650236c0b, type: 3}
       propertyPath: _programableObject
       value: 
-      objectReference: {fileID: 1255849001}
+      objectReference: {fileID: 172128735}
     - target: {fileID: 6577566990089727035, guid: 43e9cb06fb84be649bab2b9650236c0b, type: 3}
       propertyPath: m_InteractionManager
       value: 

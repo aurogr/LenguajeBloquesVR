@@ -96,7 +96,7 @@ public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
     public void StartProgram(Queue<CustomSocketInteractor> goalKeeperSockets)
     {
         Queue<CustomSocketInteractor> defenderSockets = _defenderSocketsManager.EnqueueSockets();
-        if (defenderSockets.Count == 0)
+        if (defenderSockets.Count == 1)
             _feedbackScreen.PrintFeedbackMessage("Programa instrucciones para el defensa", false);
         else
             StartCoroutine(IterateOverQueue(goalKeeperSockets, defenderSockets));
@@ -104,17 +104,24 @@ public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
 
     private IEnumerator IterateOverQueue(Queue<CustomSocketInteractor> goalKeeperSockets, Queue<CustomSocketInteractor> defenderSockets) // coroutine to move each piece
     {
-        yield return new WaitForSeconds(0.5f); // wait a little to start
+        yield return waitForSeconds; // wait a little to start
+        _gameStarted = true;
 
         while (goalKeeperSockets.Count != 1 && _defenderOnField) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
+            Debug.Log("GOALKEEPER SOCKET");
             goalKeeperSockets.Dequeue();
-
-            while(defenderSockets.Count != 1 && _defenderOnField)
+            Queue<CustomSocketInteractor> defenderSocketsCopy = new Queue<CustomSocketInteractor>(defenderSockets);
+            while (defenderSocketsCopy.Count != 1 && _defenderOnField)
             {
-                _currentSocket = defenderSockets.Dequeue(); 
-                SelectNextCell(_currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType());
-                yield return waitForSeconds; // wait a little to start
+                Debug.Log("DEFENDER SOCKET");
+                _currentSocket = defenderSocketsCopy.Dequeue();
+                PuzzlePieceInteractableObject puzzlePiece = _currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>();
+                for (int i = 0; i < puzzlePiece.GetTimes(); i++)
+                {
+                    SelectNextCell(puzzlePiece.GetPieceType());
+                    yield return waitForSeconds; // wait a little to start
+                }
             }
         }
         ReachedSimulationEnd();
@@ -166,24 +173,28 @@ public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
 
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("[OnTriggerEnter]");
-        if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
+        if (_gameStarted)
         {
-            _reachedGoal = true;
-            _defenderOnGoal = true;
-        }
-        else if (collision.gameObject.CompareTag("FieldLimits"))
-        {
-            _defenderOnField = false;
+            if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
+            {
+                _reachedGoal = true;
+                _defenderOnGoal = true;
+            }
+            else if (collision.gameObject.CompareTag("FieldLimits"))
+            {
+                _defenderOnField = false;
+            }
         }
     }
 
     private void OnTriggerExit(Collider collision)
     {
-        Debug.Log("[OnTriggerExit]");
-        if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
+        if (_gameStarted)
         {
-            _defenderOnGoal = false;
+            if (collision.gameObject.CompareTag("Goal")) // if the ball collisions with the goal, the player has won
+            {
+                _defenderOnGoal = false;
+            }
         }
     }
 
