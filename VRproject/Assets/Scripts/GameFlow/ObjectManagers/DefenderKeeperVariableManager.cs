@@ -15,7 +15,7 @@ public class DefenderKeeperVariableManager : MonoBehaviour, IObjectManager
     Vector3 _currentGoalPosition;
     Vector3 _startGoalPosition;
 
-    CustomSocketInteractor _currentSocket;
+    PuzzlePieceInteractableObject _currentPiece;
     Vector3 _targetPosition;
     [SerializeField] Transform _defenderTransform;
     bool _reachedGoal = false;
@@ -95,23 +95,22 @@ public class DefenderKeeperVariableManager : MonoBehaviour, IObjectManager
     #endregion
 
     #region Start program, go through instructions
-    public void StartProgram(Queue<CustomSocketInteractor> sockets) // called from the StartLever
+    public void StartProgram(Queue<PuzzlePieceInteractableObject> pieces) // called from the StartLever
     {
         _gameStarted = true;
-        StartCoroutine(IterateOverQueue(sockets));
+        StartCoroutine(IterateOverQueue(pieces));
     }
 
-    private IEnumerator IterateOverQueue(Queue<CustomSocketInteractor> sockets) // coroutine to move each piece
+    private IEnumerator IterateOverQueue(Queue<PuzzlePieceInteractableObject> pieces) // coroutine to move each piece
     {
         yield return new WaitForSeconds(0.5f); // wait a little to start
 
-        while (sockets.Count != 1 && !_stopIteration) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
+        while (pieces.Count != 0 && !_stopIteration) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
-            _currentSocket = sockets.Dequeue();
-            Debug.Log(_currentSocket);
-            PuzzlePieceType puzzlePieceType = _currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>().GetPieceType();
+            _currentPiece = pieces.Dequeue();
+            Debug.Log(_currentPiece);
+            PuzzlePieceType puzzlePieceType = _currentPiece.GetPieceType();
 
-            Debug.Log(puzzlePieceType);
             if (puzzlePieceType == PuzzlePieceType.message)
             {
                 if (_direction != null && _times != 0) {
@@ -128,10 +127,10 @@ public class DefenderKeeperVariableManager : MonoBehaviour, IObjectManager
                     
             } else if (puzzlePieceType == PuzzlePieceType.variableTimes)
             {
-                _times =  _currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetConditionTimes();
+                _times =  _currentPiece.gameObject.GetComponent<ConditionSetter>().GetConditionTimes();
             } else if (puzzlePieceType == PuzzlePieceType.variableDirection)
             {
-                _direction = _currentSocket.GetPuzzlePiece().GetComponent<ConditionSetter>().GetConditionDirection();
+                _direction = _currentPiece.gameObject.GetComponent<ConditionSetter>().GetConditionDirection();
             }
         }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
 {
     #region Variables
-    [SerializeField] SocketsManager _defenderSocketsManager;
+    [SerializeField] ProgramPiecesContainer _defenderSocketsManager;
 
     [SerializeField] float _lengthCellGrid;
     [SerializeField] float _speed;
@@ -16,7 +16,7 @@ public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
     Vector3 _currentGoalPosition;
     Vector3 _startGoalPosition;
 
-    CustomSocketInteractor _currentSocket;
+    PuzzlePieceInteractableObject _currentPiece;
     Vector3 _directionOfMovement;
     Vector3 _targetPosition;
     bool _reachedGoal = false;
@@ -93,33 +93,31 @@ public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
     #endregion
 
     #region Start program, go through instructions
-    public void StartProgram(Queue<CustomSocketInteractor> goalKeeperSockets)
+    public void StartProgram(Queue<PuzzlePieceInteractableObject> goalKeeperSockets)
     {
-        Queue<CustomSocketInteractor> defenderSockets = _defenderSocketsManager.EnqueueSockets();
+        Queue<PuzzlePieceInteractableObject> defenderSockets = _defenderSocketsManager.EnqueuePieces();
         if (defenderSockets.Count == 1)
             _feedbackScreen.PrintFeedbackMessage("Programa instrucciones para el defensa", false);
         else
             StartCoroutine(IterateOverQueue(goalKeeperSockets, defenderSockets));
     }
 
-    private IEnumerator IterateOverQueue(Queue<CustomSocketInteractor> goalKeeperSockets, Queue<CustomSocketInteractor> defenderSockets) // coroutine to move each piece
+    private IEnumerator IterateOverQueue(Queue<PuzzlePieceInteractableObject> goalKeeperPieces, Queue<PuzzlePieceInteractableObject> defenderPieces) // coroutine to move each piece
     {
         yield return waitForSeconds; // wait a little to start
         _gameStarted = true;
 
-        while (goalKeeperSockets.Count != 1 && _defenderOnField) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
+        while (goalKeeperPieces.Count != 0 && _defenderOnField) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
-            Debug.Log("GOALKEEPER SOCKET");
-            goalKeeperSockets.Dequeue();
-            Queue<CustomSocketInteractor> defenderSocketsCopy = new Queue<CustomSocketInteractor>(defenderSockets);
-            while (defenderSocketsCopy.Count != 1 && _defenderOnField)
+            goalKeeperPieces.Dequeue();
+            Queue<PuzzlePieceInteractableObject> defenderPiecesCopy = new Queue<PuzzlePieceInteractableObject>(defenderPieces);
+            while (defenderPiecesCopy.Count != 0 && _defenderOnField)
             {
-                Debug.Log("DEFENDER SOCKET");
-                _currentSocket = defenderSocketsCopy.Dequeue();
-                PuzzlePieceInteractableObject puzzlePiece = _currentSocket.GetPuzzlePiece().GetComponent<PuzzlePieceInteractableObject>();
-                for (int i = 0; i < puzzlePiece.GetTimes(); i++)
+                _currentPiece = defenderPiecesCopy.Dequeue();
+
+                for (int i = 0; i < _currentPiece.GetTimes(); i++)
                 {
-                    SelectNextCell(puzzlePiece.GetPieceType());
+                    SelectNextCell(_currentPiece.GetPieceType());
                     yield return waitForSeconds; // wait a little to start
                 }
             }

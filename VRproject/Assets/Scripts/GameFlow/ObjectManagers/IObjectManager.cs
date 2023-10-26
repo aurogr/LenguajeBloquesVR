@@ -3,5 +3,5 @@ using System.Collections.Generic;
 
 public interface IObjectManager
 {
-    public void StartProgram(Queue<CustomSocketInteractor> sockets);
+    public void StartProgram(Queue<PuzzlePieceInteractableObject> sockets);
 }

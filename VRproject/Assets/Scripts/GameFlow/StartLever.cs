@@ -8,12 +8,12 @@ public class StartLever : MonoBehaviour
 {
     XRGrabInteractable _interactionScript;
     [SerializeField] Button _pauseBtn; // needs to be given in the editor in all scenes, to stop the player from pausing the game while simulation is running (not possible)
-    [SerializeField] SocketsManager _socketsManager; // given in the editor in the message level, but found in real time in the rest of levels since there is only one
+    [SerializeField] ProgramPiecesContainer _piecesContainer; // given in the editor in the message level, but found in real time in the rest of levels since there is only one
     [SerializeField] GameObject _programableObject; // needs to be given in the editor in all scenes
     Rigidbody _rb;
     HingeJoint _hingeJoint;
     bool _programHasPieces = false;
-    Queue<CustomSocketInteractor> _sockets;
+    Queue<PuzzlePieceInteractableObject> _puzzlePieces;
 
     private void Start()
     {
@@ -21,8 +21,8 @@ public class StartLever : MonoBehaviour
         _rb = gameObject.GetComponent<Rigidbody>();
         _hingeJoint = gameObject.GetComponent<HingeJoint>();
 
-        if (_socketsManager == null) // if it wasn't given in the editor, find it
-            _socketsManager = FindObjectOfType<SocketsManager>();
+        if (_piecesContainer == null) // if it wasn't given in the editor, find it
+            _piecesContainer = FindObjectOfType<ProgramPiecesContainer>();
 
         // subscribe to game manager "start game" event to reset the ballMovementStarted boolean
         GameManager.Instance.OnSceneReset += ResetBallMovementBoolean;
@@ -61,13 +61,13 @@ public class StartLever : MonoBehaviour
                 // because the hinge is configured as a spring, it will snap back into the initial position
                 // else, it will stay at the bottom, showing the player visually that the lever has been triggered
 
-                _sockets = _socketsManager.EnqueueSockets();
+                _puzzlePieces = _piecesContainer.EnqueuePieces();
 
-                if (_sockets.Peek().GetPuzzlePiece() != null)
+                if (_puzzlePieces.Peek() != null)
                 {
                     _programHasPieces = true;
                     IObjectManager objectManager = _programableObject.GetComponent(typeof(IObjectManager)) as IObjectManager;
-                    objectManager.StartProgram(_sockets); // Start the program
+                    objectManager.StartProgram(_puzzlePieces); // Start the program
 
                     // to leave the lever fixed to the bottom
                     _pauseBtn.interactable = false;
