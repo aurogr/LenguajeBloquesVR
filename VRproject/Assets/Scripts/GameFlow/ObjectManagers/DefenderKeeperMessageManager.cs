@@ -96,7 +96,7 @@ public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
     public void StartProgram(Queue<PuzzlePieceInteractableObject> goalKeeperSockets)
     {
         Queue<PuzzlePieceInteractableObject> defenderSockets = _defenderSocketsManager.EnqueuePieces();
-        if (defenderSockets.Count == 1)
+        if (defenderSockets.Count == 0)
             _feedbackScreen.PrintFeedbackMessage("Programa instrucciones para el defensa", false);
         else
             StartCoroutine(IterateOverQueue(goalKeeperSockets, defenderSockets));
