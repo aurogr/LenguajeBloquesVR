@@ -12,8 +12,7 @@ public class StartLever : MonoBehaviour
     [SerializeField] GameObject _programableObject; // needs to be given in the editor in all scenes
     Rigidbody _rb;
     HingeJoint _hingeJoint;
-    bool _programHasPieces = false;
-    Queue<PuzzlePieceInteractableObject> _puzzlePieces;
+    bool _startedExecution = false;
 
     private void Start()
     {
@@ -25,10 +24,10 @@ public class StartLever : MonoBehaviour
             _piecesContainer = FindObjectOfType<ProgramPiecesContainer>();
 
         // subscribe to game manager "start game" event to reset the ballMovementStarted boolean
-        GameManager.Instance.OnSceneReset += ResetBallMovementBoolean;
+        GameManager.Instance.OnSceneReset += ResetAfterExecution;
     }
 
-    private void ResetBallMovementBoolean()
+    private void ResetAfterExecution()
     {
         // reset level interaction
         _pauseBtn.interactable = true;
@@ -48,12 +47,12 @@ public class StartLever : MonoBehaviour
     IEnumerator ReenableCollider()
     {
         yield return new WaitForSeconds(1.5f);
-        _programHasPieces = false;
+        _startedExecution = false;
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (!_programHasPieces && ScreenManager.Instance.GetCurrentScreen() == ScreenName.Game.ToString()) // we only start this once and if the screen is game screen
+        if (!_startedExecution && ScreenManager.Instance.GetCurrentScreen() == ScreenName.Game.ToString()) // we only start this once and if the screen is game screen
         {
             if (collision.gameObject.CompareTag("LeverCollider"))
             {
@@ -61,13 +60,13 @@ public class StartLever : MonoBehaviour
                 // because the hinge is configured as a spring, it will snap back into the initial position
                 // else, it will stay at the bottom, showing the player visually that the lever has been triggered
 
-                _puzzlePieces = _piecesContainer.EnqueuePieces();
+                Queue<PuzzlePieceInteractableObject>  puzzlePieces = _piecesContainer.EnqueuePieces();
 
-                if (_puzzlePieces.Peek() != null)
+                if (puzzlePieces.Peek() != null)
                 {
-                    _programHasPieces = true;
+                    _startedExecution = true;
                     IObjectManager objectManager = _programableObject.GetComponent(typeof(IObjectManager)) as IObjectManager;
-                    objectManager.StartProgram(_puzzlePieces); // Start the program
+                    objectManager.StartProgram(puzzlePieces); // Start the program
 
                     // to leave the lever fixed to the bottom
                     _pauseBtn.interactable = false;
