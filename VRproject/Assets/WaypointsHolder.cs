@@ -84,6 +84,7 @@ public class WaypointsHolder : MonoBehaviour
 
     public List<GameObject> GetWaypointsList()
     {
+        SetWaypointsList();
         return _waypointsList;
     }
     #endregion

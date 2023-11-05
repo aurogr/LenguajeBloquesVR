@@ -101,8 +101,6 @@ public class BlockBehaviour : MonoBehaviour
         _endSocketObject.transform.localPosition = new Vector3(_endSocketObjectDefaultLocalPos.x, _endSocketObject.transform.localPosition.y, _endSocketObject.transform.localPosition.z);
  
         ChangeScaleTopPiece();
-
-        Debug.Log("[ResetSize]");
     }
 
     #endregion
