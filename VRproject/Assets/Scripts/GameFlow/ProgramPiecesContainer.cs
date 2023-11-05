@@ -15,7 +15,6 @@ public class ProgramPiecesContainer : MonoBehaviour
         _puzzlePieces.Clear();
 
         PuzzlePieceInteractableObject[] puzzlePieces = gameObject.GetComponentsInChildren<PuzzlePieceInteractableObject>();
-        Debug.Log(puzzlePieces.Length);
 
         for (int i = 0; i < puzzlePieces.Length; i++)
         {

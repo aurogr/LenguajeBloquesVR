@@ -221,14 +221,12 @@ public class BallManager : MonoBehaviour, IObjectManager
                 EndFeedbackLoop();
                 break;
         }
-        _feedbackScreen.PrintFeedbackMessage("No quedan instrucciones", false);
     }
 
     private void EndFeedbackBasic()
     {
         string message = "";
-
-        if ((transform.position.x > _currentPositionStart.x && GameManager.Instance.GameCondition == GameConditions.Red) || (transform.position.x < _currentPositionStart.x && GameManager.Instance.GameCondition == GameConditions.Blue))
+        if ((transform.position.z < _currentPositionStart.z && GameManager.Instance.GameCondition == GameConditions.Red) || (transform.position.z > _currentPositionStart.z && GameManager.Instance.GameCondition == GameConditions.Blue))
             message = "Dirección equivocada, fíjate bien en el color de la pelota";
         else if (transform.position.y > (_center.y + _lengthCellGrid*0.5f))
             message = "Baja un poco la pelota";

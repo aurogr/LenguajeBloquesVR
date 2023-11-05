@@ -23,6 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameSceneMessages.unity
     guid: 2a791f5f7e3e83b44ac68ea602805259
+  - enabled: 1
+    path: Assets/Scenes/GameSceneVariables.unity
+    guid: b03e7a3efe479bb44997f018702f25a1
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 019dd217a35080c40af3dd6b883db335, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: c0184f310d4f511408d4c5d6b1075f01, type: 2}
