@@ -117,8 +117,10 @@ public class DefenderKeeperMessageManager : MonoBehaviour, IObjectManager
 
                 for (int i = 0; i < _currentPiece.GetTimes(); i++)
                 {
-                    SelectNextCell(_currentPiece.GetPieceType());
-                    yield return waitForSeconds; // wait a little to start
+                    if (_defenderOnField){
+                        SelectNextCell(_currentPiece.GetPieceType());
+                        yield return waitForSeconds; // wait a little to start
+                    }
                 }
             }
         }

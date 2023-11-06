@@ -108,7 +108,6 @@ public class DefenderKeeperVariableManager : MonoBehaviour, IObjectManager
         while (pieces.Count != 0 && !_stopIteration) // when there's only one socket left, it means that we've reached the end (because the last socket is always empty)
         {
             _currentPiece = pieces.Dequeue();
-            Debug.Log(_currentPiece);
             PuzzlePieceType puzzlePieceType = _currentPiece.GetPieceType();
 
             if (puzzlePieceType == PuzzlePieceType.message)
@@ -117,7 +116,8 @@ public class DefenderKeeperVariableManager : MonoBehaviour, IObjectManager
                     MoveDefender();
                     for (int i = 0; i <= _times; i++) // wait until movement finishes
                     {
-                        yield return waitForSeconds;
+                        if(_defenderOnField)
+                            yield return waitForSeconds;
                     }
                 }
                 else
