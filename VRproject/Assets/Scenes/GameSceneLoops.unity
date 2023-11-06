@@ -4062,7 +4062,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7739800088107720394, guid: 59a6f3c03a0c64942add3e8510826c64, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7739800088107720396, guid: 59a6f3c03a0c64942add3e8510826c64, type: 3}
       propertyPath: _name
@@ -4168,6 +4168,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 7408054436659555893, guid: 9600ae01fc951f24e8235398e2fd3987, type: 2}
+    - target: {fileID: 8404117705725564636, guid: 59a6f3c03a0c64942add3e8510826c64, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8468068950994143312, guid: 59a6f3c03a0c64942add3e8510826c64, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0
@@ -11854,7 +11858,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1572169984
 RectTransform:
   m_ObjectHideFlags: 0
