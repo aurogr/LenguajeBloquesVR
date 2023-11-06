@@ -129,22 +129,19 @@ public class BallManager : MonoBehaviour, IObjectManager
 
     void ResetConditionalLevel()
     {
-        if (_firstTime || !GameManager.Instance.GetIsGameSituationTheSame())
+        GameManager.Instance.GameCondition = Random.Range(1, 3) switch
         {
-            GameManager.Instance.GameCondition = Random.Range(1, 3) switch
-            {
-                1 => GameConditions.Red,
-                _ => GameConditions.Blue,
-            };
+            1 => GameConditions.Red,
+            _ => GameConditions.Blue,
+        };
 
+        if (_firstTime || !GameManager.Instance.GetIsGameSituationTheSame())
             SetRandomBallPosition();
-        }
         else
-        {
             transform.position = _currentPositionStart;
-        }
 
         _renderer.material.color = new Color(1, 1, 1);
+        _firstTime = false;
     }
 
     #endregion
