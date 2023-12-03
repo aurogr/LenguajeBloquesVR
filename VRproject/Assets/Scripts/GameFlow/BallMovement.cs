@@ -31,6 +31,8 @@ public class BallMovement
     }
 
     #region Movement
+
+    // The fixed update will move the ball in the specified direction until it reaches the position
     public void FixedUpdate() // because the class is not a monobehaviour, unity won't call the fixed update, we have to call it from the class it was instantiated from
     {
         if (_targetPosition != _transform.position)
@@ -40,7 +42,7 @@ public class BallMovement
         }
     }
 
-    public void MoveBall(PuzzlePieceType puzzlePieceType)
+    public void SelectNextCell(PuzzlePieceType puzzlePieceType)
     {
         InstantiateTrailBall();
 

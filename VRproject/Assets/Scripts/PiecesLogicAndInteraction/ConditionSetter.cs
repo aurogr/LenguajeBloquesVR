@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class ConditionSetter : MonoBehaviour
 {
-    GameConditions _pieceConditionSide = GameConditions.Left;
+    GameConditions _pieceConditionDirection = GameConditions.Left;
     GameConditions _pieceConditionColor = GameConditions.Red;
-    int _pieceConditionTimes = 0;
+    int _pieceConditionTimes = 1;
 
     /// <summary>
     /// Get selected condition of a conditional piece
@@ -32,9 +32,9 @@ public class ConditionSetter : MonoBehaviour
     /// <summary>
     /// Get selected condition of a conditional piece
     /// </summary>
-    public GameConditions GetConditionSide()
+    public GameConditions GetConditionDirection()
     {
-        return _pieceConditionSide;
+        return _pieceConditionDirection;
     }
 
     /// <summary>
@@ -45,10 +45,10 @@ public class ConditionSetter : MonoBehaviour
         switch (pieceCondition)
         {
             case 0:
-                _pieceConditionSide = GameConditions.Left;
+                _pieceConditionDirection = GameConditions.Left;
                 break;
             default:
-                _pieceConditionSide = GameConditions.Right;
+                _pieceConditionDirection = GameConditions.Right;
                 break;
         }
     }

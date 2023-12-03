@@ -53,7 +53,7 @@ public class ChangingInstructionsBehaviour : MonoBehaviour
         {
             _previousButton.gameObject.SetActive(false); // hide the "previous button"
         } 
-        else if (_currentInstruction == _instructions.Length - 2) // it has gone back to the second to last image
+        if (_currentInstruction == _instructions.Length - 2) // it has gone back to the second to last image
         {
             _nextButton.gameObject.SetActive(true); // show the "next button"
         }
@@ -68,7 +68,7 @@ public class ChangingInstructionsBehaviour : MonoBehaviour
         {
             _previousButton.gameObject.SetActive(true); // show the "previous button"
         }
-        else if (_currentInstruction == _instructions.Length - 1) // it's on the last image
+        if (_currentInstruction == _instructions.Length - 1) // it's on the last image
         {
             _nextButton.gameObject.SetActive(false); // hide the "next button"
         }

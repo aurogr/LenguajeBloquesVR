@@ -9,6 +9,7 @@ public class CustomSocketInteractor : MonoBehaviour
     #region Variables
     private XRSocketInteractor _socket;
     private GameObject _puzzlePiece;
+    private MeshRenderer _mesh;
 
     BlockBehaviour _fatherLoop = null;
     #endregion
@@ -16,7 +17,9 @@ public class CustomSocketInteractor : MonoBehaviour
     #region Start, set variables
     void Start()
     {
-        _socket = GetComponent<XRSocketInteractor>();}
+        _socket = GetComponent<XRSocketInteractor>();
+        _mesh = GetComponentInChildren<MeshRenderer>(true);
+    }
     #endregion
 
     #region Add / Remove puzzle pieces to socket
@@ -94,6 +97,20 @@ public class CustomSocketInteractor : MonoBehaviour
     public void DeactivateSocket()
     {
         _socket.socketActive = false;
+    }
+
+    #endregion
+
+    #region show mesh
+    public void EnableMesh()
+    {
+        if (_puzzlePiece == null)
+            _mesh.enabled = true;
+    }
+
+    public void DisableMesh()
+    {
+       _mesh.enabled = false;
     }
 
     #endregion

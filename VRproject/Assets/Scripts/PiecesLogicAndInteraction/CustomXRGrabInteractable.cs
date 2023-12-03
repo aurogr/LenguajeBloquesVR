@@ -12,6 +12,7 @@ public class CustomXRGrabInteractable : XRGrabInteractable
 
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
+        _mesh.material.SetColor("_MultipliedColor", new Color(1, 1, 1, 1));
         if (args.interactorObject.transform.CompareTag("RightHand"))
         {
             IsBeingHeld = true;

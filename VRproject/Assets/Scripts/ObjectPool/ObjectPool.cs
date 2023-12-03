@@ -60,7 +60,6 @@ public class ObjectPool
             spawnedObject = InstantiateNewObject();
             spawnedObject.transform.SetParent(null);
             spawnedObject.gameObject.SetActive(true);
-            Debug.Log("You already have a lot of pieces, I had to instantiate a new one for you");
         }
 
         return spawnedObject;

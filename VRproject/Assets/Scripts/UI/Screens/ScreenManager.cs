@@ -9,7 +9,7 @@ public class ScreenManager : MonoBehaviour
     // (for example, the game menu and options menu are screens)
 
     private static ScreenManager _instance;
-    [SerializeField] private string _firstShownScreenName; // the screen that will first be visible as we initiliaze the game
+    [SerializeField] private ScreenName _firstShownScreenName; // the screen that will first be visible as we initiliaze the game
     private IDictionary<string, IScreen> _screens;
     private IScreen _currentScreen;
     private IScreen _previousScreen; // if a more complex logic was needed to go through multiple previous screens, we could use a stack
@@ -55,7 +55,7 @@ public class ScreenManager : MonoBehaviour
             _screens.Add(screen.GetName(), screen);
         }
 
-        SwitchScreen(_firstShownScreenName); // show the first screen
+        SwitchScreen(_firstShownScreenName.ToString()); // show the first screen
     }
 
     public void SwitchScreen(string screenName)
@@ -91,4 +91,11 @@ public class ScreenManager : MonoBehaviour
             SwitchScreen(_previousScreen);
         }
     }
+
+    public string GetCurrentScreen()
+    {
+        return _currentScreen.GetName();
+    }
 }
+
+public enum ScreenName { Game, MainMenu, Pause, EndFeedback, InstructionLevel, InstructionsStart, InstructionsGeneral, DifficultyLoops }

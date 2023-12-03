@@ -4,15 +4,12 @@ using TMPro;
 
 public class PuzzlePieceInteractableObject : RecyclableObject
 {
-    Transform _repositionTransform;
-    //[SerializeField] AudioClip _collisionAudioClip;
     [SerializeField] PuzzlePieceType _pieceType = PuzzlePieceType.right;
     
     int _times = 1;
     TMP_Dropdown _dropdown;
 
     CustomSocketInteractor _socket;
-    //AudioSource _audioSource;
 
     public override void Recycle()
     {
@@ -32,10 +29,7 @@ public class PuzzlePieceInteractableObject : RecyclableObject
 
     private void Awake()
     {
-        _repositionTransform = GameObject.FindGameObjectWithTag("Reposition").transform;
-        //_audioSource = gameObject.GetComponent<AudioSource>();
         _socket = GetComponentInChildren<CustomSocketInteractor>();
-
         _dropdown = GetComponentInChildren<TMP_Dropdown>();
     }
 
@@ -59,11 +53,9 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     {
         if (collision.gameObject.CompareTag("OutsideBounds")) // if the object is unreacheable to the player return it back to the table
         {
-            gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            gameObject.transform.position = _repositionTransform.position;
+            Debug.Log("OUTSIDEBOUNDS;0");
+            Recycle();
         }
-
-        // _audioSource.PlayOneShot(_collisionAudioClip); // to play audio on collision, deactivated temporarily but should be on final version
     }
 
     private void ResetPiece()
@@ -125,5 +117,5 @@ public class PuzzlePieceInteractableObject : RecyclableObject
     #endregion
 }
 
-public enum PuzzlePieceType { right, left, up, down, forLoop, conditional, message, variable};
+public enum PuzzlePieceType { right, left, up, down, forLoop, conditional, message, variableTimes, variableDirection};
 
