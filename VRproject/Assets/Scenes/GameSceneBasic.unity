@@ -6798,6 +6798,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1528934722}
     m_Modifications:
+    - target: {fileID: 4450733741000868182, guid: 79b0f6c8268042245a4dbc23bc74504c, type: 3}
+      propertyPath: _nextSceneName
+      value: GameSceneConditional
+      objectReference: {fileID: 0}
     - target: {fileID: 4450733741123482593, guid: 79b0f6c8268042245a4dbc23bc74504c, type: 3}
       propertyPath: m_Name
       value: EndFeedback  (Screen)

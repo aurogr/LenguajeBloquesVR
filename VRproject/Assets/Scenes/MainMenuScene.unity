@@ -4152,7 +4152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &803120631
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4167,8 +4167,8 @@ RectTransform:
   m_Children:
   - {fileID: 2038003289}
   - {fileID: 1023296665}
-  - {fileID: 2107080029}
   - {fileID: 1170703294}
+  - {fileID: 2107080029}
   - {fileID: 669840794}
   - {fileID: 1568563054}
   - {fileID: 366925907}
@@ -6081,7 +6081,7 @@ GameObject:
   - component: {fileID: 1170703295}
   - component: {fileID: 1170703298}
   m_Layer: 5
-  m_Name: NivelBtn (2)
+  m_Name: NivelBtn (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6101,11 +6101,11 @@ RectTransform:
   m_Children:
   - {fileID: 1453186535}
   m_Father: {fileID: 803120631}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -21.400002}
+  m_AnchoredPosition: {x: 0, y: 7.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1170703295
@@ -11147,7 +11147,7 @@ GameObject:
   - component: {fileID: 2107080031}
   - component: {fileID: 2107080030}
   m_Layer: 5
-  m_Name: NivelBtn (1)
+  m_Name: NivelBtn (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11167,11 +11167,11 @@ RectTransform:
   m_Children:
   - {fileID: 1436552666}
   m_Father: {fileID: 803120631}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 7.699999}
+  m_AnchoredPosition: {x: 0, y: -21.8}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2107080030
