@@ -7,12 +7,12 @@ using UnityEngine;
 public class BlockBehaviour : MonoBehaviour
 {
     #region Variables
-    [SerializeField] MeshRenderer _puzzlePieceExample;
     [SerializeField] GameObject _endMeshPiece;
     [SerializeField] Transform _startTopMeshPiece;
     [SerializeField] Transform _middleTopMeshPiece;
     [SerializeField] Transform _endTopMeshPiece;
     [SerializeField] GameObject _endSocketObject;
+    [SerializeField] MeshRenderer _realSizeObject;
 
     Vector3 _endSocketObjectDefaultLocalPos;
     Vector3 _endMeshPieceDefaultLocalPos;
@@ -28,7 +28,7 @@ public class BlockBehaviour : MonoBehaviour
         _lastChildrenPuzzlePieces = new Queue<PuzzlePieceInteractableObject>();
         _endMeshPieceDefaultLocalPos = _endMeshPiece.transform.localPosition;
         _endSocketObjectDefaultLocalPos = _endSocketObject.transform.localPosition;
-        _pieceSize = _puzzlePieceExample.bounds.size.x; // the length of a puzzle piece, to move the end mesh piece accurately
+        _pieceSize = _realSizeObject.bounds.size.x; // the length of a puzzle piece, to move the end mesh piece accurately
       
         ChangeScaleTopPiece();
     }

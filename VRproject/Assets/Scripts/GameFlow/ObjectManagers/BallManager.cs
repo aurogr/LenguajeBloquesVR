@@ -36,6 +36,7 @@ public class BallManager : MonoBehaviour, IObjectManager
         _currentPositionStart = transform.position;
         _feedbackScreen = FindObjectOfType<FeedbackScreenImplementation>(true);
         _renderer = _mesh.GetComponent<MeshRenderer>();
+        _renderer.material.color = new Color(1, 1, 1);
 
         waitForSeconds = new WaitForSeconds(_movementDuration);
 
